@@ -1,0 +1,26 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+    $checkRelationship = $this->checkRelationship;
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        <?php
+        if(!empty($checkRelationship)){
+        ?>
+        <div class="form-group col-md-12">
+        	<?= isset($checkRelationship['dials_promotions']) ? "- Chương trình '" . $this->valueCurrent['name'] . "' đang liên kết với một vài chương trình khuyến mãi, nếu xóa thì tất cả liên kết sẽ bị xóa!<br />" : "" ?>
+        	<?= isset($checkRelationship['prizes']) ? "- Chương trình '" . $this->valueCurrent['name'] . "' đang liên kết với danh sách giải thưởng, nếu xóa thì tất cả giải thưởng sẽ bị xóa!<br />" : "" ?>
+		</div>
+        <div class="form-group col-md-12 text-center">
+    		<h3>Bạn có muốn xoá?</h3>
+		</div>
+        <?php
+        }
+        ?>
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+
+

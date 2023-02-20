@@ -1,0 +1,29 @@
+
+<div class="app-content content">
+	<div class="content-wrapper">
+<div class="card">
+	<div class="card-body">
+		<a title="Thêm dữ liệu" href="<?= $this->url('companies/order-details', ['action' => 'index', 'id' => $this->orderId]) ?>">
+        	<button type="button" class="btn btn-info">
+   				<i class="fa fa-plus"></i> Danh sách
+   			</button>
+		</a><br><br>
+        
+        <?php 
+            $this->form->prepare();
+        ?>
+        <?= $this->form()->openTag($this->form) ?>
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('technologies_id')) ?>
+            <?= $this->formElement($this->form->get('technologies_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('technologies_id')) ?></div>
+        </div>
+
+
+        <div class="form-group col-md-12 text-center">
+            <?= $this->formRow($this->form->get('btnSubmit')) ?>
+        </div>
+    </div>
+</div>
+</div>
+</div>

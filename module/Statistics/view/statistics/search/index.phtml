@@ -1,0 +1,130 @@
+<?php
+$title = "Tra cứu mã PIN";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row mb-1">
+            <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+                <h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+                <div class="row breadcrumbs-top d-inline-block">
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                            <li class="breadcrumb-item active">Danh sách</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <?php $this->formSearch->prepare(); ?>
+                                <?= $this->form()->openTag($this->formSearch) ?>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('condition')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('condition')) ?></div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                                </div>
+                                <?= $this->form()->closeTag($this->formSearch) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content show">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Mã Pin</th>
+                                                <th class="text-center">Số serial</th>
+                                                <th class="text-center">Sản phẩm</th>
+                                                <th class="text-center">Ngày nhập</th>
+                                                <th class="text-center">Đại lý</th>
+                                                <th class="text-center">Ngày xuất</th>
+                                                <th class="text-center">Kho</th>
+                                                <th class="text-center">Tình trạng</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if ($this->arrCodes->getAdapter()->count() > 0) {
+                                                $optionProducts = isset($this->optionProducts) ? $this->optionProducts : [];
+                                                $optionAgents = isset($this->optionAgents) ? $this->optionAgents : [];
+                                                $optionStorehouses = isset($this->optionStorehouses) ? $this->optionStorehouses : [];
+                                                $i = 1;
+                                                foreach ($this->arrCodes as $item) {
+                                            ?>
+                                                    <tr>
+                                                        <td class="text-center align-middle"><?= $i++; ?></td>
+                                                        <td class="text-center align-middle"><?= $item['id'] ?></td>
+                                                        <td class="text-center align-middle"><?= $item['serial'] ?></td>
+                                                        <td class="align-middle"><?= isset($optionProducts[$item['product_id']]) ? $optionProducts[$item['product_id']] : 'Không xác định' ?></td>
+                                                        <td class="text-center align-middle"><?= $item['imported_at'] ?></td>
+                                                        <td class="align-middle"><?= isset($optionAgents[$item['agent_id']]) ? $optionAgents[$item['agent_id']] : 'Không xác định' ?></td>
+                                                        <td class="text-center align-middle"><?= $item['exported_at'] ?></td>
+                                                        <td class="align-middle"><?= isset($optionStorehouses[$item['storehouse_id']]) ? $optionStorehouses[$item['storehouse_id']] : 'Không xác định' ?></td>
+                                                        <td class="text-center align-middle">
+                                                            <?php 
+                                                            if($item['number_checked'] > 0){ 
+                                                                echo 'Đã được kiểm tra';
+                                                                echo "<br /><strong>SĐT: </strong> " . $item["phone_id"];
+                                                                echo "<br /><strong>Ngày kiểm tra: </strong> " . $item["checked_at"];
+                                                             }else{ 
+                                                                echo 'Chưa được kiểm tra'; 
+                                                            }
+                                                            ?>
+                                                        </td>
+                                                        <td class="align-middle text-center">
+                                                            <a title="Bảo hành sản phẩm" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#xlarge" route="<?= $this->url('statistics/search', ['action' => 'iframe', 'id' => $item['id']]) ?>">
+                                                                <i class="la la-life-saver"></i></a>
+                                                        </td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <tr>
+                                                    <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                                </tr>
+                                            <?php
+                                            }
+                                            ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,22 @@
+<td colspan="3" class="text-center">
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        
+        <div class="form-group col-md-5">
+            <?= $this->formElement($this->form->get('groups_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('groups_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-5">
+            <?= $this->formElement($this->form->get('positions_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('positions_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-2 text-center">
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+</td>

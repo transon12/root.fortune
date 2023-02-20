@@ -1,0 +1,89 @@
+<?php
+$title = "Sửa bảo hành";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="<?= $this->url($this->route, ['action' => 'index', 'id' => $this->codeId]) ?>">Danh sách</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                        
+                    			<?php $this->form->prepare(); ?>
+                            	<?= $this->form()->openTag($this->form) ?>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('title')) ?>
+                                    <?= $this->formElement($this->form->get('title')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('title')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('content')) ?>
+                                    <?= $this->formElement($this->form->get('content')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('content')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('price')) ?>
+                                    <div class="input-group">
+                                    	<?= $this->formElement($this->form->get('price')) ?>
+        								<div class="input-group-append">
+        									<span class="input-group-text" id="basic-addon2">vnđ</span>
+        								</div>
+        							</div>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('price')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('datetime_receive')) ?>
+                                    <?= $this->formElement($this->form->get('datetime_receive')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('datetime_receive')) ?></div>
+                                    
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('datetime_return')) ?>
+                                    <?= $this->formElement($this->form->get('datetime_return')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('datetime_return')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12 text-center">
+                                    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                </div>
+                           	 	<?= $this->form()->closeTag($this->form) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script>
+<script type="text/javascript">
+$(function () {
+	$('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss'
+   	});
+});
+</script>  

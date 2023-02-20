@@ -1,0 +1,83 @@
+
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/forms/selects/select2.min.css">
+
+<?php
+$title = "Sửa nhiệm vụ";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row mb-1">
+            <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+                <h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+                <div class="row breadcrumbs-top d-inline-block">
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<?= $this->url('companies/mission-details', ['action' => 'index','id' => $this->orderId]) ?>">Danh sách</a></li>
+                            <li class="breadcrumb-item active"><?= $title ?></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-body">
+                <?php 
+                    $this->form->prepare();
+                    $this->form()->addValidAttribute('route');
+                ?>
+                <?= $this->form()->openTag($this->form) ?>
+                <div class="form-group col-md-6">
+                    <?= $this->formLabel($this->form->get('mission_id')) ?>
+                    <?= $this->formElement($this->form->get('mission_id')) ?>
+                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('mission_id')) ?></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <?= $this->formLabel($this->form->get('user')) ?>
+                    <?= $this->formElement($this->form->get('user')) ?>
+                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('user')) ?></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <?= $this->formLabel($this->form->get('begined_at')) ?>
+                    <?= $this->formElement($this->form->get('begined_at')) ?>
+                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('begined_at')) ?></div>
+                </div>
+
+                <div class="form-group col-md-6">
+                    <?= $this->formLabel($this->form->get('expected_at')) ?>
+                    <?= $this->formElement($this->form->get('expected_at')) ?>
+                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('expected_at')) ?></div>
+                </div>
+
+                <div class="form-group col-md-12 text-center">
+                    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                </div>
+                <?=$this->form()->closeTag($this->form)?>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="<?= TEMPS ?>app-assets/vendors/js/ui/jquery.sticky.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/js/scripts/forms/select/form-select2.min.js"></script>
+
+
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script>
+
+<script type="text/javascript">
+$(function () {
+	$("#codes").focus();
+	$('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss'
+   	});
+});
+</script>

@@ -1,0 +1,88 @@
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/forms/selects/select2.min.css">
+<?php include_once( APPLICATION_PATH . "/module/Admin/view/layout/layout-admin/script-address.php"); ?>
+        <?php 
+            $this->form->prepare();
+            $this->form()->addValidAttribute('route');
+        ?>
+        <?= $this->form()->openTag($this->form) ?>
+        <div class="col-12">
+            <h4 class="text-uppercase">Thông tin cơ bản</h4>
+            <p><hr /></p>
+        </div>
+
+        <?php if(isset($this->userId) && $this->userId == '1'){ ?>
+            <div class="form-group col-md-12">
+                <?= $this->formLabel($this->form->get('user_id')) ?>
+                <?= $this->formElement($this->form->get('user_id')) ?>
+                <div class="text-danger"><?= $this->formElementErrors($this->form->get('user_id')) ?></div>
+            </div>
+        <?php } ?>
+
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('id')) ?>
+            <?= $this->formElement($this->form->get('id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('name')) ?>
+            <?= $this->formElement($this->form->get('name')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('name')) ?></div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('tax_code')) ?>
+            <?= $this->formElement($this->form->get('tax_code')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('tax_code')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('phone')) ?>
+            <?= $this->formElement($this->form->get('phone')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('phone')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('address')) ?>
+            <?= $this->formElement($this->form->get('address')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('address')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('city_id')) ?>
+            <?= $this->formElement($this->form->get('city_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('city_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('district_id')) ?>
+            <?= $this->formElement($this->form->get('district_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('district_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('ward_id')) ?>
+            <?= $this->formElement($this->form->get('ward_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('ward_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('status')) ?>
+            <div class="demo-radio-button">
+            <?= $this->formElement($this->form->get('status')) ?>
+            </div>
+        </div>
+        
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+
+<script src="<?= TEMPS ?>app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/js/scripts/forms/select/form-select2.min.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('.select2').select2({dropdownParent: $('#xlarge')});
+});
+</script>

@@ -1,0 +1,90 @@
+<div class="row">
+	<div class="col-12">
+ 		<div class="card">
+       		<div class="card-body">
+          		<div class="table-responsive m-t-10">
+                  	<table class="display nowrap table table-hover table-striped" cellspacing="0" width="100%">
+                      	<thead>
+                          	<tr>
+                             	<th class="text-center">Phòng ban</th>
+                              	<th class="text-center">Chức vụ</th>
+                              	<th class="text-center">Sự kiện</th>
+                          	</tr>
+                       	</thead>
+                     	<tbody id="pxt-groups-view" userId="<?= $this->valueCurrent['id'] ?>">
+                        </tbody>
+                    </table>
+                </div>
+         	</div>
+    	</div>
+   	</div>
+</div>
+
+
+    <script type="text/javascript">
+    $(function() {
+        loadView();
+        // modal medium
+    	$(document).on("click", ".pxt-groups-add", function(e) {
+    		var route = $(this).attr("route");
+    		var elementCurrent = $(this);
+        	//alert(route);
+        	$.ajax({
+        		method: "GET",
+        		url: route
+        	}).done(function( data ) {
+            	if(data == 'error-not-found'){
+                	alert('Not found this user!')
+               	}else{
+            		elementCurrent.parents('tr').html(data);
+               	}
+        	});
+    	});
+    	$(document).on('submit','#event-form-groups',function(e){
+    		var route = $(this).attr("route");
+    		var elementCurrent = $(this);
+    		$.ajax({
+    			method: "POST",
+    			url: route,
+    			data: $( this ).serialize() + '&modal=1'
+    		}).done(function( data ) {
+        		//console.log(data);
+        		if(data == 'success'){
+        			loadView();
+        		}else{
+    				elementCurrent.parents('tr').html(data);
+        		}
+    		});
+    		return false;
+    	});
+    	$(document).on('click','.pxt-groups-delete',function(e){
+    		var route = $(this).attr("route");
+    		var elementCurrent = $(this);
+    		$.ajax({
+    			method: "POST",
+    			url: route,
+    			data: $( this ).serialize() + '&modal=1'
+    		}).done(function( data ) {
+        		loadView();
+    		});
+    		return false;
+    	});
+
+    	function loadView(){
+            var route = "<?= $this->url('admin/users', ['action' => 'groups-view', 'id' => $this->valueCurrent['id']]) ?>";
+            console.log(route);
+            //alert(route);
+        	$.ajax({
+        		method: "GET",
+        		url: route,
+        		data: {}
+        	}).done(function( data ) {
+            	//alert(data);
+            	$("#pxt-groups-view").html(data);
+        	});
+        }
+    	$('#large').on('hidden.bs.modal', function () {
+    		location.reload();
+    	});
+    })
+	</script>

@@ -1,0 +1,27 @@
+<?php 
+    if(!empty($this->arrGroupsPositionsUsers)){
+        $arrGroups = $this->arrGroups;
+        $arrPositions = $this->arrPositions;
+        foreach($this->arrGroupsPositionsUsers as $item){
+?>
+<tr>
+  	<td class="text-center"><?= $arrGroups[$item['group_id']] ?></td>
+   	<td class="text-center"><?= $arrPositions[$item['position_id']] ?></td>
+   	<td class="text-center">
+		<a title="Xóa" href="javascript:void(0)" class="pxt-groups-delete" 
+         	route="<?= $this->url('admin/users', ['action' => 'groups-delete', 'id' => $this->valueCurrent['id']], ['query' => ['group_id' => $item['group_id'], 'position_id' => $item['position_id']]]) ?>">
+			<i class="la la-close"></i></a>
+	</td>
+</tr>
+<?php 
+        }
+    }
+?>
+<tr>
+	<td colspan="3" class="text-center">
+    	<a href="javascript:void(0)" class="pxt-groups-add"
+          	route="<?= $this->url('admin/users', ['action' => 'groups-add', 'id' => $this->valueCurrent['id']]) ?>">
+  			<i class="fa fa-plus"></i> Thêm phòng ban - chức vụ</a>
+ 		<hr width="100%" color="#900"/>
+	</td>
+</tr>

@@ -1,0 +1,76 @@
+<?= $this->doctype() ?>
+<?php 
+    use Zend\Session\Container;
+    use Zend\Session\SessionManager;
+    $manager = new SessionManager();
+    $this->sessionContainer = new Container('session_login', $manager);
+    $arrUrl = explode('/', $this->url());
+    $urlModule = isset($arrUrl[1]) ? $arrUrl[1] : 'index';
+    $urlController = isset($arrUrl[2]) ? $arrUrl[2] : 'index';
+    $urlAction = isset($arrUrl[3]) ? $arrUrl[3] : 'index';
+?>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <!-- BEGIN: Head-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <?= $this->headTitle('Trang quản trị')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => TEMPS . 'app-assets/images/ico/favicon.ico']) ?>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="author" content="<?= META_AUTHOR ?>">
+    <link rel="apple-touch-icon" href="<?= TEMPS ?>app-assets/images/ico/apple-icon-120.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/vendors.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/ui/prism.min.css">
+    <!-- END: Vendor CSS-->
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/colors.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/components.min.css">
+    <!-- END: Theme CSS-->
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/colors/palette-gradient.min.css">
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>assets/css/style.css">
+    <!-- END: Custom CSS-->
+    <!-- BEGIN: Vendor JS-->
+    <script src="<?= TEMPS ?>app-assets/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+
+  </head>
+  <!-- END: Head-->
+
+  <!-- BEGIN: Body-->
+  <body class="vertical-menu-modern 2-columns pace-done menu-collapsed" data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+
+    <!-- BEGIN: Content-->
+    <?= $this->content ?>
+    <!-- END: Content-->
+
+
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="<?= TEMPS ?>app-assets/vendors/js/ui/prism.min.js"></script>
+    <script src="<?= TEMPS ?>app-assets/js/scripts/modal/components-modal.min.js"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="<?= TEMPS ?>assets/pxt.js"></script>
+    <!-- END: Theme JS-->
+
+  </body>
+  <!-- END: Body-->
+</html>
+
+
+
+

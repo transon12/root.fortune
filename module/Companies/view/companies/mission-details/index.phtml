@@ -1,0 +1,149 @@
+<?php
+$title = "Chi tiết đơn hàng";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<!-- <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active"><a href="<?= $this->url('companies/addresses', ['action' => 'index','id' => $this->orderId]) ?>">Danh sách</a> </li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div> -->
+       		<div class="content-header-right col-md-12 col-12">
+                <div class="btn-group float-md-right">
+                    <a class="btn btn-success" href="<?= $this->url('companies/mission-details', ['action' => 'add','id' => $this->orderId]) ?>" title="Thêm dữ liệu">
+                        <i class="la la-plus-circle"></i> Thêm dữ liệu
+                    </a>&emsp;
+                    <!-- <a class="btn btn-success pxt-modal" href="javascript:void(0)" title="Thêm nhiều dữ liệu" data-toggle="modal" data-target="#defaultSize"
+                    route="<?= $this->url('companies/mission-details', ['action' => 'add-missions','id' => $this->orderId]) ?>">
+                        <i class="la la-plus-circle"></i> Thêm nhiều dữ liệu
+                    </a> -->
+                </div> 
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Nhiệm vụ</th>
+                                                <th class="text-center">Danh sách tài khoản tham gia</th>
+                                                <th class="text-center">Thời gian bắt đầu</th>
+                                                <th class="text-center">Thời gian dự kiến hoàn thành</th>
+                                                <th class="text-center">Thời gian hoàn thành</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrMissionDetails){
+                                                $i = 1;
+                                                $optionMissions = $this->optionMissions;
+                                                $optionUsers = $this->optionUsers;
+                                                foreach($this->arrMissionDetails as $item){
+                                                    $arrUsers = [];
+                                                    $y = 0;
+                                                    foreach(explode(", ", $item['user']) as $userItem){
+                                                        $arrUsers[$y] = $optionUsers[$userItem];
+                                                        $y++;
+                                                    }
+                                                    if($item['ended_at'] == '' || $item['ended_at'] == null){
+                                                        if($this->currentTime > $item['expected_at']){
+                                                            $check = "notOk";
+                                                        }else{
+                                                            $check = "ok";
+                                                        }
+                                                    }else{
+                                                        $check = "ok";
+                                                    }
+                                        ?>
+                                            <tr class="status_<?= ($item['status'] != 1) ? $item['status'] : $check ?>">
+                                            	<td class="text-center align-middle"><?= $i++; ?></td>
+                                            	<td class="text-center align-middle"><?= $optionMissions[$item['mission_id']] ?></td>
+                                                <td class="text-center align-middle"><?= implode(", ",$arrUsers) ?></td>
+                                                <td class="text-center align-middle"><?= $item['begined_at'] ?></td>
+                                                <td class="text-center align-middle"><?= $item['expected_at'] ?></td>
+                                                <td class="text-center align-middle"><?= $item['ended_at']?></td>
+                                                <td class="text-center align-middle">
+                                                    <?php // if(\Admin\Service\Authentication::getId() == 1 || in_array($this->userName,explode(", ",$item['user']))){?>
+                                                        <input type="checkbox" <?= ($item['status'] != 1) ? "checked" : "" ?> 
+                                                            checkMission="<?= $item['id'] ?>" name="check_mission" data-target="#defaultSize" data-toggle="modal">
+                                                    <?php //} ?>
+
+                                                    <a title="Sửa nhiệm vụ" href="<?= $this->url('companies/mission-details', ['action' => 'edit', 'id' => $this->orderId, 'detailid' =>$item['id']]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa ?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('companies/mission-details', ['action' => 'delete', 'id' => $this->orderId, 'detailid' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+<script>
+    $(function(){
+        console.log(<?= $this->orderId?>)
+        $("input[name='check_mission']").change(function(){
+            var dataTarget = $(this).attr("data-target");
+            var orderId = "<?= $this->orderId?>";
+            var detailId = $(this).attr("checkMission");
+            if($(this).is(':checked') == true){
+                $(".modal-title").text("Đánh dấu đã hoàn thành");
+                var route = "<?= $this->url('companies/mission-details', ['action' => 'check']) ?>" + orderId + "/" + detailId
+            }else{
+                $(".modal-title").text("Bỏ đánh dấu");
+                var route = "<?= $this->url('companies/mission-details', ['action' => 'un-check']) ?>" + orderId + "/" + detailId
+            }
+            //console.log(route)
+            $.ajax({
+                method: "GET",
+                url: route,
+                data: {'modal': '1'}
+            }).done(function( data ) {
+                if(data == 'success'){
+                    location.reload();
+                }else{
+                    $(dataTarget + " .modal-body").html(data);
+                }
+            });
+        })
+        $(".status_notOk").css("background-color", "#ECAAAA");
+        $(".status_2").css("background-color", "#9BFBB2");
+        $(".status_3").css("background-color", "#FEDB6A");
+    });
+</script>
+
+

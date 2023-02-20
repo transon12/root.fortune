@@ -1,0 +1,114 @@
+<?php
+$title = "Cấu hình phân trang";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                				<?= $this->partial("settings/index/nav-tabs.phtml", ['route' => 'settings/index', 'id' => 'configs']) ?>
+                               	<div class="tab-content">
+                                   	<div class="tab-pane active" id="paginator" role="tabpanel">
+                                     	<div class="p-20">
+                                     		<?php $this->form->prepare(); ?>
+                                     		<?= $this->form()->openTag($this->form) ?>
+                                
+                                            <?php if(isset($this->userId) && $this->userId == '1'){ ?>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('company_id')) ?>
+                                                <?= $this->formElement($this->form->get('company_id')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('company_id')) ?></div>
+                                            </div>
+                                            <?php } ?>
+                                            
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('per_page')) ?>
+                                                <?= $this->formElement($this->form->get('per_page')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('per_page')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('per_pages')) ?>
+                                                <?= $this->formElement($this->form->get('per_pages')) ?>
+                                                <small class="font-italic">Mỗi số cách nhau bởi dấu ','</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('per_pages')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('page_range')) ?>
+                                                <?= $this->formElement($this->form->get('page_range')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('page_range')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12 text-center">
+                                                <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                            </div>
+                                            <?=$this->form()->closeTag($this->form)?>
+                                     	</div>
+                                  	</div>
+                             	</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	var arrCompanies = {};
+
+	<?php 
+	   if(isset($this->arrCompanies)){
+	       foreach($this->arrCompanies as $key => $item){
+	           echo 'arrCompanies["' . $key . '"] = JSON.parse(\'' . json_encode($item, true) . '\');';
+	       }
+	   }
+	?>
+	$(document).on('change','#company_id',function(e){
+		//var id = $(this).attr("value");
+		var id = $(this).val();
+	    if(id != "" && id != "0"){
+			if(typeof arrCompanies[id].per_page !== 'undefined'){
+				$('#per_page').val(arrCompanies[id].per_page);
+			}else{
+			}
+			if(typeof arrCompanies[id].per_pages !== 'undefined'){
+				$('#per_pages').val(arrCompanies[id].per_pages);
+			}else{
+			}
+			if(typeof arrCompanies[id].page_range !== 'undefined'){
+				$('#page_range').val(arrCompanies[id].page_range);
+			}else{
+			}
+	    }else{
+			$('#per_page').val("");
+			$('#per_pages').val("");
+			$('#page_range').val("");
+		}
+		return false;
+	});
+
+});
+</script>

@@ -1,0 +1,44 @@
+<?php
+if($this->countNotify > 0){
+    $countNotify = $this->countNotify;
+}else{
+    $countNotify = "";
+}
+$page = $this->page;
+$optionUser = $this->optionUser;
+?>
+<div id="count-notification" style="display:none"><?= $countNotify ?></div>
+<?php if(!empty($this->arrNotifications)){
+    foreach($this->arrNotifications as $item){ 
+        if($item['is_read'] == 0){ ?>
+            <a href="<?= $item['url'] ?>">
+                <div data-nid="<?= $item['id'] ?>" class="media not-read bg-blue-grey bg-lighten-5" style="margin-bottom: 0px">
+                    <div class="media-left align-self-center">
+                        <img class="media-object rounded-circle" src="<?= ($optionUser[$item['user_id_send']]['avatar'] != "") ? URL_UPLOAD.$optionUser[$item['user_id_send']]['avatar'] : (($optionUser[$item['user_id_send']]['avatar'] == 0) ? ('/img/female-user.png') : ('/img/male-user.png')) ?>" alt="avatar" style="width: 36px;height: 36px">
+                    </div>
+                    <div class="media-body">
+                        <h6 class="media-heading"><?= $optionUser[$item['user_id_send']]['name'] ?></h6>
+                        <p class="notification-text font-small-3 text-muted"><?= $item['description'] ?> </p><small>
+                        <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00"><?= $item['created_at'] ?></time></small>
+                    </div>
+                </div>
+            </a>
+        <?php }else{ ?>
+            <a href="<?= $item['url'] ?>">
+                <div data-nid="<?= $item['id'] ?>" class="media" style="margin-bottom: 0px;">
+                    <div class="media-left align-self-center">
+                        <img class="media-object rounded-circle" src="<?= ($optionUser[$item['user_id_send']]['avatar'] != "") ? URL_UPLOAD.$optionUser[$item['user_id_send']]['avatar'] : (($optionUser[$item['user_id_send']]['avatar'] == 0) ? ('/img/female-user.png') : ('/img/male-user.png')) ?>" alt="avatar" style="width: 36px;height: 36px">
+                    </div>
+                    <div class="media-body">
+                        <h6 class="media-heading"><?= $optionUser[$item['user_id_send']]['name'] ?></h6>
+                        <p class="notification-text font-small-3 text-muted"><?= $item['description'] ?> </p><small>
+                        <time class="media-meta text-muted" datetime="2015-06-11T18:29:20+08:00"><?= $item['created_at'] ?></time></small>
+                    </div>
+                </div>
+            </a>
+        <?php } ?>
+        
+        
+<?php } }else{ ?>
+    <div class="media text-center">Không có thông báo</div> 
+<?php } ?>

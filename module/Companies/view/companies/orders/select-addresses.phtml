@@ -1,0 +1,14 @@
+<?php 
+	if(isset($this->optionAddresses)){
+?>
+		<option value="">--- Chọn một địa chỉ ---</option>
+<?php
+		foreach($this->optionAddresses as $key => $item){
+?>
+			<option value="<?= $key ?>">
+				<?= $item ?>
+			</option>
+<?php
+		}
+	}
+?>

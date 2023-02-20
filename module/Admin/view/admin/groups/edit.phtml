@@ -1,0 +1,49 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        
+    	<?php if(isset($this->userId) && $this->userId == '1'){ ?>
+     	<div class="form-group col-md-12">
+          	<?= $this->formLabel($this->form->get('company_id')) ?>
+          	<?= $this->formElement($this->form->get('company_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('company_id')) ?></div>
+       	</div>
+     	<?php } ?>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('name')) ?>
+            <?= $this->formElement($this->form->get('name')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('name')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('level')) ?>
+            <?= $this->formElement($this->form->get('level')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('level')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('description')) ?>
+            <?= $this->formElement($this->form->get('description')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('description')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('status')) ?>
+            <div class="demo-radio-button">
+            <?= $this->formElement($this->form->get('status')) ?>
+            </div>
+        </div>
+        
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+
+<script src="<?= TEMPS ?>/assets/ckeditor/standard/ckeditor.js"></script>
+<script>
+	CKEDITOR.replace( 'description' );
+</script>

@@ -1,0 +1,13 @@
+.idea
+.htaccess
+/vendor
+composer.lock
+composer.phar
+/public
+def.php
+phpcs.xml
+phpunit.xml.dist
+Vagrantfile
+LICENSE.md
+404.html
+/data

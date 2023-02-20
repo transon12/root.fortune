@@ -1,0 +1,108 @@
+<?php
+$title = "Danh sách quay số";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                  	<button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tính năng</button>
+                  	<div class="dropdown-menu arrow">
+                      	<a class="dropdown-item pxt-modal" title="Thêm dữ liệu" href="<?= $this->url($this->route, ['action' => 'add', 'id' => $this->promotionId]) ?>">
+                      		<i class="la la-plus-circle"></i> Thêm dữ liệu
+                      	</a>
+                  	</div>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->formSearch->prepare(); ?>
+                             	<?= $this->form()->openTag($this->formSearch) ?>
+                              	<div class="form-group col-md-8 text-right">
+                                 	<?= $this->formElement($this->formSearch->get('keyword')) ?>
+                             	</div>
+                           		<div class="form-group col-md-4 text-center">
+                                 	<?= $this->formRow($this->formSearch->get('btnSubmit')) ?> 
+                              	</div>
+                            	<?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                                <th>Số điện thoại</th>
+                                                <th>Mã dự thưởng</th>
+                                                <th class="text-center">Ngày tham gia</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrListDials->getAdapter()->count() > 0){
+                                                $i = 1;
+                                                foreach($this->arrListDials as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="align-middle text-center"><?= $i++ ?></td>
+                                                <td class="align-middle"><?= $item['phone_id'] ?></td>
+                                                <td class="align-middle"><?= $item['code_id'] ?></td>
+                                                <td class="align-middle text-left"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
+                                                <td class="align-middle text-center">
+                                                    <a title="Bạn muốn xóa số điện thoại '<?= $item['phone_id']; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('promotions/list-dials', ['action' => 'delete', 'id' => $this->promotionId, 'list_dials_id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

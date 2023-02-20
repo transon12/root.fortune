@@ -1,0 +1,59 @@
+        <?php 
+            $this->form->prepare();
+            $this->form()->addValidAttribute('route');
+        ?>
+        <?= $this->form()->openTag($this->form) ?>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_success')) ?>
+            <?= $this->formElement($this->form->get('message_success')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_success')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_invalid')) ?>
+            <?= $this->formElement($this->form->get('message_invalid')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_invalid')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_checked')) ?>
+            <?= $this->formElement($this->form->get('message_checked')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_checked')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_checked_limit')) ?>
+            <?= $this->formElement($this->form->get('message_checked_limit')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_checked_limit')) ?></div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_checked_same_phone')) ?>
+            <?= $this->formElement($this->form->get('message_checked_same_phone')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_checked_same_phone')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_outdate')) ?>
+            <?= $this->formElement($this->form->get('message_outdate')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_outdate')) ?></div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_success_qrcode')) ?>
+            <?= $this->formElement($this->form->get('message_success_qrcode')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_success_qrcode')) ?></div>
+        </div>
+
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('message_checked_qrcode')) ?>
+            <?= $this->formElement($this->form->get('message_checked_qrcode')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_checked_qrcode')) ?></div>
+        </div>
+		
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>

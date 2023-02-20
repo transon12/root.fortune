@@ -1,0 +1,38 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        <?php
+        $checkDelete = 0;
+        if(!empty($checkRelationship)){
+        ?>
+        <div class="form-group col-md-12">
+        	<?php
+        	   if(isset($checkRelationship['blocks']) || isset($checkRelationship['messages']) ||
+        	       isset($checkRelationship['codes'])){
+        	       $checkDelete = 1;
+        	       echo "Sản phẩm '" . $this->valueCurrent['name'] . "' không thể xóa, liên hệ admin để biết thêm chi tiết!<br />";
+        	   }elseif(isset($checkRelationship['promotions_products'])){
+        	       echo "Sản phẩm '" . $this->valueCurrent['name'] . "' đang liên kết với một vài chương trình khuyến mãi, nếu xóa thì tất cả liên kết sẽ bị xóa!<br />";
+        	   }
+        	?>
+		</div>
+		<?php 
+		  if($checkDelete == 0){
+		?>
+        <div class="form-group col-md-12 text-center">
+    		<h3>Bạn có muốn xoá?</h3>
+		</div>
+        <?php
+		  }
+        }
+        ?>
+        
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= (($checkDelete == 0) ? $this->formRow($this->form->get('btnSubmit')) : "") ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+
+

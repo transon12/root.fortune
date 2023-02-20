@@ -1,0 +1,146 @@
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/calendars/fullcalendar.min.css">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/plugins/calendars/fullcalendar.min.css">
+<?php
+$title = "Quản lý chấm công";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+    <div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                            
+                			<div class="card-body">
+                                <div id="calendar"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/extensions/fullcalendar.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/extensions/locale-all.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/extensions/gcal.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var calendar = $('#calendar').fullCalendar({
+        //  editable:true, //drag and drop calendar
+        locale: 'vi',
+        eventLimit: true,
+        header:{
+            left:'prev,next today',
+            center:'title',
+            right:'month,agendaWeek,agendaDay'
+        },
+        //  events: '<?= $this->url("persons/time-keeping", ["action" => "view"]) ?>',
+        googleCalendarApiKey: 'AIzaSyCC_a7iiL2C3Im6-x8wEZMlW4jNg_kyb4g',
+        eventSources: [
+            {
+                googleCalendarId: 'vi.vietnamese#holiday@group.v.calendar.google.com',
+            },
+            {
+                url: '<?= $this->url("persons/time-keeping", ["action" => "view"]) ?>',
+                type: 'POST',
+                // data: {
+                //     custom_param1: 'something',
+                //     custom_param2: 'somethingelse'
+                // },
+                error: function() {
+                    alert('Lỗi lấy dữ liệu, vui lòng liên hệ Admin!');
+                },
+            },
+        ],
+        timeFormat: 'HH(:mm)',
+        selectable:true,
+        selectHelper:true,
+        //  select: function(start, end, allDay){
+        //   var title = prompt("Enter Event Title");
+        //   if(title){
+        //    var start = $.fullCalendar.formatDate(start, "Y-MM-DD HH:mm:ss");
+        //    var end = $.fullCalendar.formatDate(end, "Y-MM-DD HH:mm:ss");
+        //    $.ajax({
+        //     url:"insert.php",
+        //     type:"POST",
+        //     data:{title:title, start:start, end:end},
+        //     success:function()
+        //     {
+        //      calendar.fullCalendar('refetchEvents');
+        //      alert("Added Successfully");
+        //     }
+        //    })
+        //   }
+        //  },
+        //  editable:true,
+        /* update calendar */
+        //  eventResize:function(event)
+        //  {
+        //   var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        //   var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        //   var title = event.title;
+        //   var id = event.id;
+        //   $.ajax({
+        //    url:"update.php",
+        //    type:"POST",
+        //    data:{title:title, start:start, end:end, id:id},
+        //    success:function(){
+        //     calendar.fullCalendar('refetchEvents');
+        //     alert('Event Update');
+        //    }
+        //   })
+        //  },
+        /* update calendar */
+        //  eventDrop:function(event){
+        //   var start = $.fullCalendar.formatDate(event.start, "Y-MM-DD HH:mm:ss");
+        //   var end = $.fullCalendar.formatDate(event.end, "Y-MM-DD HH:mm:ss");
+        //   var title = event.title;
+        //   var id = event.id;
+        //   $.ajax({
+        //    url:"update.php",
+        //    type:"POST",
+        //    data:{title:title, start:start, end:end, id:id},
+        //    success:function()
+        //    {
+        //     calendar.fullCalendar('refetchEvents');
+        //     alert("Event Updated");
+        //    }
+        //   });
+        //  },
+        /* delete calendar */
+        //  eventClick:function(event){
+        //   if(confirm("Are you sure you want to remove it?"))
+        //   {
+        //    var id = event.id;
+        //    $.ajax({
+        //     url:"delete.php",
+        //     type:"POST",
+        //     data:{id:id},
+        //     success:function()
+        //     {
+        //      calendar.fullCalendar('refetchEvents');
+        //      alert("Event Removed");
+        //     }
+        //    })
+        //   }
+        //  },
+        });
+    });
+</script>

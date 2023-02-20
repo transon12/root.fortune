@@ -1,0 +1,71 @@
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/forms/selects/select2.min.css">
+
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+<?= $this->form()->openTag($this->form) ?>
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('leave_day_remain')) ?>
+    <?= $this->formElement($this->form->get('leave_day_remain')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('leave_day_remain')) ?></div>
+</div>
+
+<div class="form-group col-md-6">
+    <?= $this->formLabel($this->form->get('leave_start_date')) ?>
+    <?= $this->formElement($this->form->get('leave_start_date')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('leave_start_date')) ?></div>
+</div>
+
+<div class="form-group col-md-6">
+    <?= $this->formLabel($this->form->get('option_leave_start_date')) ?>
+    <?= $this->formElement($this->form->get('option_leave_start_date')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('option_leave_start_date')) ?></div>
+</div>
+
+<div class="form-group col-md-6">
+    <?= $this->formLabel($this->form->get('leave_stop_date')) ?>
+    <?= $this->formElement($this->form->get('leave_stop_date')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('leave_stop_date')) ?></div>
+</div>
+
+<div class="form-group col-md-6">
+    <?= $this->formLabel($this->form->get('option_leave_stop_date')) ?>
+    <?= $this->formElement($this->form->get('option_leave_stop_date')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('option_leave_stop_date')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('send_to')) ?>
+    <?= $this->formElement($this->form->get('send_to')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('send_to')) ?></div>
+</div>
+
+<!-- <div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('reason')) ?>
+    <?= $this->formElement($this->form->get('reason')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('reason')) ?></div>
+</div> -->
+
+<div class="form-group col-md-12 text-center">
+    <button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+</div>
+<?=$this->form()->closeTag($this->form)?>
+
+<script src="<?= TEMPS ?>app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/js/scripts/forms/select/form-select2.min.js"></script>
+
+<script src="<?= TEMPS ?>assets/pxt.js"></script>
+<script type="text/javascript">
+$(function () {
+    $('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss',
+   	});
+    $('.select2').select2({dropdownParent: $('#defaultSize')});
+});
+</script>
+
+

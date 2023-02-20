@@ -1,0 +1,82 @@
+<div class="header-navbar navbar-expand-sm navbar navbar-horizontal navbar-fixed navbar-dark navbar-without-dd-arrow navbar-shadow" role="navigation" data-menu="menu-wrapper">
+	<div class="navbar-container main-menu-content" data-menu="menu-container">
+		<ul class="nav navbar-nav" id="main-menu-navigation" data-menu="menu-navigation">
+			<li class="dropdown nav-item" data-menu="dropdown">
+				<a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#">
+					<i class="la la-gear"></i>
+					<span class="menu-title" data-i18n="nav.dash.main">Quản lý chung</span>
+				</a>
+				<ul class="dropdown-menu">
+					<li class="<?= ($urlModule == "storehouses" && $urlController == 'index' && $urlAction == 'index') ? 'active' : '' ?>">
+						<a class="dropdown-item" href="<?= $this->url('storehouses/index', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.dash.products">Quản lý kho</span></a>
+					</li>
+					<li class="<?= ($urlModule == "statistics" && $urlController == 'search') ? 'active' : '' ?>">
+						<a class="dropdown-item" href="<?= $this->url('statistics/search', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.dash.crypto">Tra cứu</span></a>
+					</li>
+					<?php if ($this->sessionContainer->id == '1') { ?>
+						<li class="<?= ($urlModule == "codes" && $urlController == 'index') ? 'active' : '' ?>">
+							<a class="dropdown-item" href="<?= $this->url('codes/index', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.dash.codes">Mã PIN</span></a>
+						</li>
+					<?php } ?>
+					<li class="<?= ($urlModule == "storehouses" && $urlController == 'products') ? 'active' : '' ?>">
+						<a class="dropdown-item" href="<?= $this->url('storehouses/products', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.supplies.storehouses">Quản lý sản phẩm</span></a>
+					</li>
+					<li class="<?= ($urlModule == "storehouses" && $urlController == 'agents') ? 'active' : '' ?>">
+						<a class="dropdown-item" href="<?= $this->url('storehouses/agents', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.dash.agents">Quản lý đại lý</span></a>
+					</li>
+			</li>
+		</ul>
+		</li>
+		<li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#"><i class="la la-bullseye"></i><span class="menu-title" data-i18n="nav.admin.main">Quản lý tài khoản</span></a>
+			<ul class="dropdown-menu">
+				<li class="<?= ($urlModule == "admin" && $urlController == 'users' && $urlAction == 'index') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('admin/users', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.admin.users">Tài khoản</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'user-crms' && $urlAction == 'index') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('admin/user-crms', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.admin.user_crms">Tài khoản CRM</span></a>
+				</li>
+			</ul>
+		</li>
+		<li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#"><i class="la la-bullseye"></i><span class="menu-title" data-i18n="nav.promotions.main">Khuyến mãi</span></a>
+			<ul class="dropdown-menu">
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'index') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.promotions.index">Khuyến mãi</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'statistic-list') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'statistic-list']) ?>"><i></i><span data-i18n="nav.promotions.index.statistic_list">Ds tham gia KM</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'statistic-win') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'statistic-win']) ?>"><i></i><span data-i18n="nav.promotions.index.statistic_win">Ds trúng thưởng KM</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'input-win') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'input-win']) ?>"><i></i><span data-i18n="nav.promotions.index.input_win">Ds nhập thông tin</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'reward') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'reward']) ?>"><i></i><span data-i18n="nav.promotions.index.reward">Ds trả thưởng</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'finished') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'finished']) ?>"><i></i><span data-i18n="nav.promotions.index.finished">Ds đã trả thưởng</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'dials' && $urlAction == 'index') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/dials', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.promotions.dials.index">Quay số</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'dials' && $urlAction == 'statistic-list') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/dials', ['action' => 'statistic-list']) ?>"><i></i><span data-i18n="nav.promotions.dials.statistic_list">Ds tham gia quay số</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'dials' && $urlAction == 'statistic-win') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/dials', ['action' => 'statistic-win']) ?>"><i></i><span data-i18n="nav.promotions.dials.statistic_win">Ds trúng thưởng quay số</span></a>
+				</li>
+				<li class="<?= ($urlModule == "promotions" && $urlController == 'offers' && $urlAction == 'index') ? 'active' : '' ?>">
+					<a class="dropdown-item" href="<?= $this->url('promotions/offers', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.promotions.offers.index">Quản lý đề xuất</span></a>
+				</li>
+			</ul>
+		</li>
+		<li class="dropdown nav-item" data-menu="dropdown"><a class="dropdown-toggle nav-link" data-toggle="dropdown" href="#"><i class="la la-line-chart"></i><span class="menu-title" data-i18n="nav.statistics.main">Thống kê</span></a>
+			<ul class="dropdown-menu">
+				<li class="<?= ($urlModule == "statistics" && $urlController == 'index') ? 'active' : '' ?>"><a class="dropdown-item" href="<?= $this->url('statistics/index', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.statistics.index">Tin nhắn kiểm tra</span></a></li>
+			</ul>
+		</li>
+
+		</ul>
+	</div>
+</div>

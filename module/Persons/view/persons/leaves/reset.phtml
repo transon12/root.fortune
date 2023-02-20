@@ -1,0 +1,28 @@
+<?php 
+    // $this->form->prepare();
+    // $this->form()->addValidAttribute('route');
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+                                    <h3>Khi Xác nhận sẽ reset tất cả ngày phép của nhân viên</h3>
+                                    <div class="form-group col-md-6 text-center">
+                                        <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                    </div>
+                                <?=$this->form()->closeTag($this->form)?>
+                            </div>
+                        </div>
+					</div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+

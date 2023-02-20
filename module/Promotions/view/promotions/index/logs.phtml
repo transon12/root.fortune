@@ -1,0 +1,91 @@
+<div class="row">
+    <div class="col-12 text-center mt-3 my-5 h4">
+        Lịch sử thao tác vào số điện thoại: <strong><?= $valueCurrent["phone_id"] ?></strong><br />
+        Tham gia chương trình: <strong><?= isset($optionPromotions[$valueCurrent['promotion_id']]) ? $optionPromotions[$valueCurrent['promotion_id']] : "" ?></strong><br />
+        Ngày trúng thưởng: <strong><?= date_format(date_create($valueCurrent['created_at']), 'd/m/Y H:i:s') ?></strong>
+    </div>
+    <div class="col-12">
+
+        <table class="table bg-white table-bordered table-striped table-hover black">
+            <thead>
+                <tr>
+                    <th class="text-center">Ngày thao tác</th>
+                    <th class="text-center">Tài khoản thao tác</th>
+                    <th class="text-center">Sự kiện xảy ra</th>
+                    <th class="text-center">Chi tiết sự kiện</th>
+                </tr>
+            </thead>
+            <tbody>
+                <?php
+                if (isset($arrLogWinners)) {
+                    $sources = \Admin\Service\Promotion::returnSource();
+                    foreach ($arrLogWinners as $item) {
+                        $type = "Vào danh sách trúng thưởng";
+                        if ($item["type"] == '1') {
+                            $type = "Chuyển sang nhập thông tin";
+                        } elseif ($item["type"] == '2') {
+                            $type = "Nhập thông tin";
+                        } elseif ($item["type"] == '3') {
+                            $type = "Chuyển sang trả thưởng";
+                        } elseif ($item["type"] == '4') {
+                            $type = "Trả thưởng";
+                        } elseif ($item["type"] == '5') {
+                            $type = "Chuyển sang đã trả thưởng";
+                        } elseif ($item["type"] == '6') {
+                            $type = "Hoàn đơn";
+                        }
+                        $datas = json_decode($item["datas"], true);
+                ?>
+                        <tr>
+                            <td class="align-middle text-center"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
+                            <td class="align-middle text-center"><?= isset($optionUsers[$item['user_id']]) ? $optionUsers[$item['user_id']] : "Không xác định" ?></td>
+                            <td class="align-middle text-center"><?= $type ?></td>
+                            <td class="align-middle">
+                                <?php
+                                if (isset($datas["user_input_id"])) {
+                                    echo "<p><strong>Tài khoản CRM:</strong> " . $datas["user_input_id"] . "</p>";
+                                }
+                                if (isset($datas["user_input_name"])) {
+                                    echo "<p><strong>Tên CRM:</strong> " . $datas["user_input_name"] . "</p>";
+                                }
+                                if (isset($datas["user_input"])) {
+                                    echo "<p><strong>Tài khoản fortune:</strong> " . (isset($optionUsers[$datas['user_input']]) ? $optionUsers[$datas['user_input']] : "Không xác định") . "</p>";
+                                }
+                                if (isset($datas["source"])) {
+                                    echo "<p><strong>Nguồn:</strong> " . (isset($sources[$datas["source"]]) ? $sources[$datas["source"]] : "Không xác định") . "</p>";
+                                }
+                                if(isset($datas["phone_recipient"])){
+                                    echo "<p><strong>Số điện thoại người nhận:</strong> " . $datas["phone_recipient"] . "</p>";
+                                }
+                                if(isset($datas["fullname_recipient"])){
+                                    echo "<p><strong>Tên người nhận:</strong> " . $datas["fullname_recipient"] . "</p>";
+                                }
+                                if(isset($datas["address_recipient"])){
+                                    echo "<p><strong>Địa chỉ người nhận:</strong> " . $datas["address_recipient"] . "</p>";
+                                }
+                                if(isset($datas["product_id"])){
+                                    echo "<p><strong>Sản phẩm được tặng:</strong> " . (isset($this->optionProducts[$datas["product_id"]]) ? $this->optionProducts[$datas["product_id"]] : "Không xác định"). "</p>";
+                                }
+                                if (isset($datas["note_1"])) {
+                                    echo "<p><strong>Ghi chú từ người chuyển thông tin:</strong> " . $datas["note_1"] . "</p>";
+                                }
+                                if (isset($datas["note_2"])) {
+                                    echo "<p><strong>Ghi chú từ người nhập thông tin:</strong> " . $datas["note_2"] . "</p>";
+                                }
+                                if (isset($datas["note_3"])) {
+                                    echo "<p><strong>Ghi chú từ người trả thưởng:</strong> " . $datas["note_3"] . "</p>";
+                                }
+                                // if(isset($datas[""])){
+                                //     echo "<p><strong>:</strong> " . $datas[""] . "</p>";
+                                // }
+                                ?>
+                            </td>
+                        </tr>
+                <?php
+                    }
+                }
+                ?>
+            </tbody>
+        </table>
+    </div>
+</div>

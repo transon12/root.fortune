@@ -1,0 +1,157 @@
+<?php
+$title = "Quản lý kho";
+$this->headTitle($title);
+// check view_all_storehouse
+$viewAllStorehouse = "1";
+if(isset($this->userConfigs['view_all_storehouse'])){
+    $viewAllStorehouse = $this->userConfigs['view_all_storehouse'];
+}
+//\Zend\Debug\Debug::dump($this->userConfigs['view_all_storehouse']); die();
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                    <a class="btn btn-success pxt-modal" href="javascript:void(0)" title="Thêm dữ liệu" 
+                      		route="<?= $this->url('storehouses/index', ['action' => 'add']) ?>" data-toggle="modal" data-target="#defaultSize">
+                      		<i class="la la-plus-circle"></i> Thêm dữ liệu
+                    </a>
+                  	</div>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->formSearch->prepare(); ?>
+                             	<?= $this->form()->openTag($this->formSearch) ?>
+                                <?php if(isset($this->userId) && $this->userId == '1'){ ?>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('company_id')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('company_id')) ?></div>
+                                </div>
+                                <?php } ?>
+                                <div class="form-group col-md-4">
+                             		<?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                              	</div>
+                              	<?php 
+                              	 if($viewAllStorehouse == "1"){
+                              	?>
+                                <div class="form-group col-md-3">
+                             		<?= $this->formElement($this->formSearch->get('user_id')) ?>
+                              	</div>
+                              	<?php 
+                              	 }
+                              	?>
+                             	<div class="form-group col-md-4">
+                                	<?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                             	</div>
+                            	<?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <?php if($this->userId == "1"){ ?><th class="text-center">Công ty</th><?php } ?>
+                                                <?php if($viewAllStorehouse == "1"){ ?><th>Tài khoản tạo</th><?php } ?>
+                                                <th class="text-center">Tên</th>
+                                                <th class="text-center">Địa chỉ</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrStorehouses->getAdapter()->count() > 0){
+                                                $i = 1;
+                                                $optionCompanies = $this->optionCompanies;
+                                                $optionUsers = $this->optionUsers;
+                                                foreach($this->arrStorehouses as $item){
+                                                    if($viewAllStorehouse == "1" || $item['user_id'] == $this->userId){
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center"><?= $i++; ?></td>
+                                            	<?php if($this->userId == "1"){ ?><td class="align-middle">
+                                                    <?= isset($optionCompanies[$item['company_id']]) ? $optionCompanies[$item['company_id']] : "Không xác định"; ?>
+                                                </td><?php } ?>
+                                            	<?php if($viewAllStorehouse == "1"){ ?>
+                                                <td class="align-middle"><?= isset($optionUsers[$item['user_id']]) ? $optionUsers[$item['user_id']] : "Không xác định"; ?></td>
+                                                <?php } ?>
+                                                <td><?= $item['name']; ?></td>
+                                                <td><?= $item['full_address']; ?></td>
+                                                <td class="text-center"><?= $item['created_at']; ?></td>
+                                                <td class="text-center">
+                                                    <a title="Sửa dữ liệu" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('storehouses/index', ['action' => 'edit', 'id' => $item['id']]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa '<?= $item['name']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#defaultSize"
+                                                    	class="pxt-modal" route="<?= $this->url('storehouses/index', ['action' => 'delete', 'id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+                                                    <a title="Quản lý vật tư trong kho '<?= $item['name']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#xlarge"
+                                                    	class="pxt-modal" route="<?= $this->url('storehouses/index', ['action' => 'iframe-supplies-ins', 'id' => $item['id']]) ?>" >
+    													<i class="la la-map-marker"></i></a>
+                                                    <a title="Nhập mã PIN vào kho '<?= $item['name']; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#xlarge"
+                                                    	route="<?= $this->url('storehouses/index', ['action' => 'iframe-imports', 'id' => $item['id']]) ?>">
+    													<i class="la la-list-alt"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                    }
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										<?= $this->paginationControl(
+                                            $this->arrStorehouses,
+                                            'Sliding',
+                                            'partial/paginator',
+                                            ['route' => 'storehouses/index', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        ) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

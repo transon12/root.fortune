@@ -1,0 +1,4 @@
+<ul class="nav nav-tabs customtab" role="tablist">
+ 	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'add') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'add', 'id' => $this->promotionId]) ?>" role="tab"><span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Thêm từng thông tin</span></a> </li>
+   	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'add-file') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'add-file', 'id' => $this->promotionId]) ?>" role="tab"><span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Thêm bằng Excel</span></a> </li>
+</ul>

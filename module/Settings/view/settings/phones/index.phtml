@@ -1,0 +1,131 @@
+<?php
+$this->headTitle('Danh sách số điện thoại');
+?>
+            <div class="row page-titles">
+                <div class="col-md-5 align-self-center">
+                    <h3 class="text-themecolor">Quản lý số điện thoại</h3>
+                </div>
+                <div class="col-md-7 align-self-center">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Trang chủ</a></li>
+                        <li class="breadcrumb-item">Quản lý số điện thoại</li>
+                        <li class="breadcrumb-item active">Danh sách</li>
+                    </ol>
+                </div>
+            </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <div id="pxtSearch" role="tablist" class="minimal-faq" aria-multiselectable="true">
+                                    <div class="card m-b-0">
+                                        <div class="card-header" role="tab" id="pxtHeading">
+                                            <div class="row">
+                                            <div class="col-lg-2 col-md-12"><button type="button" class="btn btn-info btn-pxt-modal" route="<?= $this->url($this->route, ['action' => 'add']) ?>" data-toggle="modal" data-target="#modal-medium" data-whatever="@getbootstrap"><i class="fa fa-plus"></i> Thêm dữ liệu</button></div>
+                                            <div class="col-lg-7 col-md-12 row">
+                                                <?php
+                                                    $this->formImport->prepare();
+                                                ?>
+                                                <?= $this->form()->openTag($this->formImport) ?>
+                                                	<div class="col-lg-7 col-md-12">
+                                                        <?= $this->formElement($this->formImport->get('file_import')) ?>
+                                                        <div class="text-danger"><?= $this->formElementErrors($this->formImport->get('file_import')) ?></div>
+                                                	</div>
+                                                	<div class="col-lg-3 col-md-12">
+                                                    	<?= $this->formRow($this->formImport->get('btnImport')) ?> 
+                                                	</div>
+                                                	<div class="col-lg-2 col-md-12">
+                                                    	<?= $this->formRow($this->formImport->get('btnSample')) ?>
+                                                	</div>
+                                                <?=$this->form()->closeTag($this->formImport)?>
+                                            </div>
+                                            <div class="col-lg-3 col-md-12"><a style="float: right;" class="link" data-toggle="collapse" data-parent="#pxtSearch" href="#pxtCollapse" aria-expanded="true" aria-controls="pxtCollapse">
+                                              <?= $this->partial("partial/buttons/search.phtml") ?>
+                                            </a></div>
+                                          </div>
+                                        </div>
+                                        <div id="pxtCollapse" class="collapse <?= isset($this->queries['btnSubmit']) ? 'show' : '' ?>" role="tabpanel" aria-labelledby="pxtHeading">
+                                            <div class="card-body">
+                                                <?php
+                                                    $this->formSearch->prepare();
+                                                ?>
+                                                <?= $this->form()->openTag($this->formSearch) ?>
+                                                
+                                                <div class="form-group col-md-6">
+                                                    <?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                                                </div>
+                                                <div class="form-group col-md-6">
+                                                    <?php
+                                                        echo $this->formRow($this->formSearch->get('btnSubmit'));
+                                                    ?>
+                                                </div>
+                                                <?=$this->form()->closeTag($this->formSearch)?>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="table-responsive m-t-10">
+                                	<?php /* ?><button type="button" class="btn btn-info" id="pxt-add" data-toggle="modal" data-target="#modal-medium" data-whatever="@getbootstrap"><i class="fa fa-plus"></i> Thêm dữ liệu</button><?php */ ?>
+                                	
+                                    <table class="display nowrap table table-hover table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                                <th class="text-center">Số điện thoại</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <th class="text-center">Thời gian chặn (giờ)</th>
+                                                <th class="text-center">Ngày chặn</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrPhones->getAdapter()->count() > 0){
+                                                $i = 1;
+                                                foreach($this->arrPhones as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center"><?= $i++ ?></td>
+                                                <td class="text-center"><?= $item['id']; ?></td>
+                                                <td class="text-center"><?= $item['created_at']; ?></td>
+                                                <td class="text-center"><?= $item['lock_time']; ?></td>
+                                                <td class="text-center"><?= $item['locked_at']; ?></td>
+                                                <td class="text-center">
+                                                <a title="Sửa dữ liệu" href="javascript:void(0)" class="btn-pxt-modal" 
+                                                	route="<?= $this->url('settings/phones', ['action' => 'edit', 'id' => $item['id']]) ?>" 
+                                                	data-toggle="modal" data-target="#modal-medium" data-whatever="@getbootstrap">
+													<i class="fa fa-fw fa-edit"></i></a>
+                                                <a title="Bạn muốn xóa số điện thoại: '<?= $item['id']; ?>'?" href="javascript:void(0)" class="btn-pxt-modal" 
+                                                	route="<?= $this->url('settings/phones', ['action' => 'delete', 'id' => $item['id']]) ?>" 
+                                                	data-toggle="modal" data-target="#modal-medium" data-whatever="@getbootstrap">
+													<i class="fa fa-fw fa-times"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										<?= $this->paginationControl(
+                                            $this->arrPhones,
+                                            'Sliding',
+                                            'partial/paginator',
+                                            ['route' => 'settings/phones', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        ) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>

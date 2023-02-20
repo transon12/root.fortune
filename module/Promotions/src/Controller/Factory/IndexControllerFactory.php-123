@@ -1,0 +1,41 @@
+<?php
+/**
+ * @copyright xuanthieu.cse@gmail.com
+ */
+
+namespace Promotions\Controller\Factory;
+
+use Interop\Container\ContainerInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
+use Promotions\Controller\IndexController;
+use Admin\Model\PxtAuthentication;
+use Storehouses\Model\Products;
+use Storehouses\Model\Agents;
+use Promotions\Model\Promotions;
+use Promotions\Model\PromotionsProducts;
+use Settings\Model\Settings;
+use Promotions\Model\ListPromotions;
+use Promotions\Model\WinnerPromotions;
+use Promotions\Model\ListDials;
+use Promotions\Model\DialsPromotions;
+use Promotions\Model\WinnerDials;
+use Settings\Model\Companies;
+
+class IndexControllerFactory implements FactoryInterface{
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null){
+        return new IndexController(
+            $container->get(PxtAuthentication::class),
+            $container->get(Settings::class),
+            $container->get(Products::class),
+			$container->get(Agents::class),
+            $container->get(Promotions::class),
+            $container->get(PromotionsProducts::class),
+            $container->get(ListPromotions::class),
+            $container->get(WinnerPromotions::class),
+            $container->get(ListDials::class),
+            $container->get(DialsPromotions::class),
+            $container->get(WinnerDials::class),
+            $container->get(Companies::class)
+        );
+    }
+}

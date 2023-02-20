@@ -1,0 +1,106 @@
+<?php 
+    use Zend\Session\Container;
+    use Zend\Session\SessionManager;
+    $manager = new SessionManager();
+    $this->sessionContainer = new Container('session_login', $manager);
+//     $arrUrl = explode('/', $this->url());
+    $arrUrl = explode('/', $_SERVER['REQUEST_URI']);
+   // \Zend\Debug\Debug::dump($this->viewmodel()); die();
+    $urlModule = isset($arrUrl[1]) ? $arrUrl[1] : 'index';
+    $urlController = isset($arrUrl[2]) ? $arrUrl[2] : 'index';
+    $urlAction = isset($arrUrl[3]) ? $arrUrl[3] : 'index';
+//     echo $urlModule; echo "<br />";
+//     echo $urlController; echo "<br />";
+//     echo $urlAction; echo "<br />";
+//     die();
+?>
+<?= $this->doctype() ?>
+<html class="loading" lang="en" data-textdirection="ltr">
+  <!-- BEGIN: Head-->
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
+    <meta name="description" content="Modern admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities with bitcoin dashboard.">
+    <meta name="keywords" content="admin template, modern admin template, dashboard template, flat admin template, responsive admin template, web app, crypto dashboard, bitcoin dashboard">
+    <meta name="author" content="PIXINVENT">
+    <title>Dashboard sales - Modern Admin - Clean Bootstrap 4 Dashboard HTML Template + Bitcoin Dashboard</title>
+    <link rel="apple-touch-icon" href="<?= TEMPS ?>app-assets/images/ico/apple-icon-120.png">
+    <link rel="shortcut icon" type="image/x-icon" href="<?= TEMPS ?>app-assets/images/ico/logo.png">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/vendors.min.css">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/colors.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/components.min.css">
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/menu/menu-types/horizontal-menu.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/colors/palette-gradient.min.css">
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>assets/css/style.css">
+    <!-- END: Custom CSS-->
+
+    <!-- BEGIN: Vendor JS-->
+    <script src="<?= TEMPS ?>app-assets/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+  </head>
+  <!-- END: Head-->
+
+  <!-- BEGIN: Body-->
+  <body class="horizontal-layout horizontal-menu 2-columns  " data-open="hover" data-menu="horizontal-menu" data-col="2-columns">
+
+    <!-- BEGIN: Header-->
+    <?php include_once("layout-admin/header.phtml"); ?>
+    <!-- END: Header-->
+
+
+    <!-- BEGIN: Main Menu-->
+	<?php include_once("layout-admin/top-sidebar.phtml"); ?>
+    <!-- END: Main Menu-->
+    
+	
+    <!-- BEGIN: Content-->
+    <?= $this->content ?>
+    <!-- END: Content-->
+
+    <!-- BEGIN: Footer-->
+    <?php /* ?><footer class="footer footer-static footer-light navbar-border navbar-shadow">
+      <p class="clearfix blue-grey lighten-2 text-sm-center mb-0 px-2">
+      	<span class="float-md-left d-block d-md-inline-block"><?= COPYRIGHT ?></span>
+      	<span class="float-md-right d-none d-lg-block"><?= COPYRIGHT_INFO ?><span id="scroll-top"></span></span></p>
+    </footer><?php */ ?>
+    <!-- END: Footer-->
+
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="<?= TEMPS ?>app-assets/vendors/js/ui/jquery.sticky.js"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="<?= TEMPS ?>assets/pxt.js"></script>
+    <script src="<?= TEMPS ?>app-assets/js/core/app-menu.min.js"></script>
+    <script src="<?= TEMPS ?>app-assets/js/core/app.min.js"></script>
+    <script src="<?= TEMPS ?>app-assets/js/scripts/customizer.min.js"></script>
+    <script src="<?= TEMPS ?>app-assets/js/scripts/footer.min.js"></script>
+    <!-- END: Theme JS-->
+
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script>
+
+
+
+    <?php include_once("layout-admin/flash-messenger.php"); ?>
+    <?php include_once("layout-admin/script.php"); ?>
+  </body>
+  <!-- END: Body-->
+</html>

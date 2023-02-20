@@ -1,0 +1,147 @@
+<?php
+$title = "Danh sách tham gia khuyến mãi";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row mb-1">
+            <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+                <h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+                <div class="row breadcrumbs-top d-inline-block">
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><?= $title ?></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="content-header-right col-md-6 col-12">
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <?php $this->formSearch->prepare(); ?>
+                                <?= $this->form()->openTag($this->formSearch) ?>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('datetime_begin')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('datetime_begin')) ?></div>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('datetime_end')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('datetime_end')) ?></div>
+                                </div>
+                                <div class="form-group col-md-9">
+                                    <?= $this->formElement($this->formSearch->get('promotion_id')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('promotion_id')) ?></div>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                                    <?= $this->formRow($this->formSearch->get('btnExport')) ?>
+                                </div>
+                                <?= $this->form()->closeTag($this->formSearch) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content show">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Mã Pin</th>
+                                                <th class="text-center">Số điện thoại</th>
+                                                <th class="text-center">Sản phẩm</th>
+												<th class="text-center">Tên Đại Lý</th>
+												<!--th class="text-center">Tinh thanh</th>
+												<th class="text-center">type_agent</th-->
+                                                <th class="text-center">Điểm</th>
+                                                <th class="text-center">Ngày tham gia</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if ($this->arrListPromotions->getAdapter()->count() > 0) {
+                                                $arrIsType = Promotions\Model\Promotions::returnIsType();
+                                                $i = 1;
+                                                foreach ($this->arrListPromotions as $item) {
+													$contentIn = json_decode($item['content_in'], true);
+                                            ?>
+                                                    <tr>
+                                                        <td class="text-center align-middle"><?= $i++; ?></td>
+                                                        <td class="text-center align-middle"><?= $item['code_id'] ?></td>
+                                                        <td class="text-center align-middle"><?= $item['phone_id'] ?></td>
+                                                        <td class="align-middle">
+                                                            <?= isset($optionProduct[$item["product_id"]])
+                                                                ? $optionProduct[$item["product_id"]] : "Không xác định" ?>
+                                                        </td>
+														<td class="align-middle">
+                                                            <?= isset($optionAgent[$item["agent_id"]])
+                                                                ? $optionAgent[$item["agent_id"]] : "Không xác định" ?>
+                                                        </td>
+														
+														<!--td class="text-center align-middle"><?= isset($contentIn['name_city']) ? $contentIn['name_city'] : "Không xác định" ?></td>
+														<td class="text-center align-middle"><?= isset($contentIn['type_agent']) ? $contentIn['type_agent'] : "Không xác định" ?></td-->
+																												
+                                                        <td class="text-center align-middle"><?= $item['score'] ?></td>
+                                                        <td class="text-center align-middle"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <tr>
+                                                    <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                                </tr>
+                                            <?php
+                                            }
+                                            ?>
+                                        </tbody>
+                                        <?= $this->paginationControl(
+                                            $this->arrListPromotions,
+                                            'Sliding',
+                                            'partial/paginator',
+                                            ['route' => $this->route, 'param' => ['action' => 'statistic-list'], 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        ) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<!-- <script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script> -->
+<script type="text/javascript">
+    $(function() {
+        $('.datetimepicker-input').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm:ss'
+        });
+    });
+</script>

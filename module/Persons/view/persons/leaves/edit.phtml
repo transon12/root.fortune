@@ -1,0 +1,21 @@
+<?php
+$this->form->prepare();
+$this->form()->addValidAttribute('route');
+?>
+<?= $this->form()->openTag($this->form) ?>
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('total_leave')) ?>
+    <?= $this->formElement($this->form->get('total_leave')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('total_leave')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('leave_day_used')) ?>
+    <?= $this->formElement($this->form->get('leave_day_used')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('leave_day_used')) ?></div>
+</div>
+<div class="form-group col-md-12 text-center">
+    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+</div>
+
+<?= $this->form()->closeTag($this->form) ?>

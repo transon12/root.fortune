@@ -1,0 +1,86 @@
+	<div class="card">
+      	<div class="card-body">
+          	<form method="POST" class="form-horizontal row" id="event-form-modal" enctype="multipart/form-data" data-target="#large" route="<?= $this->url('admin/users', ['action' => 'permissions-allow', 'id' => $this->valueCurrent['id']]) ?>">	
+          		<div class="table-responsive m-t-10" style="">
+                  	<table class="display nowrap table table-hover table-striped" cellspacing="0" width="100%">
+                     	<thead>
+                          	<tr>
+                             	<th class="text-center">
+                             		<input type="checkbox" id="pxt_check_all" totalParent="<?= count($this->arrMcas) ?>" class="chk-col-brown" />
+                             		<label for="pxt_check_all"><strong>Chọn tất cả</strong></label>
+                             	</th>
+                        	</tr>
+                    	</thead>
+                     	<tbody>
+                     	<?php 
+                     		if(!empty($this->arrMcas)){
+                     		    foreach($this->arrMcas as $item){
+                     	?>
+                          	<tr>
+                             	<td class="text-left align-middle">
+                             		<input type="checkbox" name="pxt_check_<?= $item['id'] ?>" id="pxt_check_<?= $item['id'] ?>" totalChild="<?= count($item['child']) ?>"
+                             			class="chk-col-brown pxt_check_parent" checkRelationship="pxt_check_child_<?= $item['id'] ?>" />
+                                    <label for="pxt_check_<?= $item['id'] ?>"><strong><?= $item['name'] ?></strong></label>
+								</td>
+                            </tr>
+                        <?php 
+                                     if(!empty($item['child'])){
+                                         foreach($item['child'] as $child){
+                        ?>
+                          	<tr>
+                             	<td class="text-left align-middle">
+                             		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="checkbox" <?= isset($this->currentMcasUsersAllow[$child['id'] . '-' . $this->valueCurrent['id']]) ? "checked" : "" ?> name="pxt_check-<?= $child['id'] ?>" id="pxt_check-<?= $child['id'] ?>" class="chk-col-brown pxt_check_child_<?= $item['id'] ?>" />
+                                    <label for="pxt_check-<?= $child['id'] ?>"><?= $child['name'] ?></label>
+								</td>
+                            </tr>
+                        <?php
+                                         }
+                                     }
+                     		     }
+                     		 }
+                        ?>
+                     	</tbody>
+                   	</table>
+         		</div>
+             	<div class="form-group col-md-12 text-center">
+                	<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+                	<input type="submit" name="btnSubmit" class="btn btn-success" value="Lưu">		
+            	</div>
+        	</form>
+     	</div>
+	</div>
+       	
+<script type="text/javascript">
+    $(function() {
+    	$('#pxt_check_all').change(function() {
+    	    var checkboxes = $(this).closest('form').find(':checkbox');
+			//console.log($(this).is(':checked'));
+    	    checkboxes.prop('checked', $(this).is(':checked'));
+    	});
+    	$('.pxt_check_parent').change(function() {
+        	var checkRelationship = $(this).attr('checkRelationship');
+    	    var checkboxes = $(this).closest('form').find('.' + checkRelationship);
+    	    checkboxes.prop('checked', $(this).is(':checked'));
+    	});
+    	// recheck parent if full child is checked
+    	var totalParent = 0;
+		$( ".pxt_check_parent" ).each(function() {
+			var checkRelationship = $(this).attr('checkRelationship');
+			var totalChild = $(this).attr('totalChild');
+			var total = 0;
+			$( "." + checkRelationship ).each(function() {
+    			if($(this).is(':checked')){
+        			total++;
+        		}
+			});
+			if(total == totalChild){
+				totalParent++;
+				$(this).prop('checked', true);
+			}
+    	});
+    	if($("#pxt_check_all").attr('totalParent') == totalParent){
+    		$("#pxt_check_all").prop('checked', true);
+        }
+    })
+	</script>
+       	

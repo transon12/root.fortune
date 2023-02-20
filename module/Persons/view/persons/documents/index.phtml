@@ -1,0 +1,42 @@
+<table class="table bg-white table-bordered table-striped table-hover black">
+    <thead>
+        <tr>
+            <th class="text-center">STT</th>
+            <th class="text-center">Tên</th>
+            <th class="text-center">Ngày upload</th>
+            <th class="text-center">Sự kiện</th>
+        </tr>
+    </thead>
+    <tbody>
+        <?php
+                if(!empty($this->arrFileUploads)){
+                    $i = 0;
+                    foreach($this->arrFileUploads as $item){
+            ?>
+            <tr>
+                <td class="align-middle text-center"><?= ++$i; ?></td>
+                <td class="align-middle"><?= $item["name"] ?></td>
+                <td class="align-middle text-center"><?= $item["created_at"] ?></td>
+                <td class="align-middle text-center">
+                    <a class="pxt-modal" title="<?= $item["name"] ?>" href="javascript:void(0)" data-toggle="modal" data-target="#xlarge"
+                        route="<?= $this->url('persons/index', ['action' => 'see', 'id' => $item['id']]) ?>">
+                        <i class="la la-eye"></i>
+                    </a>
+                    <a title="Bạn muốn sửa '<?= $item['name']; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                        route="<?= $this->url('persons/index', ['action' => 'edit', 'id' => $item['id']]) ?>">
+                        <i class="la la-pencil"></i></a>
+                    <a title="Bạn muốn xóa '<?= $item['name']; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                        route="<?= $this->url('persons/index', ['action' => 'delete', 'id' => $item['id']]) ?>">
+                        <i class="la la-close"></i></a>
+                    
+                </td>
+            </tr>
+            <?php }
+                }else{ ?>
+                        <tr>
+                            <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                        </tr>
+            <?php   }
+            ?>
+    </tbody>
+</table>

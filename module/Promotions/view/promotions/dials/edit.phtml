@@ -1,0 +1,176 @@
+<?php
+$title = "Sửa chương trình quay số";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="<?= $this->url($this->route, ['action' => 'index']) ?>">Danh sách</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+                                <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
+                                        <?= $this->formLabel($this->form->get('name')) ?>
+                                        <?= $this->formElement($this->form->get('name')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('name')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <?= $this->formLabel($this->form->get('datetime_begin')) ?>
+                                        <?= $this->formElement($this->form->get('datetime_begin')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('datetime_begin')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <?= $this->formLabel($this->form->get('datetime_end')) ?>
+                                        <?= $this->formElement($this->form->get('datetime_end')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('datetime_end')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <?= $this->formLabel($this->form->get('description')) ?>
+                                        <?= $this->formElement($this->form->get('description')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('description')) ?></div>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <div class="form-group col-md-12">
+                                        <?= $this->formLabel($this->form->get('status')) ?>
+                                        <div class="demo-radio-button">
+                                        <?= $this->formElement($this->form->get('status')) ?>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-md-12">
+                                        <?= $this->formLabel($this->form->get('win_more')) ?>
+                                        <div class="demo-radio-button">
+                                        <?= $this->formElement($this->form->get('win_more')) ?>
+                                        </div>
+                                    </div>
+                                    <?php 
+                                        if(!empty($this->arrPromotions)){
+                                            $arrDialsPromotions = $this->arrDialsPromotions;
+                                    ?>
+                                    <div class="form-group col-md-12">
+                                    	<label for="promotions_id">Danh sách sẽ lấy từ chương trình khuyến mãi: </label><br />
+                                    	<?php 
+                                    	   foreach($this->arrPromotions as $key => $item){
+                                    	?>
+                                        <input type="checkbox" name="promotions_id[]" id="pxt_check_<?= $key ?>" value="<?= $key ?>" class="chk-col-brown" <?= (isset($arrDialsPromotions[$key]) ? 'checked' : '') ?> />
+                                        <label for="pxt_check_<?= $key ?>"><?= $item ?></label><br />
+                                        <?php 
+                                    	   }
+                                        ?>
+                                    </div>
+                                    <?php 
+                                        }
+                                    ?>
+                        		</div>
+                        
+                        
+                                <table class="display nowrap table" cellspacing="0" width="100%">
+                                	<tbody>
+                                      	<tr>
+                                        	<td class="align-middle text-left">
+                                              	<?= $this->formLabel($this->form->get('background')) ?>
+                                              	<?= $this->formElement($this->form->get('background')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('background')) ?></div>
+                                        	</td>
+                                        	<td class="align-middle text-left">
+                                                	<?php
+                                                	if(isset($this->valuePost['background']) && $this->valuePost['background'] != ''){
+                                                	    echo '<img src="' . URL_UPLOAD . $this->valuePost['background'] . '" alt="" height="100px">';
+                                                	}
+                                                	?>
+                                        	</td>
+                                     	</tr>
+                                      	<tr>
+                                        	<td class="align-middle text-left">
+                                            	<?= $this->formLabel($this->form->get('music_background')) ?>
+                                               	<?= $this->formElement($this->form->get('music_background')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('music_background')) ?></div>
+                                        	</td>
+                                        	<td class="align-middle text-left">
+                                                	<?php
+                                                	if(isset($this->valuePost['music_background']) && $this->valuePost['music_background'] != ''){
+                                                	    echo '<audio controls><source src="' . URL_UPLOAD . $this->valuePost['music_background'] . '" type="audio/mpeg"></audio>';
+                                                	}
+                                                	?>
+                                        	</td>
+                                     	</tr>
+                                      	<tr>
+                                        	<td class="align-middle text-left">
+                                               	<?= $this->formLabel($this->form->get('music_dial')) ?>
+                                               	<?= $this->formElement($this->form->get('music_dial')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('music_dial')) ?></div>
+                                        	</td>
+                                        	<td class="align-middle text-left">
+                                                	<?php
+                                                	if(isset($this->valuePost['music_dial']) && $this->valuePost['music_dial'] != ''){
+                                                	    echo '<audio controls><source src="' . URL_UPLOAD . $this->valuePost['music_dial'] . '" type="audio/mpeg"></audio>';
+                                                	}
+                                                	?>
+                                        	</td>
+                                     	</tr>
+                                      	<tr>
+                                        	<td class="align-middle text-left">
+                                              	<?= $this->formLabel($this->form->get('music_win')) ?>
+                                              	<?= $this->formElement($this->form->get('music_win')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('music_win')) ?></div>
+                                        	</td>
+                                        	<td class="align-middle text-left">
+                                                	<?php
+                                                	if(isset($this->valuePost['music_win']) && $this->valuePost['music_win'] != ''){
+                                                	    echo '<audio controls><source src="' . URL_UPLOAD . $this->valuePost['music_win'] . '" type="audio/mpeg"></audio>';
+                                                	}
+                                                	?>
+                                        	</td>
+                                     	</tr>
+                               		</tbody>
+                             	</table>
+                        		<div class="form-group col-md-12 text-center">
+                                 	<?= $this->formRow($this->form->get('btnSubmit')) ?>
+                               	</div>
+                              	<?= $this->form()->closeTag($this->form) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<!-- <script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script> -->
+<script src="<?= TEMPS ?>/assets/ckeditor/standard/ckeditor.js"></script>
+<script type="text/javascript">
+CKEDITOR.replace( 'description' );
+$(function () {
+	$('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss'
+   	});
+});
+</script>

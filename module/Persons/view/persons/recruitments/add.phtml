@@ -1,0 +1,66 @@
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+<?= $this->form()->openTag($this->form) ?>
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('position')) ?>
+    <?= $this->formElement($this->form->get('position')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('position')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('group_id')) ?>
+    <?= $this->formElement($this->form->get('group_id')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('group_id')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('amount')) ?>
+    <?= $this->formElement($this->form->get('amount')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('amount')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('date_recruitment')) ?>
+    <?= $this->formElement($this->form->get('date_recruitment')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('date_recruitment')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('description')) ?>
+    <?= $this->formElement($this->form->get('description')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('description')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('require')) ?>
+    <?= $this->formElement($this->form->get('require')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('require')) ?></div>
+</div>
+
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('expected_salary')) ?>
+    <?= $this->formElement($this->form->get('expected_salary')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('expected_salary')) ?></div>
+</div>
+
+<div class="form-group col-md-12 text-center">
+    <button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+</div>
+<?=$this->form()->closeTag($this->form)?>
+
+<script src="<?= TEMPS ?>assets/pxt.js"></script>
+
+<script type="text/javascript">
+$(function () {
+    $('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss',
+   	});
+});
+</script>
+

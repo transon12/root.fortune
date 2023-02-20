@@ -1,0 +1,100 @@
+<?php
+$title = "Sửa địa chỉ";
+$this->headTitle($title);
+?>
+<?php include_once("/../../layout/layout-admin/script-address.php"); ?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="<?= $this->url($this->route, ['action' => 'index', 'id' => $this->userId]) ?>">Danh sách</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                    			<?php $this->form->prepare(); ?>
+                            	<?= $this->form()->openTag($this->form) ?>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('code')) ?>
+                                    <?= $this->formElement($this->form->get('code')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('code')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                        			<div class="row">
+                            			<div class="col-md-4">
+                                            <?= $this->formLabel($this->form->get('country_id')) ?>
+                                            <?= $this->formElement($this->form->get('country_id')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('country_id')) ?></div>
+                            			</div>
+                            			<div class="col-md-4">
+                                            <?= $this->formLabel($this->form->get('city_id')) ?>
+                                            <?= $this->formElement($this->form->get('city_id')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('city_id')) ?></div>
+                            			</div>
+                            			<div class="col-md-4">
+                                            <?= $this->formLabel($this->form->get('district_id')) ?>
+                                            <?= $this->formElement($this->form->get('district_id')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('district_id')) ?></div>
+                            			</div>
+                            		</div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('date_of_issues')) ?>
+                                    <?= $this->formElement($this->form->get('date_of_issues')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('date_of_issues')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('note')) ?>
+                                    <?= $this->formElement($this->form->get('note')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('note')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('status')) ?>
+                                    <div class="demo-radio-button">
+                                    <?= $this->formElement($this->form->get('status')) ?>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-12 text-center">
+                                    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                </div>
+                                <?= $this->form()->closeTag($this->form) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script>
+<script type="text/javascript">
+$(function () {
+	$("#codes").focus();
+	$('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY'
+   	});
+});
+</script>

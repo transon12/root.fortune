@@ -1,0 +1,126 @@
+<?php
+$title = "Hoàn thành";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-body">
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title text-center" style="font-size: 24px; font-weight: bold">Thông tin trúng thưởng</h2>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="align-middle"><strong>Số điện thoại trúng thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["phone_id"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Chương trình khuyến mãi: </strong></td>
+                                            <td class="align-middle"><?= isset($optionPromotions[$valueCurrent["promotion_id"]]) ? $optionPromotions[$valueCurrent["promotion_id"]] : "" ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ngày trúng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["created_at"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Danh sách mã trúng thưởng: </strong></td>
+                                            <td class="align-middle">
+                                                <?php
+                                                foreach ($arrCodeInWin as $item) {
+                                                    echo "- " . $item["code_id"] . " (" . $item["created_at"] . ")";
+                                                    echo ($item["phone_root"] != "") ? (" - Được nhắn bởi sđt: " . $item["phone_root"]) : "";
+                                                    echo "<br />";
+                                                }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Người phụ trách: </strong></td>
+                                            <td class="align-middle"><?= isset($optionUsers[$valueCurrent["user_input"]]) ? $optionUsers[$valueCurrent["user_input"]] : "Không xác định" ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Số điện thoại nhận thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["phone_recipient"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Tên người nhận thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["fullname_recipient"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Địa chỉ nhận thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["address_recipient"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Phần thưởng: </strong></td>
+                                            <td class="align-middle"><?= isset($optionProducts[$valueCurrent["product_id"]]) ? $optionProducts[$valueCurrent["product_id"]] : "Không xác định" ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Mã đơn hàng trả thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["code_order"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ngày trả thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["finished_at"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ghi chú từ người chuyển thông tin: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["note_1"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ghi chú từ người nhập thông tin: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["note_2"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ghi chú từ người trả thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["note_3"] ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col-12">
+                    <div class="card">
+                        <?php
+                        if ($valueCurrent["status_order"] == 3) {
+                        ?>
+                            <div class="card-content collapse show">
+                                <div class="card-body text-center">
+                                    <h4><strong class="text-danger">Đã hoàn lại đơn hàng, đề nghị vào 'Khuyến mãi / Ds trả thưởng' để xem và cập nhật thông tin</strong></h4>
+                                </div>
+                            </div>
+                        <?php
+                        } else {
+                        ?>
+                            <div class="card-content collapse show">
+                                <?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+                                <div class="card-body">
+                                    <div class="row mx-5">
+                                        <div class="form-group col-md-12 text-center">
+                                            <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?= $this->form()->closeTag($this->form) ?>
+                            </div>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+            
+
+            </div>
+        </div>
+    </div>
+</div>

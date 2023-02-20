@@ -1,0 +1,173 @@
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/colors/palette-tooltip.min.css">
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<?php
+$title = "Đánh giá";
+$this->headTitle($title);
+$dataPoint = $this->dataPoint;
+$dataEvaluation = [];
+if(isset($this->dataEvaluation)){
+    $dataEvaluation = $this->dataEvaluation;
+}
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="<?=($this->userId == $this->paramUserId) ? $this->url($this->route, ['action' => 'index']) : $this->url($this->route, ['action' => 'view', 'id'=> $this->paramUserId])?>">Danh sách</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                        		<?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formLabel($this->form->get('year')) ?>
+                                    <?= $this->formElement($this->form->get('year')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('year')) ?></div>
+                                </div><br>
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black submit-form-inputs dataTable">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center align-middle" colspan="2"></th>
+                                                <th class="text-center align-middle bg-blue-grey bg-lighten-4" colspan="2">Đánh giá của nhân viên</th>
+                                                <?php 
+                                                    if($this->userId != $this->paramUserId || $this->status != 1){
+                                                ?>
+                                                <th class="text-center align-middle bg-blue-grey bg-lighten-4" colspan="2">Đánh giá của cấp quản lý</th>
+                                                <?php } ?>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center align-middle" style="width:5%">STT</th>
+                                                <th class="text-center" style="width:25%">Tiêu chí</th>
+                                                <th class="text-center align-middle" >Điểm</th>
+                                                <th class="text-center align-middle">Biểu hiện</th>
+                                                <?php 
+                                                    if($this->userId != $this->paramUserId || $this->status != 1){
+                                                ?>
+                                                <th class="text-center align-middle" >Điểm</th>
+                                                <th class="text-center align-middle">Đánh giá</th>
+                                                <?php } ?>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php 
+                                            if(!empty($dataEvaluation)){
+                                                $i=1;
+                                                foreach($dataEvaluation as $key => $item){
+                                        ?>
+                                            <tr>
+                                                <th class="text-center align-middle"><?= $i++ ?></th>
+                                            	<td class="text-left align-middle" data-toggle="tooltip" data-placement="left" title="<?= $item['description']; ?>"><label for="<?= $key ?>"><?= $item['name'] ?></label></td>
+                                            	<td class="text-left align-middle">
+                                                    <?= $this->formElement($this->form->get($key."[point]")) ?>
+                                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get($key."[point]")) ?></div>
+                                                </td>
+                                            	<td class="text-left align-middle">
+                                                    <?= $this->formElement($this->form->get($key."[expression]")) ?>
+                                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get($key."[expression]")) ?></div>
+                                                </td>
+                                                <?php 
+                                                    if($this->userId != $this->paramUserId || $this->status != 1){
+                                                ?>
+                                                <td class="text-left align-middle">
+                                                    <?= $this->formElement($this->form->get($key."[point_manager]")) ?>
+                                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get($key."[point_manager]")) ?></div>
+                                                </td>
+                                                <td class="text-left align-middle">
+                                                    <?= $this->formElement($this->form->get($key."[expression_manager]")) ?>
+                                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get($key."[expression_manager]")) ?></div>
+                                                </td>
+                                                <?php } ?>
+                                                
+                                            </tr>
+                                        <?php
+                                                }
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+
+                                <div class="form-group col-md-12">
+                                  	<?= $this->formLabel($this->form->get('personal_comment')) ?>
+                                  	<?= $this->formElement($this->form->get('personal_comment')) ?>
+                                  	<div class="text-danger"><?= $this->formElementErrors($this->form->get('personal_comment')) ?></div>
+                              	</div>
+
+                                <?php if($this->userId != $this->paramUserId || $this->status != 1){ ?>
+                                <div class="form-group col-md-12">
+                                  	<?= $this->formLabel($this->form->get('general_comment')) ?>
+                                  	<?= $this->formElement($this->form->get('general_comment')) ?>
+                                  	<div class="text-danger"><?= $this->formElementErrors($this->form->get('general_comment')) ?></div>
+                              	</div>
+                                  <?php } ?>
+
+                                <?php 
+                                    if($this->status != 3){
+                                ?>
+                                <div class="form-group col-md-12 text-center">
+                                    <?php  if($this->userId != $this->paramUserId || $this->status == 1){ ?>
+                                        <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                    <?php } ?>
+                                    &emsp;
+                                    <?php if($this->userId != $this->paramUserId){ ?>
+                                        <?= $this->formRow($this->form->get('btnComplete')) ?>
+                                    <?php } ?>
+                                </div>
+                                <?php } ?>
+                                <?= $this->form()->closeTag($this->form) ?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+<script src="<?= TEMPS ?>app-assets/js/scripts/tooltip/tooltip.min.js"></script>
+
+<script type="text/javascript">
+$(function () {
+	$('.datetimepicker-input').datetimepicker({
+        view: 'years',
+       	format: 'YYYY'
+   	});
+
+    $(".title_tooltip").change(function(event) {
+        $.each($(this).find('option'), function(key, value) {
+            $(value).removeClass('active');
+        })
+        $('option:selected').addClass('active');
+    });
+
+    $(".title_tooltip").tooltip({
+        placement: 'right',
+        trigger: 'hover',
+        container: 'body',
+        title: function(e) {
+            $('option:selected').addClass('active');
+            return $(this).find('option:selected').attr('title');
+        }
+    });
+});
+</script>

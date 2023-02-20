@@ -1,0 +1,7 @@
+<?php 
+    // display css
+    echo isset($settingDisplay['style']) ? ("<style>" . $settingDisplay['style'] . "</style>") : "";
+    if(isset($this->infoDisplay)){
+        echo $this->infoDisplay;
+    }
+?>

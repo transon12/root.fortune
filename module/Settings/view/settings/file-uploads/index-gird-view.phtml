@@ -1,0 +1,90 @@
+<?php
+$title = "Quản lý file upload";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+       		<div class="content-header-right col-md-12 col-12">
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark mr-1" title="Tạo thư mục" 
+                      		route="<?= $this->url($this->route, ["action" => "add-folder", "id" => $this->id]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-plus"></i> Thư mục</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1 mr-1" title="Tải lên" 
+                      		route="<?= $this->url($this->route, ["action" => "add-file", "id" => $this->id]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-upload"></i> Tải lên</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1 mr-1" title="Tải xuống" disabled 
+                      		route="<?= $this->url($this->route, ["action" => "add"]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-download"></i> Tải xuống</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1 mr-1" title="Sửa tên" disabled 
+                      		route="<?= $this->url($this->route, ["action" => "add"]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-folder-o"></i> Sửa tên</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1" title="Xóa file" disabled 
+                      		route="<?= $this->url($this->route, ["action" => "add"]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-remove"></i> Xóa</button>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+                        <div class="card-body">
+                            <a href="<?= $this->url($this->route, ["action" => "index"]) ?>"><i class="la la-home"></i></a>
+                            /
+                            <?php
+                                if(!empty($this->arrRoot)){
+                                    $arrRoot =$this->arrRoot;
+                                    for($i = (count($this->arrRoot) - 1); $i >= 0; $i--){
+                            ?>
+                            <a href="<?= ($i == 0) ? "#" : $this->url($this->route, ["action" => "index", "id" => $arrRoot[$i]["id"]]) ?>"><?= $arrRoot[$i]["name"] ?></a>
+                            <?php
+                                        echo ($i != 0) ? "/" : "";
+                                    }
+                                }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+    			<div class="col-12">
+                    <div class="row">
+                        <?php
+                            if($this->arrFileUploads->getAdapter()->count() > 0){
+                                foreach($this->arrFileUploads as $key => $item){
+                                    if($item["type"] == "folder"){
+                        ?>
+                        <div class="col-md-3">
+                            <div class="card">
+                                <img class="mt-2 mx-auto" width="128px" height="128px" src="/img/folder.png" alt="<?= $item["name"] ?>">
+                                <div class="card-body text-center">
+                                    <a href="<?= $this->url('settings/file-uploads', ['action' => 'index', 'id' => $item['id']]) ?>">
+                                        <h5 title="<?= $item["name"] ?>" class="card-title"><?= \Pxt\String\ChangeString::compactString($item["name"], 0, 6) ?></h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                        <?php
+                                    }else{
+                                        ?>
+                        <div class="col-md-3">
+                            <div class="card">
+        
+                            <img class="mt-2 mx-auto" <?= ((int)$item["width"] > (int)$item["height"]) ? 'height="128"' : 'width="128px"' ?>  
+                                    src="<?= URL_UPLOAD . $item["url"] ?>" alt="<?= $item["name"] ?>">
+                                <div class="card-body text-center">
+                                    <a href="<?= $this->url('settings/file-uploads', ['action' => 'index', 'id' => $item['id']]) ?>">
+                                        <h5 title="<?= $item["name"] ?>" class="card-title"><?= \Pxt\String\ChangeString::compactString($item["name"], 0, 6) ?></h5>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                                        <?php
+                                    }
+                                }
+                            }
+                        ?>
+                    </div>
+
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

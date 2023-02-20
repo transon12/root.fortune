@@ -1,0 +1,134 @@
+<?php
+$title = "Chuyển cho người phụ trách";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-body">
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title text-center" style="font-size: 24px; font-weight: bold">Thông tin trúng thưởng</h2>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="align-middle"><strong>Số điện thoại trúng thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["phone_id"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Chương trình khuyến mãi: </strong></td>
+                                            <td class="align-middle"><?= isset($optionPromotions[$valueCurrent["promotion_id"]]) ? $optionPromotions[$valueCurrent["promotion_id"]] : "" ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ngày trúng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["created_at"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Danh sách mã trúng thưởng: </strong></td>
+                                            <td class="align-middle">
+                                                <?php
+                                                foreach ($arrCodeInWin as $item) {
+                                                    echo "- " . $item["code_id"] . " (" . $item["created_at"] . ")";
+                                                    echo ($item["phone_root"] != "") ? (" - Được nhắn bởi sđt: " . $item["phone_root"]) : "";
+                                                    echo "<br />";
+                                                }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ghi chú từ người chuyển thông tin: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["note_1"] ?></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1 class="card-title text-center" style="font-size: 28px; font-weight: bold">Cập nhật thông tin</h1>
+                        </div>
+                        <?php
+                        if ($valueCurrent["status_order"] == 3) {
+                        ?>
+                            <div class="card-content collapse show">
+                                <div class="card-body text-center">
+                                    <h4><strong class="text-success">Đã chuyển cho bộ phận trả thưởng</strong></h4>
+                                </div>
+                            </div>
+                        <?php
+                        } else {
+                        ?>
+                            <div class="card-content collapse show">
+                                <?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+                                <div class="card-body">
+                                    <div class="row mx-5">
+                                        <div class="form-group col-6">
+                                            <?= $this->formLabel($this->form->get('phone_recipient')) ?>
+                                            <div class="input-group">
+                                                <?= $this->formElement($this->form->get('phone_recipient')) ?>
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-outline-secondary check-phone" type="button">Cùng sđt nhắn tin</button>
+                                                </div>
+                                            </div>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('phone_recipient')) ?></div>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <?= $this->formLabel($this->form->get('fullname_recipient')) ?>
+                                            <?= $this->formElement($this->form->get('fullname_recipient')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('fullname_recipient')) ?></div>
+                                        </div>
+                                        <div class="form-group col-12">
+                                            <?= $this->formLabel($this->form->get('product_id')) ?>
+                                            <?= $this->formElement($this->form->get('product_id')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('product_id')) ?></div>
+                                        </div>
+                                        <div class="form-group col-8">
+                                            <?= $this->formLabel($this->form->get('address_recipient')) ?>
+                                            <?= $this->formElement($this->form->get('address_recipient')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('address_recipient')) ?></div>
+                                        </div>
+                                        <div class="form-group col-4 d-flex align-items-center">
+                                            <?= $this->formLabel($this->form->get('is_finish')) ?>&nbsp;&nbsp;
+                                            <?= $this->formElement($this->form->get('is_finish')) ?>
+                                        </div>
+                                        <div class="form-group col-md-12 col-12">
+                                            <?= $this->formLabel($this->form->get('note_2')) ?>
+                                            <?= $this->formElement($this->form->get('note_2')) ?>
+                                            <div class="text-danger"><?= $this->formElementErrors($this->form->get('note_2')) ?></div>
+                                        </div>
+                                        <div class="form-group col-md-12 text-center">
+                                            <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                        </div>
+                                    </div>
+                                </div>
+                                <?= $this->form()->closeTag($this->form) ?>
+                            </div>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="text/javascript">
+    $(function() {
+        $(document).on('click', '.check-phone', function(e) {
+            $("#phone_recipient").val("<?= $valueCurrent["phone_id"] ?>");
+        });
+    });
+</script>

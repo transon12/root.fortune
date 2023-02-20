@@ -1,0 +1,144 @@
+<?php
+$title = "Cấu hình tin nhắn trả ra";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                				<?= $this->partial("settings/index/nav-tabs.phtml", ['route' => 'settings/index', 'id' => 'messages']) ?>
+                               	<div class="tab-content">
+                                   	<div class="tab-pane active" id="messages" role="tabpanel">
+                                     	<div class="p-20">
+                                     		<?php $this->form->prepare(); ?>
+                                     		<?= $this->form()->openTag($this->form) ?>
+                                
+                                            <?php if(isset($this->userId) && $this->userId == '1'){ ?>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('company_id')) ?>
+                                                <?= $this->formElement($this->form->get('company_id')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('company_id')) ?></div>
+                                            </div>
+                                            <?php } ?>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('message_success')) ?>
+                                                <?= $this->formElement($this->form->get('message_success')) ?>
+                                                <small class="font-italic">Các tham số có thể cấu hình thêm: 
+                                                [tin_nhan_den] - Tin nhắn mà khách hàng nhắn tin đến; 
+                                                [ma_pin] - Mã pin đúng; 
+                                                [ngay] - Ngày nhắn; 
+                                                [ngay_gio] - Ngày giờ nhắn; 
+                                                [so_dien_thoai] - Số điện thoại;</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_success')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('message_invalid')) ?>
+                                                <?= $this->formElement($this->form->get('message_invalid')) ?>
+                                                <small class="font-italic">Các tham số có thể cấu hình thêm: 
+                                                [tin_nhan_den] - Tin nhắn mà khách hàng nhắn tin đến; 
+                                                [ngay] - Ngày nhắn; 
+                                                [ngay_gio] - Ngày giờ nhắn; 
+                                                [so_dien_thoai] - Số điện thoại;</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_invalid')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('message_checked')) ?>
+                                                <?= $this->formElement($this->form->get('message_checked')) ?>
+                                                <small class="font-italic">Các tham số có thể cấu hình thêm: 
+                                                [tin_nhan_den] - Tin nhắn mà khách hàng nhắn tin đến; 
+                                                [ma_pin] - Mã pin đúng; 
+                                                [ngay] - Ngày nhắn; 
+                                                [ngay_gio] - Ngày giờ nhắn;
+                                                [tu_ngay] - Ngày nhắn; 
+                                                [tu_ngay_gio] - Ngày giờ nhắn;
+                                                [so_dien_thoai] - Số điện thoại;
+                                                [so_dien_thoai_da_nhan] - Số điện thoại đã kiểm tra trước đó;</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_checked')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('message_outdate')) ?>
+                                                <?= $this->formElement($this->form->get('message_outdate')) ?>
+                                                <small class="font-italic">Các tham số có thể cấu hình thêm: 
+                                                [tin_nhan_den] - Tin nhắn mà khách hàng nhắn tin đến; 
+                                                [ma_pin] - Mã pin đúng; 
+                                                [ngay] - Ngày nhắn; 
+                                                [ngay_gio] - Ngày giờ nhắn;
+                                                [so_dien_thoai] - Số điện thoại;</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('message_outdate')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12 text-center">
+                                                <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                            </div>
+                                            <?= $this->form()->closeTag($this->form) ?>
+                                     	</div>
+                                  	</div>
+                             	</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	var arrCompanies = {};
+
+	<?php 
+	   if(isset($this->arrCompanies)){
+	       foreach($this->arrCompanies as $key => $item){
+	           echo 'arrCompanies["' . $key . '"] = JSON.parse(\'' . json_encode($item, true) . '\');';
+	       }
+	   }
+	?>
+	$(document).on('change','#company_id',function(e){
+		//var id = $(this).attr("value");
+		var id = $(this).val();
+	    if(id != "" && id != "0"){
+			if(typeof arrCompanies[id].message_success !== 'undefined'){
+				$('#message_success').val(arrCompanies[id].message_success);
+			}
+			if(typeof arrCompanies[id].message_invalid !== 'undefined'){
+				$('#message_invalid').val(arrCompanies[id].message_invalid);
+			}
+			if(typeof arrCompanies[id].message_checked !== 'undefined'){
+				$('#message_checked').val(arrCompanies[id].message_checked);
+			}
+			if(typeof arrCompanies[id].message_outdate !== 'undefined'){
+				$('#message_outdate').val(arrCompanies[id].message_checked);
+			}
+	    }else{
+			$('#message_success').val("");
+			$('#message_invalid').val("");
+			$('#message_checked').val("");
+			$('#message_outdate').val("");
+		}
+		return false;
+	});
+
+});
+</script>

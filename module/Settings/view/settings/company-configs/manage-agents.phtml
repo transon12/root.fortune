@@ -1,0 +1,90 @@
+<?php
+$title = "Danh sách cấu hình form sản phẩm";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                  	<button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tính năng</button>
+                  	<div class="dropdown-menu arrow">
+                      	<a class="dropdown-item pxt-modal" href="javascript:void(0)" title="Thêm dữ liệu" 
+                      		route="<?= $this->url($this->route, ['action' => 'manage-agents-add', 'id' => $this->companyId]) ?>" data-toggle="modal" data-target="#defaultSize">
+                      		<i class="la la-plus-circle"></i> Thêm dữ liệu
+                      	</a>
+                  	</div>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                                <th class="text-center">Key</th>
+                                                <th class="text-center">Tên</th>
+                                                <th class="text-center">Loại</th>
+                                                <th class="text-center">Thứ tự hiển thị</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if(!empty($this->contents)){
+                                                $i = 1;
+                                                foreach($this->contents as $key => $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="align-middle text-center"><?= $i++ ?></td>
+                                                <td class="align-middle"><?= $key ?></td>
+                                                <td class="align-middle"><?= $item['name'] ?></td>
+                                                <td class="align-middle"><?= $item['type'] ?></td>
+                                                <td class="align-middle"><?= $item['status'] ?></td>
+                                                <td class="align-middle text-center">
+                                                    <a title="Sửa dữ liệu" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('settings/company-configs', ['action' => 'manage-agents-edit', 'id' => $this->companyId, 'content_key' => $key]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa thuộc tính '<?= $item['name']; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('settings/company-configs', ['action' => 'manage-agents-delete', 'id' => $this->companyId, 'content_key' => $key]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

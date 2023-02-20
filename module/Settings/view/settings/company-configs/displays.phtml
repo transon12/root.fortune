@@ -1,0 +1,33 @@
+        <?php 
+            $this->form->prepare();
+            $this->form()->addValidAttribute('route');
+        ?>
+        <?= $this->form()->openTag($this->form) ?>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('logo')) ?>
+            <?= $this->formElement($this->form->get('logo')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('logo')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12 text-center">
+        	<?php 
+        	   $valuePost = $this->valuePost;
+        	   if(isset($valuePost['logo']) && $valuePost['logo'] != ''){
+        	?>
+			<img src="<?= URL_UPLOAD . $valuePost['logo'] ?>" width="60%" />
+			<?php } ?>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('style')) ?>
+            <?= $this->formElement($this->form->get('style')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('style')) ?></div>
+        </div>
+		
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+        

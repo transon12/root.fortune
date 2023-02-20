@@ -1,0 +1,40 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('agents_id')) ?>
+            <?= $this->formElement($this->form->get('agents_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('agents_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('id')) ?>
+            <?= $this->formElement($this->form->get('id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('fullname')) ?>
+            <?= $this->formElement($this->form->get('fullname')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('fullname')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('address')) ?>
+            <?= $this->formElement($this->form->get('address')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('address')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('lock_time')) ?>
+            <?= $this->formElement($this->form->get('lock_time')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('lock_time')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>

@@ -1,0 +1,23 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('storehouse_id')) ?>
+            <?= $this->formElement($this->form->get('storehouse_id')) ?>
+        	<div class="text-danger"><?= $this->formElementErrors($this->form->get('storehouse_id')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('number')) ?>
+            <?= $this->formElement($this->form->get('number')) ?>
+        	<div class="text-danger"><?= $this->formElementErrors($this->form->get('number')) ?></div>
+        </div>
+        
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>

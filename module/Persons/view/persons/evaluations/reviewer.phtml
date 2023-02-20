@@ -1,0 +1,95 @@
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/tables/jsgrid/jsgrid-theme.min.css">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/tables/jsgrid/jsgrid.min.css">
+<div id = "test"></div>
+<div id="jsGrid"></div>
+<script src="<?= TEMPS ?>app-assets/vendors/js/tables/jsgrid/jsgrid.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/tables/jsgrid/griddata.js"></script>
+<!-- <script src="<?= TEMPS ?>app-assets/js/scripts/tables/jsgrid/jsgrid.min.js"></script> -->
+<script>
+$(function() {
+    $.ajax({
+        type: "GET",
+        url: "<?= $this->url("persons/evaluations", ["action" => "profile", 'id' => $this->userId]) ?>"
+    }).done(function(profile) {
+        profile.unshift({ id: "0", name: "" });
+
+        $("#jsGrid").jsGrid({
+            // height: "100%",
+            width: "100%",
+            // filtering: true,
+            inserting: true,
+            editing: true,
+            sorting: true,
+            paging: true,
+            autoload: true,
+            // pageSize: 10,
+            // pageButtonCount: 5,
+            deleteConfirm: "Xóa người đánh giá",
+            controller: {
+                loadData: function(filter) {
+                    var data = {};
+                     $.ajax({
+                        type: "POST",
+                        url: "<?= $this->url("persons/evaluations", ["action" => "reviewers", 'id' => $this->userId]) ?>",
+                        data: filter,
+                        async: false,
+                        success: function(result){
+                            data = result;
+                            // console.log(result)
+                        }
+                    });
+                    return data;
+                },
+                insertItem: function(item) {
+                    var data = {};
+                    $.ajax({
+                        type: "POST",
+                        url: "<?= $this->url("persons/evaluations", ["action" => "add-reviewer", "id"=> $this->userId]) ?>",
+                        data: item,
+                        async: false,
+                        success: function(result){
+                            data = result;
+                        }
+                    });
+                    return data;
+                    // return $.ajax({
+                    //     type: "POST",
+                    //     url: "<?= $this->url("persons/evaluations", ["action" => "add-reviewer", "id"=> $this->userId]) ?>",
+                    //     data: item
+                    // });
+                },
+                updateItem: function(item) {
+                    var data = {};
+                    $.ajax({
+                        type: "POST",
+                        url: "<?= $this->url("persons/evaluations", ["action" => "edit-reviewer", "id"=> $this->userId]) ?>",
+                        data: item,
+                        async: false,
+                        success: function(result){
+                            data = result;
+                        }
+                    });
+                    return data;
+                    // return $.ajax({
+                    //     type: "POST",
+                    //     url: "<?= $this->url("persons/evaluations", ["action" => "edit-reviewer", "id"=> $this->userId]) ?>",
+                    //     data: item
+                    // });
+                },
+                deleteItem: function(item) {
+                    return $.ajax({
+                        type: "POST",
+                        url: "<?= $this->url("persons/evaluations", ["action" => "delete-reviewer", "id"=> $this->userId]) ?>",
+                        data: item
+                    });
+                }
+            },
+            fields: [
+                { name: "user_id_reviewer", title: "Người đánh giá", type: "select", width: 100, items: profile, valueField: "user_id", textField: "name", validate: { message: "Không được để trống", validator: function(value) { return value; } }},
+                { type: "control" }
+            ]
+        });
+
+    });
+});
+</script>

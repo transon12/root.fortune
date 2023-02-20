@@ -1,0 +1,134 @@
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/pages/users.min.css">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/extensions/zoom.css">
+
+<div class = "app-content container center-layout mt-2">
+    <div class="content-wrapper">
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <?php $this->formSearch->prepare(); ?>
+                                <?= $this->form()->openTag($this->formSearch) ?>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                                </div>
+                                <div class="form-group col-md-1">
+                                    <?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                                </div>
+                                <?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <section id="user-profile-cards-with-cover-image" class="row mt-2">
+                <?php
+                    if($this->arrProfiles->getAdapter()->count()>0){
+                        $i = 0;
+                        $optionsAvatar = $this->optionsAvatar;
+                        $optionGender = $this->optionGender;
+                        $optionPositions = $this->optionPositions;
+                        $userIdLogin = $this->userIdLogin;
+                        foreach($this->arrProfiles as $item){
+                            
+                ?>    
+                    <div class="col-xl-3 col-md-6 col-12">
+                        <div class="card">
+                            <div class="text-center">
+                                <div class="card-body">
+                                    <img src="<?= ($optionsAvatar[$item['user_id']] != '' || $optionsAvatar[$item['user_id']] != null)? URL_UPLOAD . $optionsAvatar[$item['user_id']] : (($optionGender[$item['user_id']] == 0) ? '/img/female-user.png' : '/img/male-user.png') ?>"
+                                     class="rounded-circle width-150 height-150" alt="Card image" data-action="zoom">
+                                </div>
+                                <div class="card-body">
+                                    <h4 class="card-title"><?= $item['name']?></h4>
+                                    <h6 class="card-subtitle text-muted"><?= $item['email']?></h6><br>
+                                    <h6 class="card-subtitle text-muted"><?= ($item['position_id'] == null) ? "" : $optionPositions[$item['position_id']]?></h6>
+                                </div>
+                                <div class="text-center">
+                                    <a title="Thông tin cá nhân <?= $item['name']?>" href="javascript:void(0)" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal" data-toggle="modal" data-target="#xlarge"
+                                    route="<?= $this->url('persons/profiles', ['action' => 'iframe-see', 'id' => $item['id']]) ?>">
+                                        <i class="ft-user"></i>
+                                    </a>
+                                    <a title="Sửa thông tin <?= $item['name']?>" href="<?= $this->url('persons/profiles', ['action' => 'edit-profile', 'id' => $item['id']]) ?>" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal">
+                                        <i class="ft-edit"></i>
+                                    </a>
+                                    <a title="Hợp đồng <?= $item['name']?>" href="<?= $this->url('admin/labour-contracts', ['action' => 'views', 'id' => $item['user_id']]) ?>" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal">
+                                        <i class="ft-clipboard"></i>
+                                    </a>
+
+                                    <a title="Đánh giá <?= $item['name']?>" href="<?= $this->url('persons/evaluations', ['action' => 'view', 'id' => $item['user_id']]) ?>" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal">
+                                        <i class="la la-file-text"></i>
+                                    </a>
+                                    
+                                    <a title="KPI <?= $item['name']?>" href="<?= $this->url('persons/kpis', ['action' => 'view', 'user_id' => $item['user_id']]) ?>" class="btn btn-float btn-outline-primary btn-round mb-1 pxt-modal">
+                                        <i class="ft-bar-chart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- <div class="col-xl-4 col-md-6 col-12">
+                        <div class="card profile-card-with-cover border-success border-lighten-1">
+                            <img class="card-img-top img-fluid bg-cover height-200 border-bottom-success border-custom-color" src="<?= ($item['background_avatar'] != '') ? URL_UPLOAD.$item['background_avatar'] : '/img/fortune.png' ?>" data-action="zoom"></img>
+                            <div class="card-profile-image">
+                                <img src="<?= ($optionsAvatar[$item['user_id']] != '' || $optionsAvatar[$item['user_id']] != null)? URL_UPLOAD . $optionsAvatar[$item['user_id']] : (($optionGender[$item['user_id']] == 0) ? '/img/female-user.png' : '/img/male-user.png') ?>" 
+                                    class="rounded-circle width-150 height-150 img-border box-shadow-1" alt="Card image" data-action="zoom">
+                            </div>
+                            <div class="profile-card-with-cover-content text-center">
+                                <div class="card-body">
+                                    <br>
+                                    <h4 style="font-size: 24px; font-family:Arial, Helvetica, sans-serif" class="card-title"><?= $item['name']?></h4>
+                                    <h6 class="card-subtitle text-muted"><?= $item['email']?></h6><br>
+                                    <h6 class="card-subtitle text-muted"><?= ($item['position_id'] == null) ? "" : $optionPositions[$item['position_id']]?></h6>
+                                    <hr>
+                                    <a title="Thông tin cá nhân <?= $item['name']?>" href="javascript:void(0)" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal" data-toggle="modal" data-target="#xlarge"
+                                    route="<?= $this->url('persons/profiles', ['action' => 'iframe-see', 'id' => $item['id']]) ?>">
+                                        <i class="ft-user"></i>
+                                    </a>
+                                    <a title="Sửa thông tin <?= $item['name']?>" href="<?= $this->url('persons/profiles', ['action' => 'edit-profile', 'id' => $item['id']]) ?>" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal">
+                                        <i class="ft-edit"></i>
+                                    </a>
+                                    <a title="Hợp đồng <?= $item['name']?>" href="<?= $this->url('admin/labour-contracts', ['action' => 'index', 'id' => $item['user_id']]) ?>" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal">
+                                        <i class="ft-clipboard"></i>
+                                    </a>
+                                    
+                                    <a title="KPI <?= $item['name']?>" href="<?= $this->url('persons/kpis', ['action' => 'view', 'user_id' => $item['user_id']]) ?>" class="btn btn-float btn-outline-primary btn-round mr-1 mb-1 pxt-modal">
+                                        <i class="ft-bar-chart"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div> -->
+                <?php      
+                        }
+                    }else{
+                ?>
+                    <p>Không tìm thấy dữ liệu</p>
+                <?php } ?>
+            </section>
+            <?= $this->paginationControl(
+                $this->arrProfiles,
+                'Sliding',
+                'partial/paginator',
+                ['route' => 'persons/profiles', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries])
+            ?>
+        </div>
+    </div>
+</div>
+<script src="<?= TEMPS ?>app-assets/vendors/js/extensions/transition.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/extensions/zoom.min.js"></script>

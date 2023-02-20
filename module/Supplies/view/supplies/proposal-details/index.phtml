@@ -1,0 +1,162 @@
+<?php
+$title = "Quản lý chi tiết đề xuất";
+$this->headTitle($title);
+$checkShowFull = isset($this->permission) ? $this->permission : false;
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+       			<?php 
+       			  $checkUserCreated = $this->checkUserCreated;
+       			  // check time remain add, edit, delete
+       			  $arrProposal = $this->arrProposal;
+       			  $checkRemainAddEditDelete = false;
+                  $contentSupplies = isset($this->contentSupplies) ? $this->contentSupplies : 0;
+                  $timeCurrent = strtotime( \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent() );
+                  if(isset($contentSupplies['time_limit_proposal_details'])){
+                      $timeFinish = (int)$contentSupplies['time_limit_proposal_details'] + strtotime($arrProposal['created_at']);
+                      $timeRemain = $timeFinish - $timeCurrent;
+                      if((int)$contentSupplies['time_limit_proposal_details'] < 0 || $timeRemain > 0){
+                          $checkRemainAddEditDelete = true;
+                      }
+                  }
+       			  if($checkUserCreated == true && $checkRemainAddEditDelete == true){
+       			?>
+                <div class="btn-group float-md-right">
+                  	<button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tính năng</button>
+                  	<div class="dropdown-menu arrow">
+                      	<a class="dropdown-item pxt-modal" title="Thêm dữ liệu" href="<?= $this->url($this->route, ['action' => 'add', 'id' => $this->proposalId]) ?>">
+                      		<i class="la la-plus-circle"></i> Thêm dữ liệu
+                      	</a>
+                  	</div>
+                </div>
+                <?php 
+       			  }
+                ?>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                            	<th class="text-center">Vật tư</th>
+                                            	<th class="text-center">Số lượng</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <?php if($checkShowFull == true){ ?><th class="text-center">Đã xuất</th><?php } ?>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrProposalDetails->getAdapter()->count() > 0){
+                                                $i = 1;
+                                                $optionSupplies = $this->optionSupplies;
+                                                $optionStorehouses = $this->optionStorehouses;
+                                                foreach($this->arrProposalDetails as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="align-middle text-center"><?= $i++ ?></td>
+                                            	<td class="align-middle text-center"><?= isset($optionSupplies[$item['supply_id']]) ? $optionSupplies[$item['supply_id']] : "Không xác định" ?></td>
+                                            	<td class="align-middle text-center"><?= $item['number'] ?></td>
+                                                <td class="align-middle text-center"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
+                                                <?php if($checkShowFull == true){ ?>
+                                                <td class="align-middle">
+                                                	<?php 
+                                                	   $numberProposed = 0;
+                                                	   if(!empty($item['details'])){
+                                                	       foreach($item['details'] as $itemDetail){
+                                                	           $numberProposed = $numberProposed + (int)$itemDetail['number'];
+                                                	?>
+                                            			<div class="row">
+                                                			<div class="col-5"><?= $optionStorehouses[$itemDetail['storehouse_id']] ?></div>
+                                                			<div class="col-2 text-center"">:</div>
+                                                			<div class="col-2"><?= $itemDetail['number'] ?></div>
+                                                			<div class="col-3">
+                                                			<?php
+                                                        	   if(isset($contentSupplies['time_limit_supplies_outs'])){
+                                                        	       $timeFinish = (int)$contentSupplies['time_limit_supplies_outs'] + strtotime($itemDetail['created_at']);
+                                                        	       $timeRemain = $timeFinish - $timeCurrent;
+                                                        	       if((int)$contentSupplies['time_limit_supplies_outs'] < 0 || $timeRemain > 0){ 
+                                                			?>
+                                                            	<a title="Sửa" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                                	route="<?= $this->url('supplies/supplies-outs', ['action' => 'edit', 'id' => $item['id'], 'supplies_out_id' => $itemDetail['id']]) ?>">
+                													<i class="la la-pencil"></i></a>
+                                                            	<a title="Xoá" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                                	route="<?= $this->url('supplies/supplies-outs', ['action' => 'delete', 'id' => $item['id'], 'supplies_out_id' => $itemDetail['id']]) ?>">
+                													<i class="la la-close"></i></a>
+                											<?php
+                                                        	       }
+                                                        	   } 
+                											?>
+															</div>
+															<hr />
+                                                		</div>
+                                                	<?php
+                                                	       }
+                                                	   }
+                                                	   if($numberProposed < $item['number']){
+                                                	?>
+                                                	<p class="text-center"><a title="Lấy từ kho" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('supplies/supplies-outs', ['action' => 'add', 'id' => $item['id']]) ?>">
+    													Lấy từ kho</a></p>
+    												<?php 
+                                                	   }
+    												?>
+												</td>
+												<?php } ?>
+                                                <td class="align-middle text-center">
+                                       			<?php 
+                                       			  $checkUserCreated = $this->checkUserCreated;
+                                       			  if($checkUserCreated == true && $checkRemainAddEditDelete == true){
+                                       			?>
+                                                    <a title="Sửa dữ liệu" href="<?= $this->url('supplies/proposal-details', ['action' => 'edit', 'id' => $this->proposalId, 'proposal_detail_id' => $item['id']]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa đề xuất chi tiết vật tư '<?= isset($optionSupplies[$item['supplies_id']]) ? $optionSupplies[$item['supplies_id']] : "Không xác định" ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('supplies/proposal-details', ['action' => 'delete', 'id' => $this->proposalId, 'proposal_detail_id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+    											<?php 
+                                       			  }
+    											?>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

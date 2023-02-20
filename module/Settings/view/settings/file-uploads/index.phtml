@@ -1,0 +1,154 @@
+<?php
+$queries = $this->queries;
+$title = "Quản lý file upload";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+       		<div class="content-header-right col-md-12 col-12">
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark mr-1" title="Tạo thư mục" 
+                      		route="<?= $this->url($this->route, ["action" => "add-folder", "id" => $this->id]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-plus"></i> Thư mục</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1 mr-1" title="Tải lên" 
+                      		route="<?= $this->url($this->route, ["action" => "add-file", "id" => $this->id]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-upload"></i> Tải lên</button>
+                <?php /* ?><button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1 mr-1" title="Tải xuống" disabled 
+                      		route="<?= $this->url($this->route, ["action" => "add"]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-download"></i> Tải xuống</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1 mr-1" title="Sửa tên" disabled 
+                      		route="<?= $this->url($this->route, ["action" => "add"]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-folder-o"></i> Sửa tên</button>
+                <button type="button" class="pxt-modal btn btn-light font-weight-bold text-dark ml-1" title="Xóa file" disabled 
+                      		route="<?= $this->url($this->route, ["action" => "add"]) ?>" data-toggle="modal" data-target="#defaultSize">
+                    <i class="la la-remove"></i> Xóa</button><?php */ ?>
+			</div>
+        </div>
+
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+                        <div class="card-body">
+                            <a href="<?= $this->url($this->route, ["action" => "index"], ["query" => $this->queries]) ?>"><i class="la la-home"></i></a>
+                            /
+                            <?php
+                                if(!empty($this->arrRoot)){
+                                    $arrRoot =$this->arrRoot;
+                                    for($i = (count($this->arrRoot) - 1); $i >= 0; $i--){
+                            ?>
+                            <a href="<?= ($i == 0) ? "#" : $this->url($this->route, ["action" => "index", "id" => $arrRoot[$i]["id"]], ["query" => $this->queries]) ?>"><?= $arrRoot[$i]["name"] ?></a>
+                            <?php
+                                        echo ($i != 0) ? "/" : "";
+                                    }
+                                }
+                            ?>
+                        </div>
+                    </div>
+                </div>
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                            	<th class="text-center">Tên</th>
+                                            	<th class="text-center">Kích thước</th>
+                                            	<th class="text-center">Dung lượng</th>
+                                            	<th class="text-center">Ngày upload</th>
+                                            	<th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                                if($this->arrFileUploads->getAdapter()->count() > 0){
+                                                    $i = 0;
+                                                    $dataTarget = isset($queries["data_target"]) ? ("#" . $queries["data_target"]) : "#xlarge";
+                                                    $arrIdElement = explode(" ", (isset($queries["id_element"]) ? $queries["id_element"] : "" ) );
+                                                    $idElement = isset($arrIdElement[0]) ? ("#" . $arrIdElement[0]) : "";
+                                                    $valueId = isset($arrIdElement[1]) ? $arrIdElement[1] : "";
+                                                    $arrIdHidden = explode(" ", (isset($queries["id_hidden"]) ? $queries["id_hidden"] : "" ) );
+                                                    $idHidden = isset($arrIdHidden[0]) ? ("#" . $arrIdHidden[0]) : "";
+                                                    $valueHidden = isset($arrIdHidden[1]) ? $arrIdHidden[1] : "";
+                                                    $routeIframe = $this->url('settings/file-uploads', ['action' => 'iframe', 'id' => $this->id], ["query" => $this->queries]);
+                                                    foreach($this->arrFileUploads as $key => $item){
+                                                        $src = ($item["type"] == "folder") ? "/img/folder.png" : URL_UPLOAD . $item["url"];
+                                                        $ondblclick = ($item["type"] == "folder") ? "" 
+                                                            : ("ondblclick=\"parent.getDataFromIframe('" . $dataTarget . "', '" . $idElement . "', '" . $valueId . "', '" . $idHidden . "', '" . $valueHidden . "', '" . $src . "', '" . $routeIframe . "')\"");
+                                                        //echo $ondblclick;
+                                                            //die();
+                                            ?>
+                                            <tr>
+                                                <td class="align-middle text-center"><?= ++$i; ?></td>
+                                                <td class="align-middle">
+                                                    <table class="table table-borderless">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td class="text-center align-middle col-2">
+                                                                    <img class="mx-auto" width="64px" <?= $ondblclick ?>
+                                                                    src="<?= $src ?>"
+                                                                    alt="<?= $item["name"] ?>" alt="<?= $item["name"] ?>"> 
+                                                                </td>
+                                                                <td class="align-middle col-10">
+                                                                    <?php
+                                                                        if($item["type"] == "folder"){
+                                                                    ?>
+                                                                    <a href="<?= $this->url('settings/file-uploads', ['action' => 'index', 'id' => $item['id']], ["query" => $this->queries]) ?>">
+                                                                        <?= \Pxt\String\ChangeString::compactString($item["name"], 0, 6) ?>
+                                                                    </a>
+                                                                    <?php
+                                                                        }else{
+                                                                    ?>
+                                                                        <?= \Pxt\String\ChangeString::compactString($item["name"], 0, 6) ?>
+                                                                    <?php
+                                                                        }
+                                                                    ?>
+                                                                    
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                                <td class="align-middle"><?= $item["width"] . " x " . $item["height"] ?></td>
+                                                <td class="align-middle"><?= $item["size"] ?></td>
+                                                <td class="align-middle"><?= $item["created_at"] ?></td>
+                                                <td class="align-middle">
+                                                    <?php if($item["type"] != "folder"){ ?>
+                                                    <div class="btn btn-light btn-sm pxt-copy" datacopy="<?= FULL_SERVER_NAME . URL_UPLOAD . $item["url"] ?>">Copy</div>
+                                                    <?php } ?>
+                                                </td>
+                                            </tr>
+                                            <?php
+                                            }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										<?= $this->paginationControl(
+                                            $this->arrFileUploads,
+                                            'Sliding',
+                                            'partial/paginator',
+                                            ['route' => 'settings/file-uploads', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        ) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+	</div>
+</div>

@@ -1,0 +1,92 @@
+<style>
+    .description{
+        font-size: 13px;
+        font-style: italic;
+    }
+</style>
+<?php
+$title = "Chế độ, quy trình, quy định"
+?>
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/pages/user-feed.min.css">
+<div class="app-content content">
+	<div class="content-wrapper">  
+        <div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                      	<a class="btn btn-success pxt-modal" href="javascript:void(0)" title="Thêm file" 
+                      		route="<?= $this->url('persons/index', ['action' => 'add']) ?>" data-toggle="modal" data-target="#defaultSize">
+                      		<i class="la la-plus-circle"></i> Thêm file
+                      	</a>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+            <div class="row match">
+                <div class="col-xl-3 col-md-6 col-12">    
+                    <div class="card">
+                        <div class="card-content show">
+                            <div class="card-body">
+                                <div class="list-group">
+                                    <?php
+                                        $i = 0;
+                                        foreach($this->arrGroups as $item){ ?>
+                                            <a route ="<?= $this->url('persons/documents', ['action' => 'index', 'id' => $item['id']]) ?>" name="departments"
+                                            class="listGroups list-group-item list-group-item-action"  href="javascript:void(0)" ><?= $item['name'] ?></a>
+                                    <?php } ?>						
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-xl-9 col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header" id="tieu-de" style="font-size: 20px; color:black">
+                        </div>
+                        <div class="card-body">
+                            <div class="table-responsive listFiles" >
+                                    <!-- table -->
+                            </div>               
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+$(function () {
+    // $.get("/persons/documents/index/29",function(data){
+    //         $("#tieu-de").text("Nội quy Công ty");
+    //         $(".listFiles").html(data);
+    //     });
+    $(".listGroups").on("click",function(e){
+        $(".listGroups").removeClass("active");
+        $(e.target).addClass("active");
+
+        $("#tieu-de").text("Nội quy " + $(this).text());
+        var route = $(this).attr("route");
+        $.ajax({
+            method: "GET",
+            url: route,
+            success:function(data){
+                $(".listFiles").html(data)
+            }
+        });
+    });
+});
+</script>
+
+						

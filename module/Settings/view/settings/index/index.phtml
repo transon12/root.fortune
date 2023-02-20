@@ -1,0 +1,69 @@
+<?php
+$title = "Cấu hình chung (mặc định)";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                				<?= $this->partial("settings/index/nav-tabs.phtml", ['route' => 'settings/index', 'id' => 'index']) ?>
+                               	<div class="tab-content">
+                                   	<div class="tab-pane active" id="index" role="tabpanel">
+                                     	<div class="p-20">
+                                     		<?php $this->form->prepare(); ?>
+                                     		<?= $this->form()->openTag($this->form) ?>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('cookie_lifetime')) ?>
+                                                <?= $this->formElement($this->form->get('cookie_lifetime')) ?>
+                                                <small class="font-italic">Đơn vị được tính bằng giây (s)</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('cookie_lifetime')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('remember_me')) ?>
+                                                <?= $this->formElement($this->form->get('remember_me')) ?>
+                                                <small class="font-italic">Đơn vị được tính bằng giây (s)</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('remember_me')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('allow_ips_connect_api_sms')) ?>
+                                                <?= $this->formElement($this->form->get('allow_ips_connect_api_sms')) ?>
+                                                <small class="font-italic">Mỗi IP cách nhau bởi dấu ';'</small>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('allow_ips_connect_api_sms')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12 text-center">
+                                                <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                            </div>
+                                            <?=$this->form()->closeTag($this->form)?>
+                                     	</div>
+                                  	</div>
+                             	</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,73 @@
+
+	<section class="fxt-template-animation fxt-template-layout1">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-6 col-12 fxt-bg-color">
+					<div class="fxt-content">
+						<div class="fxt-header text-center">
+							<a href="login-1.html" class="fxt-logo"><img src="<?= TEMPS ?>app-assets/images/logo/logo.png" alt="Logo"></a>
+						</div>
+						<div class="fxt-form">
+							<h2>Đăng nhập</h2>
+                                <?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+								<div class="form-group">
+									<div class="fxt-transformY-50 fxt-transition-delay-1">
+                                        <?= $this->formElement($this->form->get('username')) ?>
+										<i class="flaticon-user"></i>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="fxt-transformY-50 fxt-transition-delay-2">
+                                        <?= $this->formElement($this->form->get('password')) ?>
+										<i class="flaticon-padlock"></i>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="fxt-transformY-50 fxt-transition-delay-2">
+										<?= $this->formElement($this->form->get('remember_me')) ?>
+										<?= $this->formLabel($this->form->get('remember_me')) ?>
+									</div>
+								</div>
+								<div class="form-group">
+									<div class="fxt-transformY-50 fxt-transition-delay-3">
+										<div class="fxt-content-between">
+                                            <?= $this->formRow($this->form->get('btnSubmit')) ?>
+										</div>
+									</div>
+								</div>
+            		<?=$this->form()->closeTag($this->form)?>
+						</div>
+						<div class="fxt-footer">
+							<ul class="fxt-socials">
+								<li class="fxt-facebook fxt-transformY-50 fxt-transition-delay-4">
+									<a href="#" title="Facebook"><i class="fab fa-facebook-f"></i></a>
+								</li>
+								<li class="fxt-twitter fxt-transformY-50 fxt-transition-delay-5">
+									<a href="#" title="twitter"><i class="fab fa-twitter"></i></a>
+								</li>
+								<li class="fxt-google fxt-transformY-50 fxt-transition-delay-6">
+									<a href="#" title="google"><i class="fab fa-google-plus-g"></i></a>
+								</li>
+								<li class="fxt-linkedin fxt-transformY-50 fxt-transition-delay-7">
+									<a href="#" title="linkedin"><i class="fab fa-linkedin-in"></i></a>
+								</li>
+								<li class="fxt-pinterest fxt-transformY-50 fxt-transition-delay-8">
+									<a href="#" title="pinterest"><i class="fab fa-pinterest-p"></i></a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+				<div class="col-md-6 col-12 fxt-none-767 fxt-bg-img" data-bg-image="<?= TEMPS_LOGIN ?>img/background-1.jpg"></div>
+			</div>
+		</div>
+	</section>
+
+
+
+
+
+
+
+

@@ -1,0 +1,169 @@
+<?php
+$title = 'Danh sách tài khoản';
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                    <a class="btn btn-success pxt-modal" title="Thêm dữ liệu" href="<?= $this->url($this->route, ['action' => 'add']) ?>" >
+                        <i class="la la-plus-circle"></i> Thêm dữ liệu
+                    </a>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->formSearch->prepare(); ?>
+                             	<?= $this->form()->openTag($this->formSearch) ?>
+                                <?php if(isset($this->userId) && $this->userId == '1'){ ?>
+                                <div class="form-group col-md-4">
+                                    <?= $this->formElement($this->formSearch->get('company_id')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('company_id')) ?></div>
+                                </div>
+                                <?php } ?>
+                                <div class="form-group col-md-4">
+                             		<?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                              	</div>
+                                <div class="form-group col-md-2">
+                             		<?= $this->formElement($this->formSearch->get('status')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('status')) ?></div>
+                              	</div>
+                             	<div class="form-group col-md-2">
+                                	<?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                             	</div>
+                            	<?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <?php if($this->userId == "1"){ ?><th class="text-center">Công ty</th><?php } ?>
+                                                <th class="text-center">Tên đăng nhập</th>
+                                                <th class="text-center">Họ & tên đệm</th>
+                                                <th class="text-center">Tên</th>
+                                                <th class="text-center">Giới tính</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrUsers->getAdapter()->count() > 0){
+                                                $i = 1;
+                                                $optionCompanies = $this->optionCompanies;
+                                                $companyIsGroups = $this->companyIsGroups;
+                                                //\Zend\Debug\Debug::dump($companyIsGroups); die();
+                                                foreach($this->arrUsers as $item){
+                                                    if(isset($companyIsGroups[$item['company_id']])){
+                                                        $item['is_group'] = $companyIsGroups[$item['company_id']];
+                                                    }else{
+                                                        $item['is_group'] = "1";
+                                                    }
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center"><?= $i++; ?></td>
+                                            	<?php if($this->userId == "1"){ ?><td><?= isset($optionCompanies[$item['company_id']]) ? $optionCompanies[$item['company_id']] : "Không xác định"; ?></td><?php } ?>
+                                                <td><?= $item['username']; ?> <?= ($item['status'] != '1') ? ("(<span class='text-warning'>" . \Admin\Model\Users::getStatus()[$item['status']] . "</span>)") : "" ?></td>
+                                                <td><?= $item['lastname']; ?></td>
+                                                <td><?= $item['firstname']; ?></td>
+                                                <td><?= (($item['gender'] == 0) ? 'Nữ' : 'Nam'); ?></td>
+                                                <td class="text-center"><?= $item['created_at']; ?></td>
+                                                <td class="text-center">
+												<?= $this->partial("partial/buttons/edit.phtml", 
+												    ['route' => 'admin/users', 
+											        'title' => 'Sửa dữ liệu', 
+											        'id' => $item['id']]) ?>
+                                                <a title="Sửa tài khoản '<?= $item['username']; ?>'?" href="<?= $this->url('admin/users', ['action' => 'edit', 'id' => $item['id']]) ?>" >
+													<i class="la la-pencil"></i></a>
+                                                <a title="Bạn muốn xóa tài khoản '<?= $item['username']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#defaultSize"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'delete', 'id' => $item['id']]) ?>" >
+													<i class="la la-close"></i></a>
+                                                <a title="Đổi mật khẩu" href="javascript:void(0)" data-toggle="modal" data-target="#defaultSize"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'change-password', 'id' => $item['id']]) ?>" >
+													<i class="la la-key"></i></a>
+                                                <!-- <a title="Hợp đồng lao động '<?= $item['username']; ?>'?" href="<?= $this->url('admin/labour-contracts', ['action' => 'index', 'id' => $item['id']]) ?>">
+                                                    <i class="la la-clipboard"></i></a> -->
+												<?php if($item['is_group'] == "1"){ ?>
+                                                <a title="Danh sách phòng ban cho nhân viên '<?= $item['firstname'] . $item['lastname'] . ' (' . $item['username'] . ')' ?>'" data-toggle="modal" data-target="#large"
+                                                	href="javascript:void(0)" class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'groups', 'id' => $item['id']]) ?>" >
+													<i class="la la-users"></i></a>
+                                                <a title="Chặn quyền tài khoản '<?= $item['username']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#large"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'permissions-deny', 'id' => $item['id']]) ?>" >
+													<i class="la la-eye-slash"></i></a>
+												<?php }else{ ?>
+                                                <a title="Phân quyền tài khoản '<?= $item['username']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#large"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'permissions-allow', 'id' => $item['id']]) ?>" >
+													<i class="la la-eye"></i></a>
+												<?php } ?>
+                                                <!-- <a title="Quản lý địa chỉ '<?= $item['username']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#xlarge"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'iframe-addresses', 'id' => $item['id']]) ?>" >
+													<i class="la la-map-marker"></i></a>
+                                                <a title="Quản lý điện thoại '<?= $item['username']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#xlarge"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'iframe-phones', 'id' => $item['id']]) ?>" >
+													<i class="la la-phone"></i></a>
+                                                <a title="Quản lý chứng minh nhân dân (căn cước công dân) '<?= $item['username']; ?>'?" href="javascript:void(0)" data-toggle="modal" data-target="#xlarge"
+                                                	class="pxt-modal" route="<?= $this->url('admin/users', ['action' => 'iframe-identity-cards', 'id' => $item['id']]) ?>" >
+													<i class="la la-barcode"></i></a> -->
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										<?= $this->paginationControl(
+                                            $this->arrUsers,
+                                            'Sliding',
+                                            'partial/paginator',
+                                            ['route' => 'admin/users', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        ) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

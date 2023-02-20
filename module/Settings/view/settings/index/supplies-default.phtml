@@ -1,0 +1,66 @@
+<?php
+$title = "Cấu hình vật tư (mặc định)";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                	&nbsp;
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                				<?= $this->partial("settings/index/nav-tabs.phtml", ['route' => 'settings/index', 'id' => 'supplies-default']) ?>
+                               	<div class="tab-content">
+                                   	<div class="tab-pane active" id="supplies" role="tabpanel">
+                                     	<div class="p-20">
+                                     		<?php $this->form->prepare(); ?>
+                                     		<?= $this->form()->openTag($this->form) ?>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('time_limit_supplies_ins')) ?>
+                                                <?= $this->formElement($this->form->get('time_limit_supplies_ins')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('time_limit_supplies_ins')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('time_limit_supplies_outs')) ?>
+                                                <?= $this->formElement($this->form->get('time_limit_supplies_outs')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('time_limit_supplies_outs')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12">
+                                                <?= $this->formLabel($this->form->get('time_limit_proposal_details')) ?>
+                                                <?= $this->formElement($this->form->get('time_limit_proposal_details')) ?>
+                                                <div class="text-danger"><?= $this->formElementErrors($this->form->get('time_limit_proposal_details')) ?></div>
+                                            </div>
+                                            <div class="form-group col-md-12 text-center">
+                                                <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                            </div>
+                                            <?=$this->form()->closeTag($this->form)?>
+                                     	</div>
+                                  	</div>
+                             	</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

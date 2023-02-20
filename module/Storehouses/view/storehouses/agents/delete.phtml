@@ -1,0 +1,25 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        <?php
+        if(!empty($checkRelationship)){
+        ?>
+        <div class="form-group col-md-12">
+        	<?= isset($checkRelationship['phones']) ? "Đại lý '" . $this->valueCurrent['name'] . "' đang liên kết với một vài số điện thoại, nếu xóa thì tất cả liên kết sẽ bị xóa!<br />" : "" ?>
+		</div>
+        <div class="form-group col-md-12 text-center">
+    		<h3>Bạn có muốn xoá?</h3>
+		</div>
+        <?php
+        }
+        ?>
+        
+        <div class="form-group col-md-12 text-center">
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+
+

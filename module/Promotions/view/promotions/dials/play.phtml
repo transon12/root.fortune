@@ -1,0 +1,281 @@
+<?php
+$title = "Quản lý chương trình quay số";
+$this->headTitle($title);
+?>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+            			<div class="card-content show">
+                			<div class="card-body">
+                            	<?php if(!isset($this->valueCurrent)){ ?>
+                                <div class="form-group col-md-12 text-center" style="font-size: 36px; font-weight: bold; color: #F00;">
+                                	<?= (isset($this->error) ? $this->error : 'Có lỗi trong quá trình xử lý, đề nghị liên hệ Admin!') ?>
+                                </div>
+                                <?php
+                                }else{
+                                    $valueCurrent = $this->valueCurrent;
+                                    $title = $valueCurrent['name'];
+                                    $this->headTitle($title);
+                                ?>
+                                <div class="form-group col-md-12 text-center" style="font-size: 36px; font-weight: bold; color: #F00;">
+                                	<?= $title ?>
+                                </div>
+                                <?php 
+                                    if(isset($this->error)){
+                                ?>
+                                <div class="form-group col-md-12 text-center" style="font-size: 24px; font-weight: bold; color: #0C3;">
+                                	<?= $this->error ?>
+                                </div>
+                                <?php
+                                    }else{
+                                ?>
+                				<form method="POST" class="form-horizontal col-md-12 text-center" id="formPlay" enctype="multipart/form-data">
+                					<i class="la la-refresh" id="btnRefresh" style="position: fixed; left: 10px; top: 10px; opacity: 0.2;"></i>
+                					<input type="hidden" name="id" id="id" value="<?= $valueCurrent['id'] ?>">
+                					<input type="hidden" name="strRe" id="strRe" value="">
+                                	<div class="form-group col-md-12 text-center">
+                                		<select name="cbo_prizes_id" id="cbo_prizes_id" style="width: 50%; height: 50px; font-size: 24px; font-weight: bold; padding: 5px;">
+                                            <option value="">------- Chọn một giải thưởng -------</option>
+                                            <?php 
+                                                if(isset($this->arrPrizes) && !empty($this->arrPrizes)){
+                                                    foreach($this->arrPrizes as $key => $item){
+                                            ?>
+                                            <option value="<?= $key ?>" timeDial="<?= $item['time_dial'] ?>"><?= $item['name'] ?></option>
+                                            <?php 
+                                                    }
+                                                }
+                                            ?>
+                                     	</select>
+                                  	</div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<strong style="font-size: 24px; color: #F00; font-weight: bold;">Số lượng quay</strong>
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<input type="text" name="limit_dial" id="limit_dial" value="1" style="text-align: center; width: 50%; font-size: 24px; padding: 5px; font-weight: bold;">
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<strong style="font-size: 24px; color: #F00; font-weight: bold;">Số điện thoại trúng thưởng</strong>
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<input type="text" name="phones_id" id="phones_id" disabled value="" style="text-align: center; width: 50%; font-size: 24px; padding: 5px; font-weight: bold;">
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<strong style="font-size: 24px; color: #F00; font-weight: bold;">Mã may mắn trúng thưởng</strong>
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<input type="text" name="list_codes_id" id="list_codes_id" disabled value="" style="text-align: center; width: 50%; font-size: 24px; padding: 5px; font-weight: bold;">
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<button type="button" name="btn_dial" id="btn_dial" class="btn btn-info" event="play" style="width: 30%; font-size: 20px; padding: 10px;">
+                							<i class="la la-play"></i>
+                						</button> 
+                                    </div>
+                            	</form>
+                        		<?php 
+                                    }
+                        		?>
+                                    <div class="form-group col-md-12 text-center">
+                                    	<div class="table-responsive m-t-10">
+                                         	<table class="display nowrap table table-hover table-striped" cellspacing="0" width="100%">
+                                              	<thead>
+                                                 	<tr>
+                                                     	<th class="text-center" colspan="10" style="font-size: 32px; color: #C00; font-weight: bold;" id="abc">Danh sách trúng thưởng</th>
+                                                  	</tr>
+                                                 	<tr>
+                                                     	<th class="text-center">Giải thưởng</th>
+                                                     	<th class="text-center">Số điện thoại</th>
+                                                     	<th class="text-center">Mã may mắn</th>
+                                                     	<th class="text-center">Sự kiện</th>
+                                                  	</tr>
+                                              	</thead>
+                                             	<tbody id="listWin">
+                                             		<?php 
+                                             		 if(isset($this->arrWinnerDials) && !empty($this->arrWinnerDials)){
+                                             		     foreach($this->arrWinnerDials as $item){
+                                             		?>
+                                             		<tr>
+                                             			<td><?= $item['name'] ?></td>
+                										<td><?= $item['phone_id'] ?></td>
+                            							<td><?= $item['code_id'] ?></td>
+                            							<td><a title="Bạn muốn xóa số '<?= $item['phone_id'] ?>'?" href="javascript:void(0)" class="btn_pxt-modal" 
+                            							route="<?= $this->url('promotions/dials', ['action' => 'delete-winner', 'id' => $valueCurrent['id'], 'winner_dial_id' => $item['id']]) ?>">
+                            							<i class="la la-close"></i></a></td>
+                            						</tr>
+                            						<?php 
+                                             		     }
+                                             		 }
+                            						?>
+                                              	</tbody>
+                                          	</table>
+                                     	</div>       
+                                    </div>
+                                	<audio id="musicBackground">
+                              			<source src="/uploads/samples/music-background.mp3" type="audio/mpeg">
+                            		</audio>
+                                	<audio id="musicDial">
+                              			<source src="/uploads/samples/music-dial.mp3" type="audio/mpeg">
+                            		</audio>
+                                	<audio id="musicWin">
+                              			<source src="/uploads/samples/music-win.mp3" type="audio/mpeg">
+                            		</audio>
+                <script type="text/javascript">
+                	$(function() {
+                		// Đặt tên + định nghĩa một số biến sẽ dùng
+                		var inval; 
+                		var speed = 0;
+                		var limit = 1;
+                		var musicBackground = document.getElementById("musicBackground"); 
+                		var musicDial = document.getElementById("musicDial"); 
+                		var musicWin = document.getElementById("musicWin"); 
+                		// music
+                		musicBackground.play();
+                
+                		function randomString(length) {
+                		    //chars = '1234567890ABCDEFGHJKLMNPQRSTUVWXYZ';
+                		    chars = '1234567890';
+                		    var result = '';
+                		    for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
+                		    return result;
+                		}
+                		function runRandomNumber(){
+                			speed++;
+                			if(speed % 50 == 0){
+                				clearInterval(inval);
+                				limit = limit + 20;
+                				inval = setInterval(runRandomNumber, limit);
+                			}else
+                		   		$('#list_codes_id').val(randomString(10));
+                		}
+                		
+                		$(document).on("click", "#btnRefresh", function(){
+                			location.reload();
+                		});
+                		$(document).on("click", "#btn_dial", function(){
+                			//if(finish == 1) return;
+                			// Lấy đối tượng hiện tại
+                			var btnDial = $(this);
+                			var event = btnDial.attr("event");
+                			//alert(event);
+                			//alert(event);
+                			if(event == 'play'){
+                				// get id dial
+                				var prizeId = $("#cbo_prizes_id").val();
+                				// get time dial
+                				var timeDial = $("#cbo_prizes_id option:selected").attr("timeDial");
+                    			if(prizeId == ""){
+                    				alert("Chọn một giải thưởng trước khi quay số");
+                    			}else{
+                        			var limitDial = $("#limit_dial").val();
+                        			if(parseInt(limitDial) < 1){
+                						alert("Số lượng quay phải lớn hơn hoặc bằng 1!");
+                					}else{
+                						// music
+                						musicBackground.pause();
+                						musicDial.play();
+                        				// Thực thi
+                						$("#cbo_prizes_id").attr("readonly", "readonly");
+                						$("#limit_dial").attr("readonly", "readonly");
+                        				btnDial.find("i").removeClass("la-play").addClass("la-stop");
+                        				btnDial.attr("event", "pause");
+                        				if(timeDial != 0 && timeDial != "" && timeDial != "undefined"){
+                        		            a = setInterval(function(){ 
+                        						clearInterval(inval); 
+                        						clearInterval(a); 
+                        						$("#btn_dial").click(); 
+                    							btnDial.attr("event", "stop");
+                        					}, timeDial * 1000);
+                        				}
+                        				inval = setInterval(runRandomNumber,speed);
+                					}
+                    			}
+                			}else{
+                				if(event == 'pause'){
+                					btnDial.html("Tiếp tục quay!");
+                    				btnDial.prop("disabled", true);
+                    				// music
+                					musicDial.pause();
+                					musicWin.play();
+                					// Dừng ramdom
+                					clearInterval(inval);
+                					// Lấy một số thuộc tính cần thiết
+                					var data = $("#formPlay").serialize();
+                					//data += "&dial_lucky_award_id=" + cboDialLuckyId.val();
+                					$.ajax({
+                						type: "POST",
+                						url: '<?= $this->url('promotions/dials', ['action' => 'add-winner']) ?>',
+                						data: data,
+                						success:function(data){
+                							data = JSON.parse(data);
+                							console.log(data);
+                							if(data.error !== ""){
+                    							alert(data.error);
+                    							location.reload();
+                							}
+                							$("#phones_id").val(data.phones);
+                							$("#list_codes_id").val(data.codes);
+                							//var str = $("#strRe");
+                							var str = "<tr><td>-name-</td>";
+                							str += "<td>-phone-</td>";
+                							str += "<td>-code-</td>";
+                							str += "<td><a title=\"Bạn muốn xóa số '-phone-'?\" href=\"javascript:void(0)\" class=\"btn-pxt-modal\" route=\"<?= $this->url('promotions/dials', ['action' => 'delete-winner']) ?>-id-\" data-toggle=\"modal\" data-target=\"#modal-medium\" data-whatever=\"@getbootstrap\">";
+                							str += "<i class=\"la la-close\"></i></a></td></tr>";
+                							$.each(data.winner, function(key, value) {
+                								var re = str;
+                								re = re.replace(/-phone-/g, value.phone);
+                								re = re.replace(/-id-/g, value.id);
+                								re = re.replace(/-name-/g, value.name);
+                								re = re.replace(/-code-/g, value.code);
+                							    $("#listWin").prepend(re);
+                							});
+                		    				btnDial.prop("disabled", false);
+                		    				return false;
+                        					//musicWin.play();
+                        					//musicBackground.play();
+                							
+                						}
+                					});
+                					return false;
+                				}else{
+                					// music
+                					musicWin.pause();
+                					location.reload();
+                				}
+                			}
+                			return false;
+                		});
+                		$(document).on("click", ".btn_pxt-modal", function(){
+                			var element = $(this);
+                			var route = element.attr("route");
+
+                			var question = confirm(element.attr("title"));
+                			if (question == true) {
+            					$.ajax({
+            						type: "POST",
+            						url: route,
+            						data: "",
+            						success:function(data){
+            							data = JSON.parse(data);
+            							if(typeof data.error != "undefined"){
+            								alert(data.error);
+                						}else{
+            								alert(data.message);
+                        					location.reload();
+                						}
+            		    				return;
+            						}
+            					});
+            					return false;
+                			} else {
+                				return;
+                			}
+                		});
+                	});
+                </script>
+                <?php 
+                }
+                ?>
+       						</div>
+                        </div>
+                </div>
+            </div>
+		</div>

@@ -1,0 +1,95 @@
+<?php
+$this->form->prepare();
+$this->form()->addValidAttribute('route');
+?>
+<?= $this->form()->openTag($this->form) ?>
+<div class="col-12">
+    <h3><strong>Thông tin đề xuất</strong></h3>
+    <hr />
+</div>
+<div class="col-6">
+    <div class="row">
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('staff')) ?>
+            <?= $this->formElement($this->form->get('staff')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('staff')) ?></div>
+        </div>
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('requested_at')) ?>
+            <?= $this->formElement($this->form->get('requested_at')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('requested_at')) ?></div>
+        </div>
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('product_id')) ?>
+            <?= $this->formElement($this->form->get('product_id')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('product_id')) ?></div>
+        </div>
+    </div>
+</div>
+<div class="col-6">
+    <div class="row">
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('request')) ?>
+            <?= $this->formElement($this->form->get('request')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('request')) ?></div>
+        </div>
+        <div class="form-group col-md-12">
+            <?= $this->formLabel($this->form->get('content')) ?>
+            <?= $this->formElement($this->form->get('content')) ?>
+            <div class="text-danger"><?= $this->formElementErrors($this->form->get('content')) ?></div>
+        </div>
+    </div>
+</div>
+
+<div class="col-12">
+    <h3><strong>Thông tin Khách Hàng</strong></h3>
+    <hr />
+</div>
+<div class="form-group col-md-12">
+    <?= $this->formLabel($this->form->get('phone')) ?>
+    <?= $this->formElement($this->form->get('phone')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('phone')) ?></div>
+</div>
+<div class="form-group col-12">
+    <?= $this->formLabel($this->form->get('info')) ?>
+    <?= $this->formElement($this->form->get('info')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('info')) ?></div>
+</div>
+
+<div class="col-12">
+    <h3><strong>Kết quả xử lý</strong></h3>
+    <hr />
+</div>
+
+<div class="form-group col-4">
+    <?= $this->formLabel($this->form->get('reponse')) ?>
+    <?= $this->formElement($this->form->get('reponse')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('reponse')) ?></div>
+</div>
+<div class="form-group col-4">
+    <?= $this->formLabel($this->form->get('code')) ?>
+    <?= $this->formElement($this->form->get('code')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('code')) ?></div>
+</div>
+<div class="form-group col-4">
+    <?= $this->formLabel($this->form->get('reponsed_at')) ?>
+    <?= $this->formElement($this->form->get('reponsed_at')) ?>
+    <div class="text-danger"><?= $this->formElementErrors($this->form->get('reponsed_at')) ?></div>
+</div>
+
+<div class="form-group col-md-12 text-center">
+    <button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    <?= $this->formRow($this->form->get('btnSubmit')) ?>
+</div>
+<?= $this->form()->closeTag($this->form) ?>
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<script src="<?= TEMPS ?>assets/pxt.js"></script>
+<script type="text/javascript">
+    $(function() {
+        $('.datetimepicker-input').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm:ss'
+        });
+    });
+</script>

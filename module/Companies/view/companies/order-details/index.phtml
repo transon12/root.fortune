@@ -1,0 +1,90 @@
+<?php
+$title = "Chi tiết đơn hàng";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<!-- <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active"><a href="<?= $this->url('companies/addresses', ['action' => 'index','id' => $this->orderId]) ?>">Danh sách</a> </li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div> -->
+       		<div class="content-header-right col-md-12 col-12">
+                <div class="btn-group float-md-right">
+                    <a class="btn btn-success pxt-modal" href="<?= $this->url('companies/order-details', ['action' => 'add','id' => $this->orderId]) ?>" title="Thêm dữ liệu">
+                        <i class="la la-plus-circle"></i> Thêm dữ liệu
+                    </a>
+                  	
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Công nghệ</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if(!empty($this->arrOrderDetails)){
+                                                $i = 1;
+                                                $optionTechnologies = $this->optionTechnologies;
+                                                foreach($this->arrOrderDetails as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center align-middle"><?= $i++; ?></td>
+                                            	<td class="text-center align-middle"><?= $optionTechnologies[$item['technologies_id']] ?></td>
+                                                <td class="text-center align-middle"><?= $item['created_at'] ?></td>
+                                                <td class="text-center align-middle">
+                                                    <a title="Bạn muốn xóa '<?= $optionTechnologies[$item['technologies_id']] ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('companies/order-details', ['action' => 'delete', 'id' => $this->orderId, 'detailid' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                        
+										<!-- <?//= $this->paginationControl(
+                                        //     $this->arrOrderDetails,
+                                        //     'Sliding',
+                                        //     'partial/paginator',
+                                        //     ['routess' => 'companies/order-details', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        // ) 
+                                        ?> -->
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

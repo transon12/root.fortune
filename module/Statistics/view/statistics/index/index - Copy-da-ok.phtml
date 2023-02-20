@@ -1,0 +1,170 @@
+<?php
+$title = "Thống kê tin nhắn";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-header row mb-1">
+            <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+                <h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+                <div class="row breadcrumbs-top d-inline-block">
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                            <li class="breadcrumb-item active"><?= $title ?></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <div class="content-header-right col-md-6 col-12">
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <?php $this->formSearch->prepare(); ?>
+                                <?= $this->form()->openTag($this->formSearch) ?>
+                                <div class="form-group col-md-2">
+                                    <?= $this->formElement($this->formSearch->get('type')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('type')) ?></div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <?= $this->formElement($this->formSearch->get('datetime_begin')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('datetime_begin')) ?></div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <?= $this->formElement($this->formSearch->get('datetime_end')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('datetime_end')) ?></div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <?= $this->formElement($this->formSearch->get('status')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('status')) ?></div>
+                                </div>
+                                <div class="form-group col-md-2">
+                                    <?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                                    <?= $this->formRow($this->formSearch->get('btnExport')) ?>
+                                </div>
+                                <?= $this->form()->closeTag($this->formSearch) ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-content show">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Trạng thái</th>
+                                                <th class="text-center">Mã PIN</th>
+                                                <th class="text-center">Serial</th>
+                                                <th class="text-center">SĐT</th>
+												<th class="text-center">Người tiêu dùng điền</th>
+												<th class="text-center">Mã đại lý</th>
+                                                <th class="text-center">Sản phẩm</th>
+                                                <th class="text-center">Thông tin chi tiết</th>
+                                                <th class="text-center">Thời gian nhắn</th>
+                                            </tr>
+
+                                        </thead>
+                                        <tbody>
+                                            <?php
+                                            if (!empty($this->arrMessages)) {
+                                                $i = 1;
+                                                $optionProducts = $this->optionProducts;
+                                                foreach ($this->arrMessages as $item) {
+                                                    $contentIn = json_decode($item['content_in'], true);
+                                                    $type = "SMS";
+                                                    if ($item['type'] == '3') {
+                                                        $type = "Quét QRCode";
+                                                    } elseif ($item['type'] == '2') {
+                                                        $type = "Website";
+                                                    }
+                                                    $imgInfo = "error.png";
+                                                    if($item["status"] == 1){
+                                                        $imgInfo = "check.png";
+                                                    }elseif($item["status"] > 1){
+                                                        $imgInfo = "warning.png";
+                                                    }
+                                            ?>
+                                                    <tr>
+                                                        <td class="text-center align-middle"><?= $i++; ?></td>
+                                                        <td class="text-center align-middle">
+                                                            <img src="/img/<?= $imgInfo ?>" width="30px"/>
+                                                        </td>
+                                                        <td class="text-center align-middle"><?= $item["code_id"] ?></td>
+                                                        <td class="text-center align-middle"><?= $item['code_serial'] ?></td>
+                                                        <td class="text-center align-middle"><?= $item['phone_id'] ?></td>
+														<td class="text-center align-middle"><?= isset($contentIn['type_agent']) ? $contentIn['type_agent'] : "" ?></td>
+														 <!--td class="text-center align-middle"><?//= $item['code_agent'] ?></td-->
+														 <td class="text-center align-middle"><?= isset($optionAgents[$item['agent_id']]) ? $optionAgents[$item['agent_id']] : "" ?></td>
+                                                        <td class="text-center align-middle"><?= isset($optionProducts[$item['product_id']]) ? $optionProducts[$item['product_id']] : "" ?></td>
+                                                        <td class="align-middle">
+                                                            <?php
+                                                            echo "<strong>Hình thức nhắn: </strong>" . $type . "<br />";
+                                                            echo "<strong>Tn đến: </strong>" . $item['message_in'] . "<br />";
+                                                            echo "<span data-toggle='tooltip' data-placement='top' title='" . $item['message_out'] . "'><strong>Tn trả ra: </strong>" . \Pxt\String\ChangeString::compactString($item['message_out'], 0, 17) . "</span><br />";
+                                                            echo "<strong>Họ và tên: </strong>" . $contentIn['fullname'] . "<br />";
+															echo "<strong>Khu vực: </strong>" . $contentIn['name_city'] . "<br />";
+															?>
+                                                        </td>
+                                                        <td class="text-center align-middle"><?= $item['created_at']; ?></td>
+                                                    </tr>
+                                                <?php
+                                                }
+                                            } else {
+                                                ?>
+                                                <tr>
+                                                    <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                                </tr>
+                                            <?php
+                                            }
+                                            ?>
+                                        </tbody>
+                                        <?= $this->partial("partial/paginator-custom.phtml", [
+                                            'data'              => $this->arrMessages,
+                                            'route'             => 'statistics/index',
+                                            'params'            => ['action' => 'index'],
+                                            'totalRow'          => $this->totalRow,
+                                            'queries'           => $this->queries,
+                                            'page'              => $this->page,
+                                            'perPage'           => $this->perPage,
+                                            'contentPaginator'  => $this->contentPaginator
+                                        ]) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<script type="text/javascript">
+    $(function() {
+        $('.datetimepicker-input').datetimepicker({
+            format: 'DD/MM/YYYY HH:mm:ss'
+        });
+    });
+</script>

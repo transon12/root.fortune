@@ -1,0 +1,58 @@
+<?= $this->doctype() ?>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <?= $this->headTitle('Truy cập bị từ chối!')->setSeparator(' - ')->setAutoEscape(false) ?>
+        <?= $this->headMeta()
+            ->appendName('viewport', 'width=device-width, initial-scale=1.0')
+            ->appendHttpEquiv('X-UA-Compatible', 'IE=edge')
+        ?>
+        <?= $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/vnd.microsoft.icon', 'href' => $this->basePath() . '/img/favicon.ico']) ?>
+        <meta name="author" content="<?= META_AUTHOR ?>">
+        <?php // $this->headLink(['rel' => 'shortcut icon', 'type' => 'image/x-icon', 'href' => TEMPS . 'app-assets/images/ico/favicon.ico']) ?>
+        <?php // $this->headLink(['rel' => 'apple-touch-icon', 'type' => 'image/x-icon', 'href' => TEMPS . 'app-assets/images/ico/apple-icon-120.png']) ?>
+        
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i%7CQuicksand:300,400,500,700" rel="stylesheet">
+
+    <!-- BEGIN: Vendor CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/vendors.min.css">
+    <!-- END: Vendor CSS-->
+
+    <!-- BEGIN: Theme CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/bootstrap-extended.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/colors.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/components.min.css">
+    <!-- END: Theme CSS-->
+
+    <!-- BEGIN: Page CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/menu/menu-types/vertical-menu-modern.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/core/colors/palette-gradient.min.css">
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/pages/error.min.css">
+    <!-- END: Page CSS-->
+
+    <!-- BEGIN: Custom CSS-->
+    <link rel="stylesheet" type="text/css" href="<?= TEMPS ?>assets/css/style.css">
+    <!-- END: Custom CSS-->
+    </head>
+    
+    <body class="">
+    	<?= $this->content ?>
+	</body>
+    <!-- BEGIN: Vendor JS-->
+    <script src="<?= TEMPS ?>app-assets/vendors/js/vendors.min.js"></script>
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="<?= TEMPS ?>app-assets/vendors/js/forms/validation/jqBootstrapValidation.js"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
+    <script src="<?= TEMPS ?>app-assets/js/core/app-menu.min.js"></script>
+    <script src="<?= TEMPS ?>app-assets/js/core/app.min.js"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="<?= TEMPS ?>app-assets/js/scripts/forms/form-login-register.min.js"></script>
+    <!-- END: Page JS-->
+</html>

@@ -1,0 +1,21 @@
+<ul class="nav nav-tabs customtab" role="tablist">
+ 	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'index') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'index']) ?>" role="tab">
+ 		<span class="hidden-sm-up"><i class="ti-home"></i></span> <span class="hidden-xs-down">Cấu hình chung (mặc định)</span></a> 
+ 	</li>
+   	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'messages-default') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'messages-default']) ?>" role="tab">
+   		<span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Tin nhắn trả ra (mặc định)</span></a> 
+   	</li>
+   	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'paginators-default') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'paginators-default']) ?>" role="tab">
+   		<span class="hidden-sm-up"><i class="ti-email"></i></span> <span class="hidden-xs-down">Phân trang (mặc định)</span></a> 
+   	</li>
+   	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'supplies-default') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'supplies-default']) ?>" role="tab">
+   		<span class="hidden-sm-up"><i class="ti-supplies"></i></span> <span class="hidden-xs-down">Vật tư (mặc định)</span></a> 
+   	</li>
+   	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'messages') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'messages']) ?>" role="tab">
+   		<span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Tin nhắn trả ra</span></a> 
+   	</li>
+   	<li class="nav-item"> <a class="nav-link <?= ($this->id == 'configs') ? 'active' : '' ?>" href="<?= $this->url($this->route, ['action' => 'configs']) ?>" role="tab">
+   		<span class="hidden-sm-up"><i class="ti-user"></i></span> <span class="hidden-xs-down">Cấu hình chung</span></a> 
+   	</li>
+</ul>
+<br />

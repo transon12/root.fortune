@@ -1,0 +1,17 @@
+<?php 
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+        <?= $this->form()->openTag($this->form) ?>
+        <div>
+            
+        </div>
+        
+        <div class="form-group col-md-12 text-center">
+        <h3 style="color: red;">Khi xóa sẽ xóa cả chi tiết đơn hàng và chi tiết nhiệm vụ!</h3>
+    		<button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+    		<?= $this->formRow($this->form->get('btnSubmit')) ?>
+		</div>
+        <?=$this->form()->closeTag($this->form)?>
+
+

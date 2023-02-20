@@ -1,0 +1,168 @@
+<?php
+$title = "Chuyển cho người phụ trách";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+    <div class="content-wrapper">
+        <div class="content-body">
+            <div class="row">
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2 class="card-title text-center" style="font-size: 24px; font-weight: bold">Thông tin trúng thưởng</h2>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <table class="table">
+                                    <tbody>
+                                        <tr>
+                                            <td class="align-middle"><strong>Số điện thoại trúng thưởng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["phone_id"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Chương trình khuyến mãi: </strong></td>
+                                            <td class="align-middle"><?= isset($optionPromotions[$valueCurrent["promotion_id"]]) ? $optionPromotions[$valueCurrent["promotion_id"]] : "" ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Ngày trúng: </strong></td>
+                                            <td class="align-middle"><?= $valueCurrent["created_at"] ?></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="align-middle"><strong>Danh sách mã trúng thưởng: </strong></td>
+                                            <td class="align-middle">
+                                                <?php
+                                                foreach ($arrCodeInWin as $item) {
+                                                    echo "- " . $item["code_id"] . " (" . $item["created_at"] . ")";
+                                                    echo ($item["phone_root"] != "") ? (" - Được nhắn bởi sđt: " . $item["phone_root"]) : "";
+                                                    echo "<br />";
+                                                }
+                                                ?>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h1 class="card-title text-center" style="font-size: 28px; font-weight: bold">Chuyển thông tin cho người phụ trách</h1>
+                        </div>
+                        <?php
+                        if ($valueCurrent["status_order"] == 2) {
+                        ?>
+                            <div class="card-content collapse show">
+                                <div class="card-body text-center">
+                                    <h4><strong class="text-success">Đã chuyển thông tin cho người phụ trách</strong></h4>
+                                </div>
+                            </div>
+                        <?php
+                        } else {
+                        ?>
+                            <div class="card-content collapse show">
+                                <div class="card-body">
+                                    <?php $this->form->prepare(); ?>
+                                    <?= $this->form()->openTag($this->form) ?>
+                                    <div class="form-group col-md-3 col-12">
+                                        <?= $this->formLabel($this->form->get('user_input_crm')) ?>
+                                        <?= $this->formElement($this->form->get('user_input_crm')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('user_input_crm')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-6 col-12">
+                                        <?= $this->formLabel($this->form->get('user_input')) ?>
+                                        <div class="input-group">
+                                            <?= $this->formElement($this->form->get('user_input')) ?>
+                                            <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary get-phone" type="button">
+                                                    Tìm thông tin trên CRM
+                                                </button>
+                                                <div class="spinner-border text-primary d-none pxt-loading" role="status" style="margin-top: 7px;margin-left: 10px;margin-right: 10px;">
+                                                    <span class="sr-only"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('user_input')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-3 col-12">
+                                        <?= $this->formLabel($this->form->get('source')) ?>
+                                        <?= $this->formElement($this->form->get('source')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('source')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-12 col-12">
+                                        <?= $this->formLabel($this->form->get('note_1')) ?>
+                                        <?= $this->formElement($this->form->get('note_1')) ?>
+                                        <div class="text-danger"><?= $this->formElementErrors($this->form->get('note_1')) ?></div>
+                                    </div>
+                                    <div class="form-group col-md-12 text-center">
+                                        <?= $this->formRow($this->form->get('btnSubmit')) ?>
+                                    </div>
+                                    <?= $this->formElement($this->form->get('user_input_id')) ?>
+                                    <?= $this->formElement($this->form->get('user_input_name')) ?>
+                                    <?= $this->form()->closeTag($this->form) ?>
+                                </div>
+                            </div>
+                        <?php
+                        }
+                        ?>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function isJson(item) {
+        item = typeof item !== "string" ?
+            JSON.stringify(item) : item;
+        try {
+            item = JSON.parse(item);
+        } catch (e) {
+            return false;
+        }
+        return item;
+    }
+    $(function() {
+        $(document).on('click', '.get-phone', function(e) {
+            $(".pxt-loading").removeClass("d-none");
+            $(".pxt-loading").addClass("d-block");
+            $.ajax({
+                type: 'POST',
+                url: "/promotions/order/get-phone/<?= $valueCurrent["phone_id"] ?>",
+                data: [],
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: function(data) {
+                    console.log(data);
+                    var json = isJson(data);
+                    // console.log("AAA");
+                    // console.log(json);
+                    if (json === false) {
+                        alert("Liên hệ fortune để biết thêm thông tin!");
+                    } else {
+                        if (json.status == "0") {
+                            alert(json.message);
+                        } else {
+                            // alert("Người quản lý của sđt này là: " + json.user_id);
+                            $("#user_input").val(json.user_input);
+                            $("#user_input_crm").val(json.user_input_id + " (" + json.user_input_name + ")");
+                            $("#user_input_id").val(json.user_input_id);
+                            $("#user_input_name").val(json.user_input_name);
+                        }
+                    }
+                    $(".pxt-loading").addClass("d-none");
+                    $(".pxt-loading").removeClass("d-block");
+                },
+                error: function(data) {
+                    alert("Liên hệ fortune để biết thêm thông tin");
+                }
+            });
+        });
+    });
+</script>

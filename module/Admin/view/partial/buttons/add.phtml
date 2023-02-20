@@ -1,0 +1,4 @@
+<a title="<?= $this->title ?>" 
+href="<?= $this->url($this->route, ['action' => (isset($this->action) ? $this->action : 'add')]) ?>" >
+<button type="button" class="btn btn-info"><i class="fa fa-plus"></i> <?= $this->title ?></button>
+</a>

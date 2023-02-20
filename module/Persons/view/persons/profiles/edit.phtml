@@ -1,0 +1,195 @@
+<?php
+    $title = "Thông tin cá nhân";
+    $value = $this->valueCurrent;
+    $optionPositions = $this->optionPositions;
+?>
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/css/pages/users.min.css">
+<div class="app-content container center-layout mt-2">
+      <div class="content-wrapper">
+        <div class="content-header row mb-1">
+            <div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+                <h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+                <div class="row breadcrumbs-top d-inline-block">
+                    <div class="breadcrumb-wrapper col-12">
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="<?= $this->url('persons/profiles', ['action' => 'index']) ?>">Trang nhân sự</a></li>
+                            <li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="content-body">
+            <div class="row match">
+                <!-- <div class="col-xl-4 col-md-6 col-12">
+                    <div class="card profile-card-with-cover border-success border-lighten-1">
+                        <img class="card-img-top img-fluid bg-cover height-200 border-bottom-success border-custom-color user-background-avatar" src="<?= ($value['background_avatar'] != '') ? URL_UPLOAD.$value['background_avatar'] : '/img/fortune.png' ?>"></img>
+                        <div class="card-profile-image">
+                            <img src="<?= ($value['avatar'] != null) ? URL_UPLOAD.$value['avatar'] : (($value['gender'] == 0) ? '/img/female-user.png' : '/img/male-user.png') ?>" 
+                                class="rounded-circle width-150 height-150 img-border box-shadow-1 user-avatar" alt="Card image">
+                        </div>
+                        <div class="profile-card-with-cover-content text-center">
+                            <div class="card-body">
+                                <br>
+                                <h4 style="font-size: 24px; font-family:Arial, Helvetica, sans-serif" class="card-title"><?= $value['name']?></h4>
+                                
+                                <h6 class="card-subtitle text-muted"><?= $value['email']?></h6><br>
+                                <h6 class="card-subtitle text-muted"><?= ($value['position_id'] == null) ? "" : $optionPositions[$value['position_id']]?></h6>
+                            </div>
+                            <div class="text-center">
+                                <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-facebook"><span class="la la-facebook"></span></a>
+                                <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-twitter"><span class="la la-twitter"></span></a>
+                                <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-linkedin"><span class="la la-skype font-medium-4"></span></a>
+                                <a href="#" class="btn btn-social-icon mb-1 btn-outline-github"><span class="la la-youtube font-large-1"></span></a>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+                <div class="col-xl-3 col-md-6 col-12">
+                    <div class="card">
+                        <div class="text-center">
+                            <div class="card-body">
+                                <img src="<?= ($value['avatar'] != null) ? URL_UPLOAD.$value['avatar'] : (($value['gender'] == 0) ? '/img/female-user.png' : '/img/male-user.png') ?>" class="rounded-circle width-150 height-150 user-avatar" alt="Card image">
+                            </div>
+                            <div class="card-body">
+                                <h4 class="card-title"><?= $value['name']?></h4>
+                                <h6 class="card-subtitle text-muted"><?= $value['email']?></h6><br>
+                                <h6 class="card-subtitle text-muted"><?= ($value['position_id'] == null) ? "" : $optionPositions[$value['position_id']]?></h6>
+                            </div>
+                            <div class="text-center">
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-facebook"><span class="la la-facebook"></span></a>
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-twitter"><span class="la la-twitter"></span></a>
+                            <a href="#" class="btn btn-social-icon mr-1 mb-1 btn-outline-linkedin"><span class="la la-skype font-medium-4"></span></a>
+                            <a href="#" class="btn btn-social-icon mb-1 btn-outline-github"><span class="la la-youtube font-large-1"></span></a>
+                        </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xl-8 col-md-6 col-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4 class="card-title" style="font-size: 20px;"><?= $title?></h4>
+                            <a class="heading-elements-toggle"><i class="fa fa-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="reload"><i class="ft-rotate-cw"></i></a></li>
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="card-content collapse show">
+                            <div class="card-body">
+                                <?php $this->form->prepare(); ?>
+                                <?= $this->form()->openTag($this->form) ?>
+                                <div class="form-group col-md-6 ">
+                                    <?= $this->formLabel($this->form->get('firstname')) ?>
+                                    <?= $this->formElement($this->form->get('firstname')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('firstname')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('lastname')) ?>
+                                    <?= $this->formElement($this->form->get('lastname')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('lastname')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('birthday')) ?>
+                                    <?= $this->formElement($this->form->get('birthday')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('birthday')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('home_town')) ?>
+                                    <?= $this->formElement($this->form->get('home_town')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('home_town')) ?></div>
+                                </div>
+                                <div class="form-group col-md-12">
+                                    <?= $this->formLabel($this->form->get('addresses')) ?>
+                                    <?= $this->formElement($this->form->get('addresses')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('addresses')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('phones')) ?>
+                                    <?= $this->formElement($this->form->get('phones')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('phones')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('identity_cards')) ?>
+                                    <?= $this->formElement($this->form->get('identity_cards')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('identity_cards')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('email')) ?>
+                                    <?= $this->formElement($this->form->get('email')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('email')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('position_id')) ?>
+                                    <?= $this->formElement($this->form->get('position_id')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('position_id')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('level_educations')) ?>
+                                    <?= $this->formElement($this->form->get('level_educations')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('level_educations')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('gender')) ?>
+                                    <?= $this->formElement($this->form->get('gender')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('gender')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('password')) ?>
+                                    <?= $this->formElement($this->form->get('password')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('password')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('re_password')) ?>
+                                    <?= $this->formElement($this->form->get('re_password')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('re_password')) ?></div>
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('avatar')) ?>
+                                    <?= $this->formElement($this->form->get('avatar')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('avatar')) ?></div>
+                                </div>
+                                <!-- <div class="form-group col-md-6">
+                                    <?= $this->formLabel($this->form->get('background_avatar')) ?>
+                                    <?= $this->formElement($this->form->get('background_avatar')) ?>
+                                    <div class="text-danger"><?= $this->formElementErrors($this->form->get('background_avatar')) ?></div>
+                                </div> -->
+                                <div class="form-group col-md-12 text-center">
+                                    <?= $this->formRow($this->form->get('btnSubmit'));?>
+                                </div>
+                                <?=$this->form()->closeTag($this->form)?>
+                            </div>
+                        </div>
+                    </div>
+                </div>    
+            </div>
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+	$('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss'
+   	});
+
+    $("#avatar").on("change",function(){
+        let file = $("#avatar").prop("files")[0];
+        console.log(file);
+        if(file){
+            $(".user-avatar").attr("src",URL.createObjectURL(file));
+        }
+    });
+    $("#background_avatar").on("change",function(){
+        let file = $("#background_avatar").prop("files")[0];
+        console.log(file);
+        if(file){
+            $(".user-background-avatar").attr("src",URL.createObjectURL(file));
+        }
+    });
+});
+</script>

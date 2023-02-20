@@ -1,0 +1,12 @@
+<?php 
+	if(isset($this->optionSurrogates)){
+?>
+		<option value="">--- Chọn một người đại diện ---</option>
+<?php
+		foreach($this->optionSurrogates as $key => $item){
+?>
+			<option value="<?= $key ?>"><?= $item ?></option>
+<?php
+		}
+	}
+?>

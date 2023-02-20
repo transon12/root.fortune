@@ -1,0 +1,10 @@
+<option value="">--- Chọn một sản phẩm ---</option>
+<?php
+    if(!empty($this->optionsData)){
+        foreach($this->optionsData as $id => $item){
+?>
+<option value="<?= $id ?>"><?= $item ?></option>
+<?php 
+        }
+    }
+?>

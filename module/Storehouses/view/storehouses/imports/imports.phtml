@@ -1,0 +1,156 @@
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/forms/selects/select2.min.css">
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<?php
+$title = "Nhập kho";
+$this->headTitle($title);
+$settingDatas = [];
+if(isset($this->settingDatas)){
+    $settingDatas = $this->settingDatas;
+}
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item active"><?= $title ?></li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Dữ liệu để nhập kho</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->form->prepare(); ?>
+                             	<?= $this->form()->openTag($this->form) ?>
+                             	<div class="form-group col-md-2">
+                             		<?= $this->formElement($this->form->get('status')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->form->get('status')) ?></div>
+                             	</div>
+                                <div class="form-group col-md-3">
+                             		<?= $this->formElement($this->form->get('products_id')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->form->get('products_id')) ?></div>
+                              	</div>
+                                <div class="form-group col-md-2">
+                             		<?= $this->formElement($this->form->get('datetime_import')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->form->get('datetime_import')) ?></div>
+                              	</div>
+                                <div class="form-group col-md-3">
+                             		<?= $this->formElement($this->form->get('codes')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->form->get('codes')) ?></div>
+                              	</div>
+								<?php 
+									if(!empty($settingDatas)){
+										foreach($settingDatas as $key => $item){
+								?>
+								<div class="form-group col-md-3">
+									<?= $this->formElement($this->form->get($key)) ?>
+									<div class="text-danger"><?= $this->formElementErrors($this->form->get($key)) ?></div>
+								</div>
+								<?php 
+										}
+									}
+								?>
+                             	<div class="form-group col-md-1 text-center">
+                                	<?= $this->formRow($this->form->get('btnSubmit')) ?>
+                             	</div>
+                             	<div class="form-group col-md-1 text-center">
+                                	<?= $this->formRow($this->form->get('btnExport')) ?>
+                             	</div>
+                            	<?=$this->form()->closeTag($this->form)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                            	<th class="text-center">Ngày nhập</th>
+                                            	<th class="text-center">Mã sản phẩm</th>
+                                            	<th class="text-center">Tên sản phẩm</th>
+                                            	<th class="text-center">Tổng nhập</th>
+                                            	<th class="text-center">Tồn kho</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if(count($this->arrCodes) > 0){
+                                                // $arrCodesNotExport = $this->arrCodesNotExport;
+                                                $optionProducts = $this->optionProducts;
+                                                $optionProductsDetail = $this->optionProductsDetail;
+                                                $i = 1;
+                                                foreach($this->arrCodes as $item){
+                                                    // $totalInventory = isset($arrCodesNotExport[$item['date_at'] . '-' . $item['product_id']]) ? $arrCodesNotExport[$item['date_at'] . '-' . $item['product_id']] : "0";
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center"><?= $i ?></td>
+                                            	<td class="text-center"><?= $item['date_at'] ?></td>
+                                            	<td class="text-center"><?= isset($optionProductsDetail[$item['product_id']]['code']) ? $optionProductsDetail[$item['product_id']]['code'] : "" ?></td>
+                                            	<td class="text-center"><?= isset($optionProducts[$item['product_id']]) ? $optionProducts[$item['product_id']] : "" ?></td>
+                                            	<td class="text-center"><?= $item['total'] ?></td>
+                                            	<td class="text-center">
+													<?= $item['total_inventory'] ?>
+                                            		<?php if((int)$item['total_inventory'] > 0){ ?>
+                                            		<a href="<?= $this->url('storehouses/imports', ['action' => 'export-inventory', 'id' => $this->id], ['query' => ['date_at' => $item['date_at'], 'product_id' => $item['product_id']]]) ?>"> (xuất chi tiết)</a>
+                                            		<?php } ?>
+                                            	</td>
+                                            </tr>
+                                        <?php
+                                                    $i++;
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Chưa có dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
+<script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script>
+<script src="<?= TEMPS ?>app-assets/vendors/js/forms/select/select2.full.min.js"></script>
+<script src="<?= TEMPS ?>app-assets/js/scripts/forms/select/form-select2.min.js"></script>
+<script type="text/javascript">
+$(function () {
+	$("#codes").focus();
+	$('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss'
+   	});
+});
+</script>

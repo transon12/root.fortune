@@ -1,0 +1,136 @@
+<?php
+$title = "Đánh giá";
+$this->headTitle($title);
+$optionName = $this->optionName;
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?> <?= $optionName[$this->userId] ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?> <?= $optionName[$this->userId] ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                      	<a class="btn btn-success pxt-modal" href="javascript:void(0)" title="Thêm dữ liệu"
+                          route="<?= $this->url('persons/evaluations', ['action' => 'reviewer', 'id' => $this->userId]) ?>" data-toggle="modal" data-target="#defaultSize">
+                          <i class="la la-plus-circle"></i> Thêm người đánh giá
+                      	</a>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->formSearch->prepare(); ?>
+                             	<?= $this->form()->openTag($this->formSearch) ?>
+
+                                <div class="form-group col-md-2">
+                             		<?= $this->formElement($this->formSearch->get('year')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('year')) ?></div>
+                              	</div>
+                             	<div class="form-group col-md-1">
+                                	<?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                             	</div>
+
+                            	<?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Họ và tên</th>
+                                                <th class="text-center">Năm</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if(!empty($this->arrEvaluations)){
+                                                $i = 1;
+                                                foreach($this->arrEvaluations as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center align-middle"><?= $i++; ?></td>
+                                            	<td class="text-center align-middle"><?= $optionName[$item['user_id']] ?></td>
+                                                <td class="text-center align-middle"><?= $item['year'] ?></td>
+                                                <td class="text-center align-middle"><?= $item['created_at'] ?></td>
+                                                <td class="text-center align-middle">
+                                                <?php 
+                                                    if($item['status'] != 3){
+                                                ?>
+                                                    <a title="Đánh giá" href="<?= $this->url('persons/evaluations', ['action' => 'edit', 'id' => $this->userId, 'evaluation_id' => $item['id']]) ?>" class="pxt-modal" >
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa ?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('persons/evaluations', ['action' => 'delete', 'id' => $this->userId, 'evaluation_id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+                                                <?php }else{ ?>
+                                                    <a title="Xem đánh giá" href="<?= $this->url('persons/evaluations', ['action' => 'edit', 'id' => $this->userId, 'evaluation_id' => $item['id']]) ?>" class="pxt-modal" >
+    													<i class="la la-eye"></i></a>
+                                                <?php } ?>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<!-- <script type="text/javascript">
+$(function() {
+	var urlString = window.location.href;
+    var url = new URL(urlString);
+    var year = url.searchParams.get("year");
+    var today = new Date();
+    var currentYear = today.getFullYear();
+    if(year === "" || year === null){
+        $(".evaluations_year").text("Đánh giá năm " + currentYear);
+    }else{
+        $(".evaluations_year").text("Đánh giá năm " + year);
+    }
+});
+</script> -->
+

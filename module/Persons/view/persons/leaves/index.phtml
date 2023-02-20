@@ -1,0 +1,181 @@
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<?php
+$title = "Tổng hợp phép";
+$this->headTitle($title);
+$date = \Pxt\Datetime\ChangeDatetime::getDateCurrent();
+// $a = date_format(date_create($date), "m-d");
+// $b = date_format(date_create("2000000-11-30"), "m-d");
+// $aDate = DateTime::createFromFormat('m-d', '05-20');
+// if($a <= $b){
+//     echo "ok";
+// } else{
+//     echo "okkkkk";
+// }
+// $a= date("Y-m-d");
+// echo date("Y") -1 ;
+/* số năm, số tháng, số ngày */
+// $date1 = date_create("2008-10-14");
+// $date2 = date_create("2021-10-13");
+// $dateDifference = date_diff($date1, $date2)->format('%y năm, %m tháng and %d ngày');
+// echo date_diff($date1, $date2)->format("%y"). "<br>";
+// echo $dateDifference;
+
+/* tính số ngày */
+// $a = strtotime("2021-10-13");
+// $b = strtotime("2021-10-17");
+// echo round(($b - $a)/(60*60*24));
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tính năng</button>
+                    <div class="dropdown-menu arrow">  	
+                        <a class="dropdown-item pxt-modal" title="Reset phép năm" href="javascript:void(0)" data-toggle="modal" data-target="#defaultSize"
+                        route="<?= $this->url('persons/leaves', ['action' => 'iframe']) ?>">
+                      		<i class="la la-plus-circle"></i> Reset phép năm 1/1
+                      	</a>
+                        <a class="dropdown-item pxt-modal" title="Hủy phép năm cũ" href="javascript:void(0)" data-toggle="modal" data-target="#defaultSize"
+                        route="<?= $this->url('persons/leaves', ['action' => 'reset-old-leave']) ?>">
+                      		<i class="la la-plus-circle"></i> Hủy phép năm cũ 31/1
+                      	</a>
+                    </div>   
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->formSearch->prepare(); ?>
+                             	<?= $this->form()->openTag($this->formSearch) ?>
+
+                                <div class="form-group col-md-2">
+                             		<?= $this->formElement($this->formSearch->get('keyword')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('keyword')) ?></div>
+                              	</div>
+                                <div class="form-group col-md-3">
+                             		<?= $this->formElement($this->formSearch->get('datetime_begin')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('datetime_begin')) ?></div>
+                              	</div>
+                                <div class="form-group col-md-3">
+                             		<?= $this->formElement($this->formSearch->get('datetime_end')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('datetime_end')) ?></div>
+                              	</div>
+                             	<div class="form-group col-md-1">
+                                	<?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                             	</div>
+                                 <div class="form-group col-md-1">
+                                	<?= $this->formRow($this->formSearch->get('btnExport')) ?>
+                             	</div>
+
+                            	<?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center">Họ tên</th>
+                                                <th class="text-center">Ngày vào làm việc</th>
+                                                <th class="text-center">Số ngày phép</th>
+                                                <th class="text-center">Số ngày đã sử dụng</th>
+                                                <th class="text-center">Số ngày còn lại</th>
+                                                <th class="text-center" >Phép năm cũ còn lại</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrLeaveLists->getAdapter()->count() > 0){
+                                                $optionProfileName = $this->optionProfileName;
+                                                $optionProfileStartDate = $this->optionProfileStartDate;
+                                                $i = 1;
+                                                foreach($this->arrLeaveLists as $item){
+                                                    // echo date_format(date_create($optionProfileStartDate[$item['profile_id']]), "Y-m-d");
+                                                    
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center align-middle"><?= $i++; ?></td>
+                                            	<td class="align-middle"><?= $optionProfileName[$item['profile_id']] ?></td>
+                                                <td class="text-center align-middle"><?= $optionProfileStartDate[$item['profile_id']] ?></td>
+                                                <td class="text-center align-middle"><?= $item['total_leave'] ?></td>
+                                                <td class="text-center align-middle"><?= $item['leave_day_used'] ?></td>
+                                                <td class="text-center align-middle"><?= ($item['total_leave'] - $item['leave_day_used']) ?></td>
+                                                <td class="text-center align-middle"><?= $item['old_year_leave'] ?></td>
+                                                <td class="text-center align-middle">
+                                                    <a title="Xem chi tiết nghỉ phép <?= $optionProfileName[$item['profile_id']] ?>" href="<?= $this->url('persons/leaves', ['action' => 'view', 'id' => $item['id']]) ?>">
+    													<i class="la la-eye"></i></a>
+                                                    <a title="Sửa phép <?= $optionProfileName[$item['profile_id']] ?>" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('persons/leaves', ['action' => 'edit', 'id' => $item['id']]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa '<?= $optionProfileName[$item['profile_id']]; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('persons/leaves', ['action' => 'delete', 'id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										<?= $this->paginationControl(
+                                            $this->arrLeaveLists,
+                                            'Sliding',
+                                            'partial/paginator',
+                                            ['route' => 'persons/leaves', 'contentPaginator' => $this->contentPaginator, 'queries' => $this->queries]
+                                        ) ?>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    $('.datetimepicker-input').datetimepicker({
+       	format: 'DD/MM/YYYY HH:mm:ss',
+   	});
+});
+</script>

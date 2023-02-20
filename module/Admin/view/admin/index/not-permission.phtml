@@ -1,0 +1,31 @@
+<!-- BEGIN: Content-->
+<div class="app-content content">
+	<div class="content-wrapper">
+        <div class="content-header row mb-1"></div>
+        <div class="content-body">
+        	<section class="flexbox-container">
+    		<div class="col-12 d-flex align-items-center justify-content-center">
+        <div class="col-lg-4 col-md-8 col-10 p-0">
+            <div class="card-header bg-transparent border-0">
+                    <h2 class="error-code text-center mb-2">401</h2>
+                    <h3 class="text-uppercase text-center">Lỗi 401 - Truy cập bị từ chối</h3>
+                    <h6 class="text-center">Bạn không đủ quyền truy cập trang này</h6>
+            </div>
+            <div class="card-content">
+                <div class="row py-2">
+                    <div class="col-12 col-sm-6 col-md-6 mb-1">
+                        <a href="<?=$this->url('admin/index', ['action' => 'index'])?>" class="btn btn-primary btn-block"><i class="ft-home"></i> Quay trở về trang chủ</a>
+                    </div>
+                    <div class="col-12 col-sm-6 col-md-6 mb-1">
+                        <a href="<?= $this->url('admin/index', ['action' => 'logout']) ?>" class="btn btn-danger btn-block"><i class="ft-users"></i>  Truy cập bằng tài khoản khác</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+		</div>
+	</div>
+</div>
+<!-- END: Content-->

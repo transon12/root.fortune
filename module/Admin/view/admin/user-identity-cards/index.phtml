@@ -1,0 +1,91 @@
+<?php
+$title = "Quản lý địa chỉ nhân viên";
+$this->headTitle($title);
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                  	<button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Tính năng</button>
+                  	<div class="dropdown-menu arrow">
+                      	<a class="dropdown-item pxt-modal" title="Thêm dữ liệu" href="<?= $this->url($this->route, ['action' => 'add', 'id' => $this->userId]) ?>">
+                      		<i class="la la-plus-circle"></i> Thêm dữ liệu
+                      	</a>
+                  	</div>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                            	<th class="text-center">STT</th>
+                                                <th class="text-center">Số cmnd (cccd)</th>
+                                                <th class="text-center">Ngày cấp</th>
+                                                <th class="text-center">Nơi cấp</th>
+                                                <th class="text-center">Ghi chú</th>
+                                                <th class="text-center">Ngày tạo</th>
+                                                <th class="text-center">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if($this->arrUserIdentityCards->getAdapter()->count() > 0){
+                                                $i = 1;
+                                                foreach($this->arrUserIdentityCards as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="align-middle text-center"><?= $i++ ?></td>
+                                                <td class="align-middle text-center"><?= $item['code'] ?></td>
+                                                <td class="align-middle text-center"><?= $item['date_of_issues'] ?></td>
+                                                <td class="align-middle text-center"><?= $item['full_address'] ?></td>
+                                                <td class="align-middle text-center"><?= $item['note'] ?></td>
+                                                <td class="align-middle text-center"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
+                                                <td class="align-middle text-center">
+                                                    <a title="Sửa dữ liệu" href="<?= $this->url('admin/user-identity-cards', ['action' => 'edit', 'id' => $this->userId, 'user_identity_cards_id' => $item['id']]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa số cmnd (cccd) '<?= $item['code']; ?>'?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('admin/user-identity-cards', ['action' => 'delete', 'id' => $this->userId, 'user_identity_cards_id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>

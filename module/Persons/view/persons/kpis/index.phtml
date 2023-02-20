@@ -1,0 +1,135 @@
+<?php
+$title = "KPI";
+$this->headTitle($title);
+$optionName = $this->optionName;
+?>
+<div class="app-content content">
+	<div class="content-wrapper">
+		<div class="content-header row mb-1">
+          	<div class="content-header-left col-md-6 col-12 mb-2 breadcrumb-new">
+            	<h3 class="content-header-title mb-0 d-inline-block"><?= $title ?> <?= $optionName[$this->userId] ?></h3>
+            	<div class="row breadcrumbs-top d-inline-block">
+              		<div class="breadcrumb-wrapper col-12">
+                		<ol class="breadcrumb">
+                          	<li class="breadcrumb-item"><a href="#">Trang chủ</a></li>
+                          	<li class="breadcrumb-item"><a href="#"><?= $title ?> <?= $optionName[$this->userId] ?></a></li>
+                          	<li class="breadcrumb-item active">Danh sách</li>
+                		</ol>
+              		</div>
+            	</div>
+          	</div>
+       		<div class="content-header-right col-md-6 col-12">
+                <div class="btn-group float-md-right">
+                      	<a class="btn btn-success pxt-modal" href="<?= $this->url('persons/kpis', ['action' => 'add']) ?>" title="Thêm dữ liệu">
+                      		<i class="la la-plus-circle"></i> Thêm dữ liệu
+                      	</a>
+                </div>
+			</div>
+        </div>
+        <div class="content-body">
+			<div class="row">
+    			<div class="col-12">
+        			<div class="card">
+        				<div class="card-header">
+                            <h4 class="card-title">Tìm kiếm</h4>
+                            <a class="heading-elements-toggle"><i class="la la-ellipsis-v font-medium-3"></i></a>
+                            <div class="heading-elements">
+                                <ul class="list-inline mb-0">
+                                    <li><a data-action="collapse"><i class="ft-minus"></i></a></li>
+                                </ul>
+                            </div>
+                        </div>
+            			<div class="card-content collapse show">
+                			<div class="card-body">
+                            	<?php $this->formSearch->prepare(); ?>
+                             	<?= $this->form()->openTag($this->formSearch) ?>
+
+                                <div class="form-group col-md-2">
+                             		<?= $this->formElement($this->formSearch->get('year')) ?>
+                                 	<div class="text-danger"><?= $this->formElementErrors($this->formSearch->get('year')) ?></div>
+                              	</div>
+                             	<div class="form-group col-md-1">
+                                	<?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
+                             	</div>
+
+                            	<?=$this->form()->closeTag($this->formSearch)?>
+                            </div>
+                        </div>
+                    </div>
+        			<div class="card">
+            			<div class="card-content show">
+                			<div class="card-body">
+                                <div class="table-responsive">
+                                    <h3 class="kpi_year"></h3>
+                                    <table class="table bg-white table-bordered table-striped table-hover black">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center">STT</th>
+                                                <th class="text-center" style="width: 15%;">Mục tiêu</th>
+                                                <th class="text-center" style="width: 15%;">Đo lường</th>
+                                                <th class="text-center" style="width: 15%;">Kết quả, kỳ vọng</th>
+                                                <th class="text-center" style="width: 35%;">Chương trình hành động</th>
+                                                <th class="text-center" style="width: 15%;">Kết quả thực hiện</th>
+                                                <th class="text-center" style="width: 5%;">Sự kiện</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        <?php
+                                            if(!empty($this->arrUserKpis)){
+                                                $i = 1;
+                                                foreach($this->arrUserKpis as $item){
+                                        ?>
+                                            <tr>
+                                            	<td class="text-center align-middle"><?= $i++; ?></td>
+                                            	<td class="text-center align-middle"><?= $item['target'] ?></td>
+                                                <td class="text-center align-middle"><?= $item['measure']?></td>
+                                                <td class="text-center align-middle"><?= $item['expected_results'] ?></td>
+                                                <td class="align-middle"><?= $item['action_program'] ?></td>
+                                                <td class="text-center align-middle"><?= $item['results'] ?></td>
+                                                <td class="text-center align-middle">
+                                                    <a title="Sửa dữ liệu" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#xlarge"
+                                                    	route="<?= $this->url('persons/kpis', ['action' => 'edit', 'user_id' => $item['user_id'], 'id' => $item['id']]) ?>">
+    													<i class="la la-pencil"></i></a>
+                                                    <a title="Bạn muốn xóa KPI này ?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
+                                                    	route="<?= $this->url('persons/kpis', ['action' => 'delete', 'user_id' => $item['user_id'], 'id' => $item['id']]) ?>">
+    													<i class="la la-close"></i></a>
+												</td>
+                                            </tr>
+                                        <?php
+                                                }
+                                            }else{
+                                        ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                        <?php
+                                            }
+                                        ?>
+                                        </tbody>
+										
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+$(function() {
+	var urlString = window.location.href;
+    var url = new URL(urlString);
+    var year = url.searchParams.get("year");
+    var today = new Date();
+    var currentYear = today.getFullYear();
+    if(year === "" || year === null){
+        $(".kpi_year").text("KPI năm " + currentYear);
+    }else{
+        $(".kpi_year").text("KPI năm " + year);
+    }
+});
+</script>
+

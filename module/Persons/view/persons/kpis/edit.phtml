@@ -1,0 +1,60 @@
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
+<link rel="stylesheet" type="text/css" href="<?= TEMPS ?>app-assets/vendors/css/forms/selects/select2.min.css">
+<?php
+    $this->form->prepare();
+    $this->form()->addValidAttribute('route');
+?>
+<?= $this->form()->openTag($this->form) ?>
+
+    <div class="form-group col-md-6">
+        <?= $this->formLabel($this->form->get('year')) ?>
+        <?= $this->formElement($this->form->get('year')) ?>
+        <div class="text-danger"><?= $this->formElementErrors($this->form->get('year')) ?></div>
+    </div>
+<br>
+    <div class="form-group col-md-6">
+        <?= $this->formLabel($this->form->get('target')) ?>
+        <?= $this->formElement($this->form->get('target')) ?>
+        <div class="text-danger"><?= $this->formElementErrors($this->form->get('target')) ?></div>
+    </div>
+    
+    <div class="form-group col-md-6">
+        <?= $this->formLabel($this->form->get('measure')) ?>
+        <?= $this->formElement($this->form->get('measure')) ?>
+        <div class="text-danger"><?= $this->formElementErrors($this->form->get('measure')) ?></div>
+    </div>
+    
+    <div class="form-group col-md-6">
+        <?= $this->formLabel($this->form->get('expected_results')) ?>
+        <?= $this->formElement($this->form->get('expected_results')) ?>
+        <div class="text-danger"><?= $this->formElementErrors($this->form->get('expected_results')) ?></div>
+    </div>
+    
+    <div class="form-group col-md-6">
+        <?= $this->formLabel($this->form->get('action_program')) ?>
+        <?= $this->formElement($this->form->get('action_program')) ?>
+        <div class="text-danger"><?= $this->formElementErrors($this->form->get('action_program')) ?></div>
+    </div>
+
+    <div class="form-group col-md-12">
+        <?= $this->formLabel($this->form->get('results')) ?>
+        <?= $this->formElement($this->form->get('results')) ?>
+        <div class="text-danger"><?= $this->formElementErrors($this->form->get('results')) ?></div>
+    </div>
+
+    <div class="form-group col-md-12 text-center">
+    <button type="button" class="btn btn-default " data-dismiss="modal" id="pxt-cancel">Đóng</button>
+        <?php echo $this->formRow($this->form->get('btnSubmit')); ?>
+    </div>
+<?=$this->form()->closeTag($this->form)?>
+
+<script src="<?= TEMPS ?>assets/pxt.js"></script>
+<script type="text/javascript">
+$(function () {
+	$('.datetimepicker-input').datetimepicker({
+        view: 'years',
+       	format: 'YYYY'
+   	});
+});
+</script>
