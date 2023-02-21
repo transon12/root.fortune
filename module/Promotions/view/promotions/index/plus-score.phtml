@@ -71,7 +71,7 @@ $this->headTitle($title);
                                                     <td class="align-middle"><?= $value['score']; ?></td>
                                                     <td class="align-middle"><?= $value['message_win']; ?></td>
                                                     <td class="align-middle text-center">
-                                                        <a title="Sửa dữ liệu" href="<?= $this->url('promotions/index', ['action' => 'edit', 'id' => $value['id']]) ?>">
+                                                        <a title="Sửa dữ liệu" href="<?= $this->url('promotions/index', ['action' => 'editPlusScore', 'id' => $value['id']]) ?>">
                                                             <i class="la la-pencil"></i></a>
                                                         <a title="Bạn muốn xóa điểm thắng ?" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#defaultSize"
                                                            route="<?= $this->url('promotions/index', ['action' => 'deletePlusScore', 'id' => $value['id']]) ?>">

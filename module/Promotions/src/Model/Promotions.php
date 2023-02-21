@@ -345,12 +345,13 @@ class Promotions
         // record data
         $entityListPromotions = new ListPromotions($this->adapter);
         $entityWinnerPromotions = new WinnerPromotions($this->adapter);
+        $entityListPlusScore = new PlusScore($this->adapter);
 
         if ((int)$params["limit_message_day"] !== 0) {
             $dayBegin = date("d/m/Y", time()) . " 00:00:00";
             $dayEnd = date("d/m/Y", time()) . " 23:59:59";
             $arrListPromotionsLimit = $entityListPromotions->fetchAlls(['promotion_id' => $promotionId, 'phone_id' => $options['phone_id'],
-                'datetime_begin' => $dayBegin, 'datetime_end' => $dayEnd]);
+                                                                        'datetime_begin' => $dayBegin, 'datetime_end' => $dayEnd]);
             $totalScoreListPromotionLimit = count($arrListPromotionsLimit);
             if ($totalScoreListPromotionLimit >= (int)$params["limit_message_day"]) {
                 return [
@@ -364,7 +365,7 @@ class Promotions
             $monthBegin = date("1/m/Y", time()) . " 00:00:00";
             $monthEnd = date("t/m/Y", time()) . " 23:59:59";
             $arrListPromotionsLimit = $entityListPromotions->fetchAlls(['promotion_id' => $promotionId, 'phone_id' => $options['phone_id'],
-                'datetime_begin' => $monthBegin, 'datetime_end' => $monthEnd]);
+                                                                        'datetime_begin' => $monthBegin, 'datetime_end' => $monthEnd]);
             $totalScoreListPromotionLimit = count($arrListPromotionsLimit);
             if ($totalScoreListPromotionLimit >= (int)$params["limit_message_month"]) {
                 return [
@@ -392,32 +393,42 @@ class Promotions
         // check condition
         // get data list promotions as phone_id and promotion_id
         $arrListPromotions = $entityListPromotions->fetchAlls(['promotion_id' => $promotionId, 'phone_id' => $options['phone_id']]);
+        $totalScoreListPromotion = count($arrListPromotions);
+
+        $winner = $entityWinnerPromotions->fetchRowByPhoneId($options['phone_id'], $promotionId);
+        $arrWinnerPromotions = $entityWinnerPromotions->fetchAlls(['promotion_id' => $promotionId, 'phone_id' => $options['phone_id']]);
+        // check condition to win
         $totalScoreListPromotion = 0;
-        if (!empty($arrListPromotions)) {
-            foreach ($arrListPromotions as $item) {
+        if(!empty($arrListPromotions)){
+            foreach($arrListPromotions as $item){
                 $totalScoreListPromotion = (int)$totalScoreListPromotion + (int)$item['score'];
             }
         }
-        $winner = $entityWinnerPromotions->fetchRowByPhoneId($options['phone_id'], $promotionId);
-
-        // check condition to win
-        $scoreRemain = !$winner ? $totalScoreListPromotion : ($totalScoreListPromotion - $winner['score']);
+        // get data winner promotions as phone_id and promotion_id
+        $arrWinnerPromotions = $entityWinnerPromotions->fetchAlls(['promotion_id' => $promotionId, 'phone_id' => $options['phone_id']]);
+        $totalWinnerPromotions = 0;
+        if(!empty($arrWinnerPromotions)){
+            foreach($arrWinnerPromotions as $item){
+                $totalWinnerPromotions = (int)$totalWinnerPromotions + (int)$item['score'];
+            }
+        }
+        $scoreRemain = $totalScoreListPromotion - $totalWinnerPromotions;
         // set message
         $params['message_near_win'] = str_replace('{diem_san_pham}', $score, $params['message_near_win']);
         $params['message_near_win'] = str_replace('{ten_san_pham}', (isset($currentProduct['name']) ? $currentProduct['name'] : ''), $params['message_near_win']);
         $params['message_near_win'] = str_replace('{tong_diem}', $totalScoreListPromotion, $params['message_near_win']);
-        $params['message_near_win'] = str_replace('{diem_gan_trung}', $scoreRemain, $params['message_near_win']);
+        $params['message_near_win'] = str_replace('{diem_gan_trung}', $totalScoreListPromotion, $params['message_near_win']);
         // check if only actulative
+
         if (!$params['score_win']) {
-            $params['score_win'] = $score;
-            $this->createdWinner($options, $promotionId, $params, $params['message_near_win']);
+
             return [
-                'message' => $params['message_near_win'],
+                'message' => $params['message_near_win'].'----3',
                 'price_topup' => '',
             ];
         }
 
-        $params['message_near_win'] = str_replace('{diem_thieu_de_trung}', ($params['score_win'] - $scoreRemain), $params['message_near_win']);
+        // $params['message_near_win'] = str_replace('{diem_thieu_de_trung}', ($params['score_win'] - $scoreRemain), $params['message_near_win']);
         // check if limit win != 0
         if ($params['limit_win'] > 0) {
             if (count($arrWinnerPromotions) >= $params['limit_win']) {
@@ -427,31 +438,54 @@ class Promotions
                 ];
             }
         }
-        $scores = explode($params['score_win'], ',');
-        $scores = sort($scores);
+        $scores = explode(',', $params['score_win']);
+        sort($scores);
         foreach ($scores as $item) {
-            if ($scoreRemain < $item) {
-                $params['message_near_win'] = str_replace('{diem_thieu_de_trung}', ($item - $scoreRemain), $params['message_near_win']);
-                $data = ['score' => $winner['score'] + $score, 'updated_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()];
+            $plus = $entityListPlusScore->firstOnly($item);
+            if ($totalScoreListPromotion < $item) {
+                echo $totalScoreListPromotion;
+                // $params['message_near_win'] = $params['message_near_win'];
+                $data = ['score' => $winner['score'] + $score, 'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()];
+                if(!empty($winner)) $entityWinnerPromotions->updateRow($winner['id'], $data);
+                return [
+                    'message'     =>  $params['message_near_win'].'----'.$totalScoreListPromotion,
+                    'price_topup' => '',
+                ];
+            }
+            if (!empty($plus)) {
+                $message = $plus['message_win'];
+                if($item == $plus['score'] && empty($winner)){
+                    $params['score_win'] = $plus['score'];
+                    $this->createdWinner($options, $promotionId, $params, $message);
+                    return [
+                        'message'     => $message. '---555',
+                        'price_topup' => '',
+                    ];
+                }
+
+                if($item == $plus['score'] && !empty($winner) &&  $winner['score']< $plus['score']){
+                    $data = ['score' => $winner['score'] + $score, 'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()];
+                    $entityWinnerPromotions->updateRow($winner['id'], $data);
+                    return [
+                        'message'     => $message. '---4',
+                        'price_topup' => '',
+                    ];
+                }
+
+            }
+        }
+        foreach ($scores as $item) {
+            if ($scoreRemain >= $item) {
+                $plus= $entityListPlusScore->firstOnly($item);
+                $data = ['score' => $winner['score'] + $score, 'message' => $plus['message_win'], 'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()];
                 $entityWinnerPromotions->updateRow($winner['id'], $data);
                 return [
-                    'message' => $params['message_near_win'],
+                    'message'     =>  $plus['message_win'].'----1-3',
                     'price_topup' => '',
                 ];
             }
         }
-        if ($scoreRemain >= $params['score_win']) {
-            if (empty($winner)) {
-                $message = $params['message_win'];
-                $this->createdWinner($options, $promotionId, $params, $message);
-                return [
-                    'message' => $message,
-                    'price_topup' => (isset($params['price_topup']) ? $params['price_topup'] : ''),
-                ];
-            }
-            $data = ['score' => $winner['score'] + $score, 'message' => $params['message_win'], 'updated_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()];
-            $entityWinnerPromotions->updateRow($winner['id'], $data);
-        }
+
     }
 
     private function handleTypeRandom($promotionId = null, $options = null, $params = null)

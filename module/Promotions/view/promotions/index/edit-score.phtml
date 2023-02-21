@@ -60,45 +60,12 @@ $this->headTitle($title);
                                                 <?= $this->formElement($this->form->get('description')) ?>
                                                 <div class="text-danger"><?= $this->formElementErrors($this->form->get('description')) ?></div>
                                             </div>
-                                            <?php 
-                                                if(!empty($this->arrProducts)){
-                                                    $arrPromotionsProducts = $this->arrPromotionsProducts;
-                                            ?>
-                                            <div class="form-group col-md-12">
-                                            	<label for="products_id">Sản phẩm sẽ tham gia chương trình: </label><br />
-                                                <div class="table-responsive m-t-10">
-                                                    <table class="display nowrap table table-hover table-striped" cellspacing="0" width="100%">
-                                                        <tbody>
-                                                        <?php
-                                                            foreach($this->arrProducts as $key => $item){
-                                                        ?>
-                                                            <tr>
-                                                                <td class="align-middle"><?= $item ?></td>
-                                                            	<td class="align-middle">
-                                                            		<input type="text" name="score-<?= $key ?>" id="score-<?= $key ?>" class="form-control" 
-                                                            		value="<?= (isset($arrPromotionsProducts[$key]) ? $arrPromotionsProducts[$key] : '0') ?>" placeholder="0">
-                                                            	</td>
-                                                            </tr>
-                                                        <?php
-                                                            }
-                                                        ?>
-                                                        </tbody>
-                                                    </table>
-                                                </div>
-                                            </div>
-                                            <?php 
-                                                }
-                                            ?>
                                             <div class="form-group col-md-12">
                                                 <?= $this->formLabel($this->form->get('status')) ?>
                                                 <div class="demo-radio-button">
                                                 <?= $this->formElement($this->form->get('status')) ?>
                                                 </div>
                                             </div>
-											<div class="form-group col-md-3">
-												<?= $this->formElement($this->form->get('supplie_id')) ?>
-												<div class="text-danger"><?= $this->formElementErrors($this->form->get('supplie_id')) ?></div>
-											</div>
                                             <div class="form-group col-md-12">
                                                 <?= $this->formLabel($this->form->get('limit_win')) ?>
                                                 <?= $this->formElement($this->form->get('limit_win')) ?>

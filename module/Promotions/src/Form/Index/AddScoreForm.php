@@ -107,15 +107,7 @@ class AddScoreForm extends Form{
             ]);
         $this->add($dial);
         
-		
-		
-		$suppliesId = new Element\Select('supplie_id');
-        $suppliesId->setLabel('Sản phẩm khuyến mãi: ')
-            ->setAttributes([
-                'class' => 'select2 form-control',
-                'placeholder'   => 'Chọn Sản phẩm: '
-            ]);
-        $this->add($suppliesId);
+
 		
 		$suppliersId = new Element\Select('supplier_id');
         $suppliersId->setLabel('Nhân Viên: ')

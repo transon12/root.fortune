@@ -2,6 +2,9 @@
 
 namespace Promotions\Controller;
 
+use Promotions\Form\Index\AddPlusScoreFrom;
+use Promotions\Form\Index\DeletePlusScoreForm;
+use Promotions\Form\Index\EditPlusForm;
 use Zend\View\Model\ViewModel;
 use Admin\Core\AdminCore;
 use Admin\Model\PxtAuthentication;
@@ -113,7 +116,7 @@ class IndexController extends AdminCore
         }
         $queries = $this->params()->fromQuery();
         // reset company_id if empty
-        if (! isset($queries['company_id']) || $queries['company_id'] == '') {
+        if (!isset($queries['company_id']) || $queries['company_id'] == '') {
             $queries['company_id'] = isset($queries['company_id']) ? $queries['company_id'] : $this->defineCompanyId;
         }
         $formSearch->setData($queries);
@@ -132,12 +135,12 @@ class IndexController extends AdminCore
         $arrPromotions->setItemCountPerPage($perPage);
         $arrPromotions->setPageRange($contentPaginator['page_range']);
         return new ViewModel([
-            'arrPromotions'    => $arrPromotions,
+            'arrPromotions' => $arrPromotions,
             'contentPaginator' => $contentPaginator,
-            'formSearch'       => $formSearch,
-            'queries'          => $queries,
-            'userId'           => $this->sessionContainer->id,
-            'optionCompanies'  => $this->entityCompanies->fetchAllToOptions(),
+            'formSearch' => $formSearch,
+            'queries' => $queries,
+            'userId' => $this->sessionContainer->id,
+            'optionCompanies' => $this->entityCompanies->fetchAllToOptions(),
         ]);
     }
 
@@ -157,25 +160,25 @@ class IndexController extends AdminCore
                 $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
                 $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
                 $data = [
-                    'company_id'     => $this->defineCompanyId,
-                    'name'           => $valuePost['name'],
+                    'company_id' => $this->defineCompanyId,
+                    'name' => $valuePost['name'],
                     'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
-                    'datetime_end'   => date_format($datetimeEnd, 'Y-m-d H:i:s'),
-                    'is_type'        => 0,
-                    'description'    => $valuePost['description'],
-                    'content'        => json_encode([
+                    'datetime_end' => date_format($datetimeEnd, 'Y-m-d H:i:s'),
+                    'is_type' => 0,
+                    'description' => $valuePost['description'],
+                    'content' => json_encode([
                         'input_type' => $valuePost['input_type'],
                     ]),
-                    'created_at'     => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
-                    'status'         => $valuePost['status'],
+                    'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                    'status' => $valuePost['status'],
                 ];
                 $promotionId = $this->entityPromotions->addRow($data);
-                if (! empty($valuePost['products_id'])) {
+                if (!empty($valuePost['products_id'])) {
                     foreach ($valuePost['products_id'] as $item) {
                         $dataPromotionsProducts = [
                             'promotion_id' => $promotionId,
-                            'product_id'   => $item,
-                            'created_at'   => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                            'product_id' => $item,
+                            'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
                         ];
                         $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
                     }
@@ -203,7 +206,7 @@ class IndexController extends AdminCore
         $form = new AddScoreForm();
 
         $optionSupplies = $this->entitySupplies->fetchAllOptions(['company_id' => $this->defineCompanyId]);
-        $form->get('supplie_id')->setValueOptions(['' => '------- Chọn một vật phẩm khuyến mãi -------'] + $optionSupplies);
+//        $form->get('supplie_id')->setValueOptions(['' => '------- Chọn một vật phẩm khuyến mãi -------'] + $optionSupplies);
 
         $request = $this->getRequest();
         // get product
@@ -214,55 +217,58 @@ class IndexController extends AdminCore
             $form->setData($valuePost);
             // check error score_win
             // \Zend\Debug\Debug::dump($valuePost); die();
-            if ($valuePost['score_win'] != '0' && $valuePost['score_win'] != '') {
-                if ($this->checkValueProductsId($valuePost, $valuePost['score_win']) == false) {
-                    $form->get('score_win')->setMessages(['score_win_min' => 'Tổng điểm trúng thưởng phải lớn hơn điểm của từng sản phẩm!']);
+            if ($form->isValid()) {
+                if ($valuePost['score_win'] != '0' && $valuePost['score_win'] != '') {
+                    if ($this->checkValueProductsId($valuePost, $valuePost['score_win']) == false) {
+                        $form->get('score_win')->setMessages(['score_win_min' => 'Tổng điểm trúng thưởng phải lớn hơn điểm của từng sản phẩm!']);
+                    }
                 }
-            }
 //            dd($valuePost);
-            $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
-            $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
-            $data = [
-                'company_id'     => COMPANY_ID,
-                'name'           => $valuePost['name'],
-                'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
-                'datetime_end'   => date_format($datetimeEnd, 'Y-m-d H:i:s'),
-                'is_type'        => 1,
-                'description'    => $valuePost['description'],
-                'content'        => json_encode([
-                    'dial'                => $valuePost['dial'],
-                    'supplie_id'          => $valuePost['supplie_id'],
-                    'limit_win'           => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
-                    'score_win'           => ($valuePost['score_win'] != '') ? $valuePost['score_win'] : '0',
-                    'limit_message_day'   => ($valuePost['limit_message_day'] != '') ? $valuePost['limit_message_day'] : '0',
-                    'message_limit_day'   => $valuePost['message_limit_day'],
-                    'limit_message_month' => ($valuePost['limit_message_month'] != '') ? $valuePost['limit_message_month'] : '0',
-                    'message_limit_month' => $valuePost['message_limit_month'],
-                    'price_topup'         => $valuePost['price_topup'],
-                    'message_near_win'    => $valuePost['message_near_win'],
-                    'message_win'         => $valuePost['message_win'],
-                    'message_limit_win'   => $valuePost['message_limit_win'],
-                ]),
-                'created_at'     => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
-                'status'         => $valuePost['status'],
-            ];
-            $promotionId = $this->entityPromotions->addRow($data);
+                $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
+                $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
+                $data = [
+                    'company_id' => COMPANY_ID,
+                    'name' => $valuePost['name'],
+                    'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
+                    'datetime_end' => date_format($datetimeEnd, 'Y-m-d H:i:s'),
+                    'is_type' => 1,
+                    'description' => $valuePost['description'],
+                    'content' => json_encode([
+                        'dial' => $valuePost['dial'],
+                        'limit_win' => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
+                        'score_win' => ($valuePost['score_win'] != '') ? $valuePost['score_win'] : '0',
+                        'limit_message_day' => ($valuePost['limit_message_day'] != '') ? $valuePost['limit_message_day'] : '0',
+                        'message_limit_day' => $valuePost['message_limit_day'],
+                        'limit_message_month' => ($valuePost['limit_message_month'] != '') ? $valuePost['limit_message_month'] : '0',
+                        'message_limit_month' => $valuePost['message_limit_month'],
+                        'price_topup' => $valuePost['price_topup'],
+                        'message_near_win' => $valuePost['message_near_win'],
+                        'message_win' => $valuePost['message_win'],
+                        'message_limit_win' => $valuePost['message_limit_win'],
+                    ]),
+                    'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                    'status' => $valuePost['status'],
+                ];
+                $promotionId = $this->entityPromotions->addRow($data);
 
-            $arrProductsId = $this->splitValueProductsId($valuePost, $arrProducts);
+                $arrProductsId = $this->splitValueProductsId($valuePost, $arrProducts);
 
-            if (! empty($arrProductsId)) {
-                foreach ($arrProductsId as $key => $item) {
-                    $dataPromotionsProducts = [
-                        'promotion_id' => $promotionId,
-                        'product_id'   => $key,
-                        'score'        => $item,
-                        'created_at'   => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
-                    ];
-                    $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
+                if (!empty($arrProductsId)) {
+                    foreach ($arrProductsId as $key => $item) {
+                        $dataPromotionsProducts = [
+                            'promotion_id' => $promotionId,
+                            'product_id' => $key,
+                            'score' => $item,
+                            'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                        ];
+                        $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
+                    }
                 }
+                $this->flashMessenger()->addSuccessMessage('Thêm dữ liệu thành công!');
+                return $this->redirect()->toRoute('promotions/index');
+            } else {
+                $this->flashMessenger()->addWarningMessage('Lỗi nhập dữ liệu, đề nghị kiểm tra lại!');
             }
-            $this->flashMessenger()->addSuccessMessage('Thêm dữ liệu thành công!');
-            return $this->redirect()->toRoute('promotions/index');
 
         }
 
@@ -277,7 +283,7 @@ class IndexController extends AdminCore
      */
     public function checkValueProductsId($valuePost, $scoreWin)
     {
-        if (! empty($valuePost)) {
+        if (!empty($valuePost)) {
             foreach ($valuePost as $key => $item) {
                 $arrName = explode('-', $key);
                 if ($arrName[0] === 'score') {
@@ -293,7 +299,7 @@ class IndexController extends AdminCore
     public function splitValueProductsId($valuePost, $arrProducts)
     {
         $result = [];
-        if (! empty($valuePost)) {
+        if (!empty($valuePost)) {
             foreach ($valuePost as $key => $item) {
                 $arrName = explode('-', $key);
                 if ($arrName[0] === 'score') {
@@ -323,31 +329,31 @@ class IndexController extends AdminCore
                 $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
                 $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
                 $data = [
-                    'company_id'     => COMPANY_ID,
-                    'name'           => $valuePost['name'],
+                    'company_id' => COMPANY_ID,
+                    'name' => $valuePost['name'],
                     'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
-                    'datetime_end'   => date_format($datetimeEnd, 'Y-m-d H:i:s'),
-                    'is_type'        => 2,
-                    'description'    => $valuePost['description'],
-                    'content'        => json_encode([
-                        'dial'              => $valuePost['dial'],
-                        'limit_win'         => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
-                        'price_topup'       => $valuePost['price_topup'],
-                        'message_win'       => $valuePost['message_win'],
+                    'datetime_end' => date_format($datetimeEnd, 'Y-m-d H:i:s'),
+                    'is_type' => 2,
+                    'description' => $valuePost['description'],
+                    'content' => json_encode([
+                        'dial' => $valuePost['dial'],
+                        'limit_win' => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
+                        'price_topup' => $valuePost['price_topup'],
+                        'message_win' => $valuePost['message_win'],
                         'message_limit_win' => $valuePost['message_limit_win'],
-                        'is_random'         => $valuePost['is_random'],
-                        'order_win'         => ($valuePost['is_random'] == 0) ? $valuePost['order_win'] : '',
+                        'is_random' => $valuePost['is_random'],
+                        'order_win' => ($valuePost['is_random'] == 0) ? $valuePost['order_win'] : '',
                     ]),
-                    'created_at'     => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
-                    'status'         => $valuePost['status'],
+                    'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                    'status' => $valuePost['status'],
                 ];
                 $promotionId = $this->entityPromotions->addRow($data);
-                if (! empty($valuePost['products_id'])) {
+                if (!empty($valuePost['products_id'])) {
                     foreach ($valuePost['products_id'] as $item) {
                         $dataPromotionsProducts = [
                             'promotion_id' => $promotionId,
-                            'products_id'  => $item,
-                            'created_at'   => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                            'products_id' => $item,
+                            'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
                         ];
                         $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
                     }
@@ -411,31 +417,31 @@ class IndexController extends AdminCore
                 $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
                 $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
                 $data = [
-                    'name'           => $valuePost['name'],
+                    'name' => $valuePost['name'],
                     'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
-                    'datetime_end'   => date_format($datetimeEnd, 'Y-m-d H:i:s'),
-                    'is_type'        => 2,
-                    'description'    => $valuePost['description'],
-                    'content'        => json_encode([
-                        'dial'              => $valuePost['dial'],
-                        'limit_win'         => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
-                        'price_topup'       => $valuePost['price_topup'],
-                        'message_win'       => $valuePost['message_win'],
+                    'datetime_end' => date_format($datetimeEnd, 'Y-m-d H:i:s'),
+                    'is_type' => 2,
+                    'description' => $valuePost['description'],
+                    'content' => json_encode([
+                        'dial' => $valuePost['dial'],
+                        'limit_win' => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
+                        'price_topup' => $valuePost['price_topup'],
+                        'message_win' => $valuePost['message_win'],
                         'message_limit_win' => $valuePost['message_limit_win'],
-                        'is_random'         => $valuePost['is_random'],
-                        'order_win'         => $valuePost['order_win'],
+                        'is_random' => $valuePost['is_random'],
+                        'order_win' => $valuePost['order_win'],
                     ]),
-                    'status'         => $valuePost['status'],
+                    'status' => $valuePost['status'],
                 ];
                 $this->entityPromotions->updateRow($id, $data);
                 // update promotionsProducts
                 $this->entityPromotionsProducts->deleteRowsAsPromotionsId($id);
-                if (! empty($valuePost['products_id'])) {
+                if (!empty($valuePost['products_id'])) {
                     foreach ($valuePost['products_id'] as $item) {
                         $dataPromotionsProducts = [
                             'promotion_id' => $id,
-                            'product_id'   => $item,
-                            'created_at'   => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                            'product_id' => $item,
+                            'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
                         ];
                         $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
                     }
@@ -476,8 +482,8 @@ class IndexController extends AdminCore
         }
         $form = new EditScoreForm();
         $request = $this->getRequest();
-        $optionSupplies = $this->entitySupplies->fetchAllOptions(['company_id' => $this->defineCompanyId]);
-        $form->get('supplie_id')->setValueOptions(['' => '------- Chọn một vật phẩm khuyến mãi -------'] + $optionSupplies);
+//        $optionSupplies = $this->entitySupplies->fetchAllOptions(['company_id' => $this->defineCompanyId]);
+//        $form->get('supplie_id')->setValueOptions(['' => '------- Chọn một vật phẩm khuyến mãi -------'] + $optionSupplies);
         $arrPromotionsProducts = $this->entityPromotionsProducts->fetchAllAsPromotionId($id, true);
 
         // get product
@@ -485,51 +491,48 @@ class IndexController extends AdminCore
         if ($request->isPost()) {
             $valuePost = $request->getPost()->toArray();
             $form->setData($valuePost);
-            if ($form->isValid()) {
-                $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
-                $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
-                $data = [
-                    'name'           => $valuePost['name'],
-                    'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
-                    'datetime_end'   => date_format($datetimeEnd, 'Y-m-d H:i:s'),
-                    'description'    => $valuePost['description'],
-                    'content'        => json_encode([
-                        'dial'                => $valuePost['dial'],
-                        'supplie_id'          => $valuePost['supplie_id'],
-                        'limit_win'           => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
-                        'score_win'           => ($valuePost['score_win'] != '') ? $valuePost['score_win'] : '0',
-                        'limit_message_day'   => ($valuePost['limit_message_day'] != '') ? $valuePost['limit_message_day'] : '0',
-                        'message_limit_day'   => $valuePost['message_limit_day'],
-                        'limit_message_month' => ($valuePost['limit_message_month'] != '') ? $valuePost['limit_message_month'] : '0',
-                        'message_limit_month' => $valuePost['message_limit_month'],
-                        'price_topup'         => $valuePost['price_topup'],
-                        'message_near_win'    => $valuePost['message_near_win'],
-                        'message_win'         => $valuePost['message_win'],
-                        'message_limit_win'   => $valuePost['message_limit_win'],
-                    ]),
-                    'status'         => $valuePost['status'],
-                ];
-                $this->entityPromotions->updateRow($id, $data);
-                // update promotionsProducts
-                $this->entityPromotionsProducts->deleteRowsAsPromotionsId($id);
-                $arrProductsId = $this->splitValueProductsId($valuePost, $arrProducts);
-                if (! empty($arrProductsId)) {
-                    foreach ($arrProductsId as $key => $item) {
-                        $dataPromotionsProducts = [
-                            'promotion_id' => $id,
-                            'product_id'   => $key,
-                            'score'        => $item,
-                            'created_at'   => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
-                        ];
-                        $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
-                    }
+
+            $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
+            $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
+            $data = [
+                'name' => $valuePost['name'],
+                'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
+                'datetime_end' => date_format($datetimeEnd, 'Y-m-d H:i:s'),
+                'description' => $valuePost['description'],
+                'content' => json_encode([
+                    'dial' => $valuePost['dial'],
+                    'limit_win' => ($valuePost['limit_win'] != '') ? $valuePost['limit_win'] : '0',
+                    'score_win' => ($valuePost['score_win'] != '') ? $valuePost['score_win'] : '0',
+                    'limit_message_day' => ($valuePost['limit_message_day'] != '') ? $valuePost['limit_message_day'] : '0',
+                    'message_limit_day' => $valuePost['message_limit_day'],
+                    'limit_message_month' => ($valuePost['limit_message_month'] != '') ? $valuePost['limit_message_month'] : '0',
+                    'message_limit_month' => $valuePost['message_limit_month'],
+                    'price_topup' => $valuePost['price_topup'],
+                    'message_near_win' => $valuePost['message_near_win'],
+                    'message_win' => $valuePost['message_win'],
+                    'message_limit_win' => $valuePost['message_limit_win'],
+                ]),
+                'status' => $valuePost['status'],
+            ];
+            $this->entityPromotions->updateRow($id, $data);
+            // update promotionsProducts
+            $this->entityPromotionsProducts->deleteRowsAsPromotionsId($id);
+            $arrProductsId = $this->splitValueProductsId($valuePost, $arrProducts);
+            if (!empty($arrProductsId)) {
+                foreach ($arrProductsId as $key => $item) {
+                    $dataPromotionsProducts = [
+                        'promotion_id' => $id,
+                        'product_id' => $key,
+                        'score' => $item,
+                        'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                    ];
+                    $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
                 }
-                // update array promotions products
-                $arrPromotionsProducts = $this->entityPromotionsProducts->fetchAllAsPromotionId($id, true);
-                $this->flashMessenger()->addSuccessMessage('Sửa dữ liệu thành công!');
-            } else {
-                $this->flashMessenger()->addWarningMessage('Lỗi nhập dữ liệu, đề nghị kiểm tra lại!');
             }
+            // update array promotions products
+            $arrPromotionsProducts = $this->entityPromotionsProducts->fetchAllAsPromotionId($id, true);
+            $this->flashMessenger()->addSuccessMessage('Sửa dữ liệu thành công!');
+
         } else {
             $valuePost['datetime_begin'] = date_format(date_create($valuePost['datetime_begin']), 'd/m/Y H:i:s');
             $valuePost['datetime_end'] = date_format(date_create($valuePost['datetime_end']), 'd/m/Y H:i:s');
@@ -572,24 +575,24 @@ class IndexController extends AdminCore
                 $datetimeBegin = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_begin']);
                 $datetimeEnd = date_create_from_format('d/m/Y H:i:s', $valuePost['datetime_end']);
                 $data = [
-                    'name'           => $valuePost['name'],
+                    'name' => $valuePost['name'],
                     'datetime_begin' => date_format($datetimeBegin, 'Y-m-d H:i:s'),
-                    'datetime_end'   => date_format($datetimeEnd, 'Y-m-d H:i:s'),
-                    'description'    => $valuePost['description'],
-                    'content'        => json_encode([
+                    'datetime_end' => date_format($datetimeEnd, 'Y-m-d H:i:s'),
+                    'description' => $valuePost['description'],
+                    'content' => json_encode([
                         'input_type' => $valuePost['input_type'],
                     ]),
-                    'status'         => $valuePost['status'],
+                    'status' => $valuePost['status'],
                 ];
                 $this->entityPromotions->updateRow($id, $data);
                 // update promotionsProducts
                 $this->entityPromotionsProducts->deleteRowsAsPromotionsId($id);
-                if (! empty($valuePost['products_id'])) {
+                if (!empty($valuePost['products_id'])) {
                     foreach ($valuePost['products_id'] as $item) {
                         $dataPromotionsProducts = [
                             'promotion_id' => $id,
-                            'product_id'   => $item,
-                            'created_at'   => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
+                            'product_id' => $item,
+                            'created_at' => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent(),
                         ];
                         $this->entityPromotionsProducts->addRow($dataPromotionsProducts);
                     }
@@ -682,9 +685,9 @@ class IndexController extends AdminCore
         }
 
         return new ViewModel([
-            'form'              => $form,
+            'form' => $form,
             'checkRelationship' => $checkRelationship,
-            'valueCurrent'      => $valueCurrent,
+            'valueCurrent' => $valueCurrent,
         ]);
     }
 
@@ -709,12 +712,12 @@ class IndexController extends AdminCore
         $optionAgents = $this->entityAgents->fetchAllOptions();
 
         return new ViewModel([
-            'valueCurrent'     => $valueCurrent,
+            'valueCurrent' => $valueCurrent,
             'optionPromotions' => $optionPromotions,
-            'arrLogWinners'    => $arrLogWinners,
-            'optionUsers'      => $optionUsers,
-            'optionProducts'   => $optionProducts,
-            'optionAgents'     => $optionAgents,
+            'arrLogWinners' => $arrLogWinners,
+            'optionUsers' => $optionUsers,
+            'optionProducts' => $optionProducts,
+            'optionAgents' => $optionAgents,
         ]);
     }
 
@@ -773,13 +776,13 @@ class IndexController extends AdminCore
         // }
 
         return new ViewModel([
-            'arrListPromotions'   => $arrListPromotions,
-            'contentPaginator'    => $contentPaginator,
-            'formSearch'          => $formSearch,
-            'queries'             => $queries,
+            'arrListPromotions' => $arrListPromotions,
+            'contentPaginator' => $contentPaginator,
+            'formSearch' => $formSearch,
+            'queries' => $queries,
             'optionListPromotion' => $optionListPromotion,
-            'optionProduct'       => $optionProduct,
-            'optionAgent'         => $optionAgent
+            'optionProduct' => $optionProduct,
+            'optionAgent' => $optionAgent
             //		'optionMessage' => $optionMessage
         ]);
     }
@@ -919,10 +922,10 @@ class IndexController extends AdminCore
         $arrWinnerPromotions->setPageRange($contentPaginator['page_range']);
         return new ViewModel([
             'arrWinnerPromotions' => $arrWinnerPromotions,
-            'contentPaginator'    => $contentPaginator,
-            'formSearch'          => $formSearch,
-            'queries'             => $queries,
-            'optionPromotions'    => $optionPromotions,
+            'contentPaginator' => $contentPaginator,
+            'formSearch' => $formSearch,
+            'queries' => $queries,
+            'optionPromotions' => $optionPromotions,
         ]);
     }
 
@@ -987,12 +990,12 @@ class IndexController extends AdminCore
         $optionUsers = $this->entityUsers->fetchAllOptions();
         return new ViewModel([
             'arrWinnerPromotions' => $arrWinnerPromotions,
-            'contentPaginator'    => $contentPaginator,
-            'formSearch'          => $formSearch,
-            'queries'             => $queries,
-            'optionPromotions'    => $optionPromotions,
-            'optionUsers'         => $optionUsers,
-            'userId'              => $this->sessionContainer->id,
+            'contentPaginator' => $contentPaginator,
+            'formSearch' => $formSearch,
+            'queries' => $queries,
+            'optionPromotions' => $optionPromotions,
+            'optionUsers' => $optionUsers,
+            'userId' => $this->sessionContainer->id,
         ]);
     }
 
@@ -1058,12 +1061,12 @@ class IndexController extends AdminCore
         $optionUsers = $this->entityUsers->fetchAllOptions();
         return new ViewModel([
             'arrWinnerPromotions' => $arrWinnerPromotions,
-            'contentPaginator'    => $contentPaginator,
-            'formSearch'          => $formSearch,
-            'queries'             => $queries,
-            'optionPromotions'    => $optionPromotions,
-            'optionUsers'         => $optionUsers,
-            'userId'              => $this->sessionContainer->id,
+            'contentPaginator' => $contentPaginator,
+            'formSearch' => $formSearch,
+            'queries' => $queries,
+            'optionPromotions' => $optionPromotions,
+            'optionUsers' => $optionUsers,
+            'userId' => $this->sessionContainer->id,
         ]);
     }
 
@@ -1130,12 +1133,12 @@ class IndexController extends AdminCore
         $optionUsers = $this->entityUsers->fetchAllOptions();
         return new ViewModel([
             'arrWinnerPromotions' => $arrWinnerPromotions,
-            'contentPaginator'    => $contentPaginator,
-            'formSearch'          => $formSearch,
-            'queries'             => $queries,
-            'optionPromotions'    => $optionPromotions,
-            'optionUsers'         => $optionUsers,
-            'userId'              => $this->sessionContainer->id,
+            'contentPaginator' => $contentPaginator,
+            'formSearch' => $formSearch,
+            'queries' => $queries,
+            'optionPromotions' => $optionPromotions,
+            'optionUsers' => $optionUsers,
+            'userId' => $this->sessionContainer->id,
         ]);
     }
 
@@ -1404,28 +1407,80 @@ class IndexController extends AdminCore
             'arrayPlusScore' => $arrPlusScore,
         ]);
     }
-    public function addPlusScoreAction()
-    {
-        $arrPlusScore = $this->entityPlusScore->fetchAlls();
-        return new ViewModel([
-            'arrayPlusScore' => $arrPlusScore,
-        ]);
-    }
 
     public function deletePlusScoreAction()
     {
+        $form = new DeletePlusScoreForm($request->getRequestUri());
         $this->layout()->setTemplate('empty/layout');
         $request = $this->getRequest();
-        $form = new DeleteForm($request->getRequestUri());
-        $view = new ViewModel(['from' =>$form]);
 
         $id = (int)$this->params()->fromRoute('id', 0);
 
         if ($request->isPost()) {
             $this->entityPlusScore->deleteRow($id);
-
-            return $this->flashMessenger()->addSuccessMessage('Xóa dữ liệu thành công!');
+            $this->flashMessenger()->addSuccessMessage('Xóa dữ liệu thành công!');
         }
-        return $view;
+        return new ViewModel(['from' => $form]);
+    }
+
+    public function addPlusScoreAction()
+    {
+        $request = $this->getRequest();
+        $form = new AddPlusScoreFrom();
+        $id = (int)$this->params()->fromRoute('id', 0);
+        $valuePost = $request->getPost()->toArray();
+        $form->setData($valuePost);
+        if ($form->isValid()) {
+            $data = [
+                'score' => $valuePost['score'],
+                'message_win' => $valuePost['message_win'],
+            ];
+            $this->entityPlusScore->addRow($data);
+
+            $this->flashMessenger()->addSuccessMessage('Xóa dữ liệu thành công!');
+            return $this->redirect()->toRoute('promotions/plusScore');
+
+        } else {
+            $this->flashMessenger()->addWarningMessage('Lỗi nhập dữ liệu, đề nghị kiểm tra lại!');
+        }
+
+        return new ViewModel(['form' => $form]);
+    }
+
+    public function EditPlusScoreAction()
+    {
+        $id = (int)$this->params()->fromRoute('id', 0);
+        $valueCurrent = $this->entityPlusScore->firstRow($id);
+        $init = [];
+        $form = new EditPlusForm();
+
+        if (empty($valueCurrent)) {
+            $this->redirect()->toRoute('promotions/dials');
+        } else {
+            $init['score'] = $valueCurrent['score'];
+            $init['message_win'] = $valueCurrent['message_win'];
+        }
+
+        $form->setData($init);
+        $request = $this->getRequest();
+        $valuePost = $request->getPost()->toArray();
+        $form->setData($valuePost);
+        if ($request->isPost()) {
+            if ($form->isValid()) {
+                $data = [
+                    'score' => $valuePost['score'],
+                    'message_win' => $valuePost['message_win'],
+                ];
+                $this->entityPlusScore->updateRow($id, $data);
+
+                $this->flashMessenger()->addSuccessMessage('Xóa dữ liệu thành công!');
+                return $this->redirect()->toRoute('promotions/plusScore');
+
+            } else {
+                $this->flashMessenger()->addWarningMessage('Lỗi nhập dữ liệu, đề nghị kiểm tra lại!');
+            }
+        }
+
+        return new ViewModel(['form' => $form]);
     }
 }

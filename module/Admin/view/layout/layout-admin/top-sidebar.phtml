@@ -42,6 +42,9 @@
 				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'index') ? 'active' : '' ?>">
 					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'index']) ?>"><i></i><span data-i18n="nav.promotions.index">Khuyến mãi</span></a>
 				</li>
+                <li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'index') ? 'active' : '' ?>">
+                    <a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'plusScore']) ?>"><i></i><span data-i18n="nav.promotions.index">Quản lý điểm cộng</span></a>
+                </li>
 				<li class="<?= ($urlModule == "promotions" && $urlController == 'index' && $urlAction == 'statistic-list') ? 'active' : '' ?>">
 					<a class="dropdown-item" href="<?= $this->url('promotions/index', ['action' => 'statistic-list']) ?>"><i></i><span data-i18n="nav.promotions.index.statistic_list">Ds tham gia KM</span></a>
 				</li>

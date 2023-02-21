@@ -52,13 +52,13 @@ class PlusScore
         return false;
     }
 
-    public function firstOnly($promotion_id)
+    public function firstOnly($score)
     {
         $adapter = $this->adapter;
-        $sql = new Sql($this->adapter);
+        $sql    = new Sql($this->adapter);
         $select = $sql->select();
-        $select = $sql->from($this->_name);
-        $select->where(['promotion_id' => $promotion_id]);
+        $select->from($this->_name);
+        $select->where("score = '$score'");
         try {
             $selectString = $sql->buildSqlString($select);
             $results = $adapter->query($selectString, $adapter::QUERY_MODE_EXECUTE);
@@ -66,9 +66,65 @@ class PlusScore
             return false;
         }
         $arr = $results->toArray();
-        if (empty($results)) {
+        if (empty($arr)) {
             return false;
         }
         return $arr[0];
+    }
+    public function addRow($data)
+    {
+        $adapter = $this->adapter;
+        $sql    = new Sql($this->adapter);
+        $insert = $sql->insert($this->_name);
+        $insert->values($data);
+        try {
+            $statement = $sql->prepareStatementForSqlObject($insert);
+            $results = $statement->execute();
+            return $results;
+        } catch (Exception $e) {
+            return false;
+        }
+        if (empty($results)) {
+            return false;
+        }
+        return false;
+    }
+
+    public function firstRow($id)
+    {
+        $adapter = $this->adapter;
+        $sql    = new Sql($this->adapter);
+        $select = $sql->select();
+        $select->from($this->_name);
+        $select->where("id = '$id'");
+        try {
+            $selectString = $sql->buildSqlString($select);
+            $results = $adapter->query($selectString, $adapter::QUERY_MODE_EXECUTE);
+        } catch (Exception $e) {
+            return false;
+        }
+        $arr = $results->toArray();
+        if (empty($arr)) {
+            return false;
+        }
+        return $arr[0];
+    }
+    public function updateRow($id, $data){
+        $adapter = $this->adapter;
+        $sql    = new Sql($this->adapter);
+        $update = $sql->update($this->_name);
+        $update->set($data);
+        $update->where(['id' => $id]);
+        try {
+            $statement = $sql->prepareStatementForSqlObject($update);
+            $results = $statement->execute();
+            return $results;
+        } catch (Exception $e) {
+            return false;
+        }
+        if(empty($results)){
+            return false;
+        }
+        return false;
     }
 }
