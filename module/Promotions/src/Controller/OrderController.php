@@ -23,6 +23,7 @@ use Promotions\Model\LogWinners;
 use Promotions\Model\WinnerDials;
 use Settings\Model\Companies;
 use SoapHeader;
+use Promotions\Model\PlusScore;
 
 class OrderController extends AdminCore
 {
@@ -39,16 +40,17 @@ class OrderController extends AdminCore
     private $entityUsers;
     private $entityUserCrms;
     private $entityLogWinners;
+    private $entityPlusScore;
     // Danh sách tài khoản
     private $userCrms = [];
 
     public function setUserCrms()
     {
         $arrUserCrms = $this->entityUserCrms->fetchAllOptions();
-        foreach($arrUserCrms as $k => $v){
+        foreach ($arrUserCrms as $k => $v) {
             $this->userCrms[$k] = [
-                "id"    => $v["user_id"],
-                "name"  => $v["name"]
+                "id" => $v["user_id"],
+                "name" => $v["name"]
             ];
         }
         /*
@@ -103,21 +105,23 @@ class OrderController extends AdminCore
     }
 
     public function __construct(
-        PxtAuthentication $entityPxtAuthentication,
-        Settings $entitySettings,
-        Products $entityProducts,
-        Promotions $entityPromotions,
+        PxtAuthentication  $entityPxtAuthentication,
+        Settings           $entitySettings,
+        Products           $entityProducts,
+        Promotions         $entityPromotions,
         PromotionsProducts $entityPromotionsProducts,
-        ListPromotions $entityListPromotions,
-        WinnerPromotions $entityWinnerPromotions,
-        ListDials $entityListDials,
-        DialsPromotions $entityDialsPromotions,
-        WinnerDials $entityWinnerDials,
-        Companies $entityCompanies,
-        Users $entityUsers,
-        UserCrms $entityUserCrms,
-        LogWinners $entityLogWinners
-    ) {
+        ListPromotions     $entityListPromotions,
+        WinnerPromotions   $entityWinnerPromotions,
+        ListDials          $entityListDials,
+        DialsPromotions    $entityDialsPromotions,
+        WinnerDials        $entityWinnerDials,
+        Companies          $entityCompanies,
+        Users              $entityUsers,
+        UserCrms           $entityUserCrms,
+        LogWinners         $entityLogWinners,
+        PlusScore          $entityPlusScore
+    )
+    {
         parent::__construct($entityPxtAuthentication);
         $this->entityProducts = $entityProducts;
         $this->entityPromotions = $entityPromotions;
@@ -132,6 +136,7 @@ class OrderController extends AdminCore
         $this->entityUsers = $entityUsers;
         $this->entityUserCrms = $entityUserCrms;
         $this->entityLogWinners = $entityLogWinners;
+        $this->entityPlusScore = $entityPlusScore;
     }
 
     public function indexAction()
@@ -157,7 +162,7 @@ class OrderController extends AdminCore
             [
                 '' => '--- Chọn một người phụ trách ---'
             ] +
-                $optionUsers
+            $optionUsers
         );
 
         $request = $this->getRequest();
@@ -169,44 +174,44 @@ class OrderController extends AdminCore
                 $this->setUserCrms();
                 $note1 = str_replace("\n", "<br />", $valuePost["note_1"]);
                 $this->entityWinnerPromotions->updateRow($valueCurrent["id"], [
-                    "status_order"      => 2,
-                    "user_input"        => $valuePost["user_input"],
-                    "user_input_id"     => $valuePost["user_input_id"],
-                    "user_input_name"   => $valuePost["user_input_name"],
-                    "source"            => $valuePost["source"],
-                    "note_1"            => $note1,
-                    "inputed_at"        => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
+                    "status_order" => 2,
+                    "user_input" => $valuePost["user_input"],
+                    "user_input_id" => $valuePost["user_input_id"],
+                    "user_input_name" => $valuePost["user_input_name"],
+                    "source" => $valuePost["source"],
+                    "note_1" => $note1,
+                    "inputed_at" => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
                 ]);
                 // Cập nhật tạm thời giá trị 'status_order' để chặn form ngoài view
                 $valueCurrent["status_order"] = 2;
                 $this->flashMessenger()->addSuccessMessage('Chuyển thành công!');
                 // Cập nhật log
                 $dataLogs = [];
-                if($valueCurrent["user_input_id"] != $valuePost["user_input_id"]){
+                if ($valueCurrent["user_input_id"] != $valuePost["user_input_id"]) {
                     $dataLogs["user_input_id"] = $valuePost["user_input_id"];
                 }
-                if($valueCurrent["user_input_name"] != $valuePost["user_input_name"]){
+                if ($valueCurrent["user_input_name"] != $valuePost["user_input_name"]) {
                     $dataLogs["user_input_name"] = $valuePost["user_input_name"];
                 }
-                if($valueCurrent["user_input"] != $valuePost["user_input"]){
+                if ($valueCurrent["user_input"] != $valuePost["user_input"]) {
                     $dataLogs["user_input"] = $valuePost["user_input"];
                 }
-                if($valueCurrent["source"] != $valuePost["source"]){
+                if ($valueCurrent["source"] != $valuePost["source"]) {
                     $dataLogs["source"] = $valuePost["source"];
                 }
-                if($valueCurrent["note_1"] != $note1){
+                if ($valueCurrent["note_1"] != $note1) {
                     $dataLogs["note_1"] = $note1;
                 }
                 $this->entityLogWinners->addRow([
-                    "user_id"               => $this->sessionContainer->id,
-                    "winner_promotion_id"   => $valueCurrent["id"],
-                    "type"                  => "1",
-                    "datas"                 => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
-                    "created_at"            => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
+                    "user_id" => $this->sessionContainer->id,
+                    "winner_promotion_id" => $valueCurrent["id"],
+                    "type" => "1",
+                    "datas" => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
+                    "created_at" => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
                 ]);
             } else {
                 $this->entityWinnerPromotions->updateRow($valueCurrent["id"], [
-                    "note_1"            => str_replace("\n", "<br />", $valuePost["note_1"])
+                    "note_1" => str_replace("\n", "<br />", $valuePost["note_1"])
                 ]);
                 $this->flashMessenger()->addWarningMessage('Lỗi nhập dữ liệu, đề nghị kiểm tra lại!');
             }
@@ -218,8 +223,8 @@ class OrderController extends AdminCore
         $optionPromotions = $this->entityPromotions->fetchAllOptions01();
         // Lấy danh sách các mã trúng cùng
         $arrCodeInWin = $this->entityListPromotions->fetchAllInWin([
-            "phone_id"      => $valueCurrent["phone_id"],
-            "promotion_id"  => $valueCurrent["promotion_id"],
+            "phone_id" => $valueCurrent["phone_id"],
+            "promotion_id" => $valueCurrent["promotion_id"],
             "number_winner" => $valueCurrent["number_winner"],
         ]);
 
@@ -234,6 +239,7 @@ class OrderController extends AdminCore
 
     public function inputAction()
     {
+        $plusScore = $this->entityPlusScore->fetchAlls();
         // check import
         $id = (int)$this->params()->fromRoute('id', 0);
         //echo $id ; die();
@@ -248,20 +254,31 @@ class OrderController extends AdminCore
         // Lấy danh sách sản phẩm
         $optionProducts = $this->entityProducts->fetchAllOptions04();
         // Danh sách sản phẩm trúng thưởng
-        $arrPromotionsProducts = array("1490" => "1490", "2727" => "2727", "1712" => "1712", "1489" => "1489", "1713" => "1713", "1516" => "1516", "1517" => "1517", "1679" => "1679", "1716" => "1716", "1678" => "1678", "1707" => "1707", "1705" => "1705", "1708" => "1708", "1706" => "1706", "1717" => "1717", "1488" => "1488", "1714" => "1714");
+        $arrPromotionsProducts = $this->entityPromotionsProducts->fetchAllAsPromotionId($valueCurrent["promotion_id"]);
         // \Zend\Debug\Debug::dump($optionProducts);
         // die();
         // Thay lại option product
         $optionProductFinished = [];
+        $plusScoreOption = [];
         foreach ($arrPromotionsProducts as $key => $item) {
-            $optionProductFinished[$key] = isset($optionProducts[$key]) ? $optionProducts[$key] : "Không xác định";
+            $optionProductFinished[$item['product_id']] = !empty($item['name']) ? $item['name'] : "Không xác định";
+        }
+        foreach ($plusScore as $key => $item) {
+            if ($valueCurrent['score'] > $item['score']) continue;
+            $plusScoreOption[$item['id']] = $item['message_win'];
         }
 
         $form->get('product_id')->setValueOptions(
             [
                 '' => '--- Chọn một sản phẩm ---'
             ] +
-                $optionProductFinished
+            $optionProductFinished
+        );
+        $form->get('plusScoreId')->setValueOptions(
+            [
+                '' => '--- Chọn điểm trả thưởng ---'
+            ] +
+            $plusScoreOption
         );
         // Lấy danh sách tài khoản
         $optionUsers = $this->entityUsers->fetchAllOptions();
@@ -272,15 +289,16 @@ class OrderController extends AdminCore
             $form->setData($valuePost);
             $isValid = 0;
             if (isset($valuePost["is_finish"]) && $valuePost["is_finish"] == 1) {
-                if(!$form->isValid()){
+                if (!$form->isValid()) {
                     $isValid = 1;
                 }
             }
             if ($isValid == 0) {
+                $plusScoreItem = $this->entityPlusScore->firstOnly($valuePost["plusScoreId"]);
                 $dataUpdate = [];
                 if (isset($valuePost["is_finish"]) && $valuePost["is_finish"] == 1) {
                     $dataUpdate["status_order"] = 3;
-                // Cập nhật tạm thời giá trị 'status_order' để chặn form ngoài view
+                    // Cập nhật tạm thời giá trị 'status_order' để chặn form ngoài view
                     $valueCurrent["status_order"] = 3;
                 }
                 $note2 = str_replace("\n", "<br />", $valuePost["note_2"]);
@@ -293,32 +311,43 @@ class OrderController extends AdminCore
                 $this->entityWinnerPromotions->updateRow($valueCurrent["id"], $dataUpdate);
                 // Cập nhật log
                 $dataLogs = [];
-                if($valueCurrent["phone_recipient"] != $valuePost["phone_recipient"]){
+                if ($valueCurrent["phone_recipient"] != $valuePost["phone_recipient"]) {
                     $dataLogs["phone_recipient"] = $valuePost["phone_recipient"];
                 }
-                if($valueCurrent["fullname_recipient"] != $valuePost["fullname_recipient"]){
+                if ($valueCurrent["fullname_recipient"] != $valuePost["fullname_recipient"]) {
                     $dataLogs["fullname_recipient"] = $valuePost["fullname_recipient"];
                 }
-                if($valueCurrent["address_recipient"] != $valuePost["address_recipient"]){
+                if ($valueCurrent["address_recipient"] != $valuePost["address_recipient"]) {
                     $dataLogs["address_recipient"] = $valuePost["address_recipient"];
                 }
-                if($valueCurrent["note_2"] != $note2){
+                if ($valueCurrent["note_2"] != $note2) {
                     $dataLogs["note_2"] = $note2;
                 }
-                if($valueCurrent["product_id"] != $valuePost["product_id"]){
+
+                if ($valueCurrent["product_id"] != $valuePost["product_id"]) {
                     $dataLogs["product_id"] = $valuePost["product_id"];
                 }
                 if (isset($valuePost["is_finish"]) && $valuePost["is_finish"] == 1) {
                     $type = "3";
-                }else{
+                } else {
                     $type = "2";
+                    $dataLogs["is_minus"] = 0;
+                }
+                if ($type == 3) {
+                    $dataLogs["minus_points"] = empty($plusScoreItem) ? 0 : $plusScoreItem['score'];
+                    $dataLogs["is_minus"] = 1;
+                    $dataLogs["pointOld"] = $valueCurrent['score'];
+                    $this->entityWinnerPromotions->updateRow($valueCurrent['id'],
+                        ['score' => $valueCurrent['score'] - $plusScoreItem['score'],
+                            "created_at" => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
+                        ]);
                 }
                 $this->entityLogWinners->addRow([
-                    "user_id"               => $this->sessionContainer->id,
-                    "winner_promotion_id"   => $valueCurrent["id"],
-                    "type"                  => $type,
-                    "datas"                 => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
-                    "created_at"            => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
+                    "user_id" => $this->sessionContainer->id,
+                    "winner_promotion_id" => $valueCurrent["id"],
+                    "type" => $type,
+                    "datas" => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
+                    "created_at" => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
                 ]);
                 $this->flashMessenger()->addSuccessMessage('Cập nhật thành công!');
             } else {
@@ -332,18 +361,18 @@ class OrderController extends AdminCore
         $optionPromotions = $this->entityPromotions->fetchAllOptions01();
         // Lấy danh sách các mã trúng cùng
         $arrCodeInWin = $this->entityListPromotions->fetchAllInWin([
-            "phone_id"      => $valueCurrent["phone_id"],
-            "promotion_id"  => $valueCurrent["promotion_id"],
+            "phone_id" => $valueCurrent["phone_id"],
+            "promotion_id" => $valueCurrent["promotion_id"],
             "number_winner" => $valueCurrent["number_winner"],
         ]);
 
         return new ViewModel([
-            'valueCurrent'      => $valueCurrent,
-            'id'                => $id,
-            'form'              => $form,
-            'optionPromotions'  => $optionPromotions,
-            'arrCodeInWin'      => $arrCodeInWin,
-            'optionUsers'       => $optionUsers
+            'valueCurrent' => $valueCurrent,
+            'id' => $id,
+            'form' => $form,
+            'optionPromotions' => $optionPromotions,
+            'arrCodeInWin' => $arrCodeInWin,
+            'optionUsers' => $optionUsers
         ]);
     }
 
@@ -384,21 +413,21 @@ class OrderController extends AdminCore
                 $valueCurrent["status_order"] = 1;
                 // Cập nhật log
                 $dataLogs = [];
-                if($valueCurrent["code_order"] != $valuePost["code_order"]){
+                if ($valueCurrent["code_order"] != $valuePost["code_order"]) {
                     $dataLogs["code_order"] = $valuePost["code_order"];
                 }
-                if($valueCurrent["finished_at"] != $valuePost["finished_at"]){
+                if ($valueCurrent["finished_at"] != $valuePost["finished_at"]) {
                     $dataLogs["finished_at"] = $valuePost["finished_at"];
                 }
-                if($valueCurrent["note_3"] != $note3){
+                if ($valueCurrent["note_3"] != $note3) {
                     $dataLogs["note_3"] = $note3;
                 }
                 $this->entityLogWinners->addRow([
-                    "user_id"               => $this->sessionContainer->id,
-                    "winner_promotion_id"   => $valueCurrent["id"],
-                    "type"                  => "5",
-                    "datas"                 => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
-                    "created_at"            => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
+                    "user_id" => $this->sessionContainer->id,
+                    "winner_promotion_id" => $valueCurrent["id"],
+                    "type" => "5",
+                    "datas" => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
+                    "created_at" => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
                 ]);
                 $this->flashMessenger()->addSuccessMessage('Cập nhật thành công!');
             } else {
@@ -412,8 +441,8 @@ class OrderController extends AdminCore
         $optionPromotions = $this->entityPromotions->fetchAllOptions01();
         // Lấy danh sách các mã trúng cùng
         $arrCodeInWin = $this->entityListPromotions->fetchAllInWin([
-            "phone_id"      => $valueCurrent["phone_id"],
-            "promotion_id"  => $valueCurrent["promotion_id"],
+            "phone_id" => $valueCurrent["phone_id"],
+            "promotion_id" => $valueCurrent["promotion_id"],
             "number_winner" => $valueCurrent["number_winner"],
         ]);
 
@@ -421,13 +450,13 @@ class OrderController extends AdminCore
         $optionProducts = $this->entityProducts->fetchAllOptions01();
 
         return new ViewModel([
-            'valueCurrent'      => $valueCurrent,
-            'id'                => $id,
-            'form'              => $form,
-            'optionPromotions'  => $optionPromotions,
-            'arrCodeInWin'      => $arrCodeInWin,
-            'optionUsers'       => $optionUsers,
-            'optionProducts'    => $optionProducts
+            'valueCurrent' => $valueCurrent,
+            'id' => $id,
+            'form' => $form,
+            'optionPromotions' => $optionPromotions,
+            'arrCodeInWin' => $arrCodeInWin,
+            'optionUsers' => $optionUsers,
+            'optionProducts' => $optionProducts
         ]);
     }
 
@@ -449,7 +478,7 @@ class OrderController extends AdminCore
         $form = new FinishedForm();
         $request = $this->getRequest();
         if ($request->isPost()) {
-            if($this->sessionContainer->id == '268'){
+            if ($this->sessionContainer->id == '268') {
                 $dataUpdate["status_order"] = 2;
                 $this->entityWinnerPromotions->updateRow($valueCurrent["id"], $dataUpdate);
                 // Cập nhật tạm thời giá trị 'status_order' để chặn form ngoài view
@@ -458,13 +487,13 @@ class OrderController extends AdminCore
                 // Cập nhật log
                 $dataLogs = [];
                 $this->entityLogWinners->addRow([
-                    "user_id"               => $this->sessionContainer->id,
-                    "winner_promotion_id"   => $valueCurrent["id"],
-                    "type"                  => "6",
-                    "datas"                 => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
-                    "created_at"            => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
+                    "user_id" => $this->sessionContainer->id,
+                    "winner_promotion_id" => $valueCurrent["id"],
+                    "type" => "6",
+                    "datas" => json_encode($dataLogs, JSON_HEX_APOS | JSON_UNESCAPED_UNICODE),
+                    "created_at" => \Pxt\Datetime\ChangeDatetime::getDatetimeCurrent()
                 ]);
-            }else{
+            } else {
                 $this->flashMessenger()->addWarningMessage('Tài khoản không được phép thao tác hoàn đơn!');
             }
         }
@@ -473,8 +502,8 @@ class OrderController extends AdminCore
         $optionPromotions = $this->entityPromotions->fetchAllOptions01();
         // Lấy danh sách các mã trúng cùng
         $arrCodeInWin = $this->entityListPromotions->fetchAllInWin([
-            "phone_id"      => $valueCurrent["phone_id"],
-            "promotion_id"  => $valueCurrent["promotion_id"],
+            "phone_id" => $valueCurrent["phone_id"],
+            "promotion_id" => $valueCurrent["promotion_id"],
             "number_winner" => $valueCurrent["number_winner"],
         ]);
 
@@ -482,13 +511,13 @@ class OrderController extends AdminCore
         $optionProducts = $this->entityProducts->fetchAllOptions01();
 
         return new ViewModel([
-            'valueCurrent'      => $valueCurrent,
-            'id'                => $id,
-            'optionPromotions'  => $optionPromotions,
-            'arrCodeInWin'      => $arrCodeInWin,
-            'optionUsers'       => $optionUsers,
-            'form'              => $form,
-            'optionProducts'    => $optionProducts
+            'valueCurrent' => $valueCurrent,
+            'id' => $id,
+            'optionPromotions' => $optionPromotions,
+            'arrCodeInWin' => $arrCodeInWin,
+            'optionUsers' => $optionUsers,
+            'form' => $form,
+            'optionProducts' => $optionProducts
         ]);
     }
 

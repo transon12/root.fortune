@@ -1111,6 +1111,7 @@ class IndexController extends AdminCore
         }
         // Chỉ lấy khi đã được xử lý
         $queries["status_order"] = 1;
+        $queries["is_join"] = 1;
 
         $arrWinnerPromotions = new Paginator(new ArrayAdapter($this->entityWinnerPromotions->fetchAlls($queries)));
         // get setting paginator

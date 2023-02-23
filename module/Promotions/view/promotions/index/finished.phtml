@@ -62,7 +62,7 @@ $this->headTitle($title);
                                 </div>
                                 <div class="form-group col-md-3">
                                     <?= $this->formRow($this->formSearch->get('btnSubmit')) ?>
-                                	<?= $this->formRow($this->formSearch->get('btnExport')) ?>
+                                    <?= $this->formRow($this->formSearch->get('btnExport')) ?>
                                 </div>
                                 <?= $this->form()->closeTag($this->formSearch) ?>
                             </div>
@@ -74,57 +74,71 @@ $this->headTitle($title);
                                 <div class="table-responsive">
                                     <table class="table bg-white table-bordered table-striped table-hover black">
                                         <thead>
-                                            <tr>
-                                                <th class="text-center">STT</th>
-                                                <th class="text-center">Số điện thoại</th>
-                                                <th class="text-center">Chương trình khuyến mãi</th>
-                                                <th class="text-center">Điểm</th>
-                                                <th class="text-center">Ngày trúng thưởng</th>
-                                                <th class="text-center">Tài khoản cập nhật</th>
-                                                <th class="text-center">Người phụ trách (CRM)</th>
-                                                <th class="text-center">Sự kiện</th>
-                                            </tr>
+                                        <tr>
+                                            <th class="text-center">STT</th>
+                                            <th class="text-center">Số điện thoại</th>
+                                            <th class="text-center">Chương trình khuyến mãi</th>
+                                            <th class="text-center">Điểm đã có</th>
+                                            <th class="text-center">Điểm đã trả thưởng</th>
+                                            <th class="text-center">Điểm còn lại</th>
+                                            <th class="text-center">Tên đại lý</th>
+                                            <th class="text-center">Tỉnh Thành</th>
+                                            <th class="text-center">Ngày trúng thưởng</th>
+                                            <th class="text-center">Sự kiện</th>
+                                        </tr>
                                         </thead>
                                         <tbody>
-                                            <?php
-                                            if ($this->arrWinnerPromotions->getAdapter()->count() > 0) {
-                                                $i = 1;
-                                                $optionPromotions = $this->optionPromotions;
-                                                foreach ($this->arrWinnerPromotions as $item) {
-                                            ?>
-                                                    <tr>
-                                                        <td class="text-center align-middle"><?= $i++; ?></td>
-                                                        <td class="text-center align-middle"><?= $item['phone_id'] ?></td>
-                                                        <td class="text-center align-middle"><?= isset($optionPromotions[$item['promotion_id']]) ? $optionPromotions[$item['promotion_id']] : "" ?></td>
-                                                        <td class="text-center align-middle"><?= $item['score'] ?></td>
-                                                        <td class="text-center align-middle"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
-                                                        <td class="text-center align-middle"><?= isset($optionUsers[$item["user_input"]]) ? $optionUsers[$item["user_input"]] : "Không xác định" ?></td>
-                                                        <td class="text-center align-middle">
-                                                            <?= ($item["user_input_id"] != "" && $item["user_input_name"] != "") ? 
-                                                                ($item["user_input_id"] . " (" . $item["user_input_name"] . ")") : "Không xác định" ?></td>
-                                                        <td class="text-center">
-                                                            <a title="Cập nhật thông tin" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#xlarge" route="<?= $this->url('promotions/index', ['action' => 'iframe-finished', 'id' => $item['id']]) ?>">
-                                                                <i class="la la-list-alt"></i></a>
-                                                            <?php
-                                                            if ($this->userId == 268) {
-                                                            ?>
-                                                                <a title="Xem logs" href="javascript:void(0)" class="pxt-modal" data-toggle="modal" data-target="#xlarge" route="<?= $this->url('promotions/index', ['action' => 'logs', 'id' => $item['id']]) ?>">
-                                                                    <i class="la la-history"></i></a>
-                                                            <?php
-                                                            }
-                                                            ?>
-                                                        </td>
-                                                    </tr>
-                                                <?php
-                                                }
-                                            } else {
+                                        <?php
+                                        if ($this->arrWinnerPromotions->getAdapter()->count() > 0) {
+                                            $i = 1;
+                                            $optionPromotions = $this->optionPromotions;
+                                            foreach ($this->arrWinnerPromotions as $item) {
+                                                $contentIn = json_decode($item['content_in'], true);
                                                 ?>
+
                                                 <tr>
-                                                    <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                                    <td class="text-center align-middle"><?= $i++; ?></td>
+                                                    <td class="text-center align-middle"><?= $item['phone_id'] ?></td>
+                                                    <td class="text-center align-middle"><?= isset($optionPromotions[$item['promotion_id']]) ? $optionPromotions[$item['promotion_id']] : "" ?></td>
+                                                    <td class="text-center align-middle"><?= $item['score'] ?> dã có
+                                                    </td>
+                                                    <td class="text-center align-middle"><?= !empty($contentIn['pointOld']) ? $contentIn['pointOld'] : "chưa trả thưởng" ?></td>
+                                                    <td class="text-center align-middle"><?= !empty($contentIn['minus_points']) ? $contentIn['pointOld'] - $contentIn['minus_points'] : $item['score'] ?>
+                                                        còn lại
+                                                    </td>
+                                                    <td class="text-center align-middle"><?= !empty($item['name']) ? $item['name'] : "chưa có agent" ?></td>
+                                                    <td class="text-center align-middle"><?= !empty($contentIn['name_city']) ? $contentIn['name_city'] : "chưa có city" ?></td>
+                                                    <td class="text-center align-middle"><?= date_format(date_create($item['created_at']), 'd/m/Y H:i:s') ?></td>
+                                                    <td class="text-center">
+                                                        <a title="Cập nhật thông tin" href="javascript:void(0)"
+                                                           class="pxt-modal" data-toggle="modal" data-target="#xlarge"
+                                                           route="<?= $this->url('promotions/index', ['action' => 'iframe-finished', 'id' => $item['id']]) ?>">
+                                                            <i class="la la-list-alt"></i></a>
+                                                        <?php
+                                                        if ($this->userId == 268) {
+                                                            ?>
+                                                            <a title="Xem logs" href="javascript:void(0)"
+                                                               class="pxt-modal" data-toggle="modal"
+                                                               data-target="#xlarge"
+                                                               route="<?= $this->url('promotions/index', ['action' => 'logs', 'id' => $item['id']]) ?>">
+                                                                <i class="la la-history"></i></a>
+                                                            <?php
+                                                        }
+                                                        ?>
+                                                    </td>
+
+
                                                 </tr>
-                                            <?php
+                                                <?php
                                             }
+                                        } else {
                                             ?>
+                                            <tr>
+                                                <td colspan="100" class="text-center">Không tìm thấy dữ liệu</td>
+                                            </tr>
+                                            <?php
+                                        }
+                                        ?>
                                         </tbody>
                                         <?= $this->paginationControl(
                                             $this->arrWinnerPromotions,
@@ -143,13 +157,13 @@ $this->headTitle($title);
     </div>
 </div>
 
-<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css" />
+<link rel="stylesheet" href="<?= TEMPS ?>assets/font-awesome/css/font-awesome.css"/>
 <link href="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/css/tempusdominus-bootstrap-4.css" rel="stylesheet">
 <!-- <script type="text/javascript" src="<?= TEMPS ?>assets/moment.js/2.22.2/moment-with-locales.min.js"></script>
 <script type="text/javascript" src="<?= TEMPS ?>assets/moment-timezone/0.5.21/moment-timezone-with-data-2012-2022.min.js"></script>
 <script src="<?= TEMPS ?>assets/bootstrap-4-datetimepicker/js/tempusdominus-bootstrap-4.js"></script> -->
 <script type="text/javascript">
-    $(function() {
+    $(function () {
         $('.datetimepicker-input').datetimepicker({
             format: 'DD/MM/YYYY HH:mm:ss'
         });

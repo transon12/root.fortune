@@ -77,6 +77,7 @@ class PromotionsProducts
         $select->from($this->_name);
         $select->where("promotion_id = '$promotionId'");
         $select->order('created_at asc');
+        $select->join('products', 'products.id = promotions_products.product_id', ['name'],'left');
         try {
             $selectString = $sql->buildSqlString($select);
             $results = $adapter->query($selectString, $adapter::QUERY_MODE_EXECUTE);

@@ -25,7 +25,7 @@ class WinnerPromotions
         $select = $sql->select();
         $select->from($this->_name);
 
-        $select->where("company_id = '" . COMPANY_ID . "'");
+        $select->where($this->_name.".company_id = '" . COMPANY_ID . "'");
 
         if (isset($options['promotion_id'])) {
             if ($options['promotion_id'] != "" && $options['promotion_id'] != null) {
@@ -74,7 +74,10 @@ class WinnerPromotions
                 }
             }
         }
-        $select->order('created_at desc');
+		 $select->order('created_at desc');
+		if (isset($options['is_join'])){
+			$select->join('messages', 'messages.phone_id = winner_promotions.phone_id',['content_in'], 'left');
+			$select->join('agents', 'messages.agent_id = agents.id', ['name'],'left');}
         try {
             $selectString = $sql->buildSqlString($select);
             // echo $selectString; die();

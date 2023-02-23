@@ -269,6 +269,7 @@ class ApiController extends AbstractActionController
         if ($queries['Message'] == '') {
             die("-1|Message not found!");
         }
+
         // get other
         if ($this->params()->fromQuery('fullname', '') != '') {
             $queries['fullname'] = $this->params()->fromQuery('fullname', '');

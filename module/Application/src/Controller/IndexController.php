@@ -263,7 +263,8 @@ class IndexController extends AbstractActionController{
                 $url .= "&name_city=" . $nameCity;
 				$url .= "&type_agent=" . $type_agent;
                 $dataSend = json_decode(file_get_contents($url), true);
-                // \Zend\Debug\Debug::dump($dataSend); die();
+
+//                 \Zend\Debug\Debug::dump($dataSend); die();
                 $arrProduct = $this->entityProducts->fetchRow($this->currentCode['product_id']);
                 $datasProduct = ($arrProduct['datas'] != null) ? json_decode($arrProduct['datas'], true) : [];
 

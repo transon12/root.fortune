@@ -74,13 +74,22 @@ class InputForm extends Form
         $this->add($isFinish);
 
         $note2 = new Element\Textarea('note_2');
-        $note2->setLabel('Ghi chú nhập thông tin: ')
+        $note2->setLabel('Ghi chú nhập thông tin1: ')
             ->setAttributes([
                 'id'        => 'note_2',
                 'class'     => 'form-control',
                 'rows'      => '5'
             ]);
         $this->add($note2);
+
+        $plusScoreId = new Element\Select('plusScoreId');
+        $plusScoreId->setLabel('Trừ điểm thưởng')
+            ->setAttributes([
+                'class' => 'form-control',
+                'id' => 'plusScoreId',
+                'rows'      => '12'
+            ]);
+        $this->add($plusScoreId);
 
         $this->add([
             'name'  => 'btnSubmit',
